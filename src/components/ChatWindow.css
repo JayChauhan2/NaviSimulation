@@ -12,7 +12,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   background: var(--bg-glass);
   z-index: 10;
 }
@@ -106,11 +106,27 @@
 }
 
 @keyframes iphone-shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-8px); }
-  40% { transform: translateX(8px); }
-  60% { transform: translateX(-4px); }
-  80% { transform: translateX(4px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-8px);
+  }
+
+  40% {
+    transform: translateX(8px);
+  }
+
+  60% {
+    transform: translateX(-4px);
+  }
+
+  80% {
+    transform: translateX(4px);
+  }
 }
 
 .send-btn {
@@ -141,7 +157,8 @@
 /* Navi Mascot Notification Styles */
 .navi-clippy-container {
   position: absolute;
-  bottom: 25px; /* Sits partially behind the footer */
+  bottom: 25px;
+  /* Sits partially behind the footer */
   right: 20px;
   z-index: 10;
   display: flex;
@@ -150,18 +167,41 @@
   animation: slideUpNavi 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
+.navi-clippy-container.navi-exiting {
+  animation: slideDownNavi 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+}
+
 @keyframes slideUpNavi {
-  0% { transform: translateY(120px) scale(0.8); opacity: 0; }
-  100% { transform: translateY(0) scale(1); opacity: 1; }
+  0% {
+    transform: translateY(120px) scale(0.8);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDownNavi {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120px) scale(0.8);
+    opacity: 0;
+  }
 }
 
 .navi-dialogue {
   background-color: #E3F2FD;
   border-radius: 12px;
   padding: 12px 16px;
-  margin-bottom: -10px; /* Overlap image slightly */
+  margin-bottom: -10px;
+  /* Overlap image slightly */
   z-index: 15;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   position: relative;
   text-align: center;
   border: 1px solid rgba(13, 71, 161, 0.1);
@@ -171,8 +211,15 @@
 }
 
 @keyframes fadeInPop {
-  0% { transform: scale(0.9); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .navi-dialogue::after {
@@ -239,5 +286,95 @@
   width: 140px;
   height: auto;
   z-index: 12;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* Suggestions Popup Styles */
+.suggestions-popup {
+  position: absolute;
+  bottom: 80px; 
+  left: 20px;
+  max-width: 380px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  z-index: 30;
+  animation: slideUpPopup 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.suggestions-popup::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 30px;
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
+}
+
+.suggestions-header {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  padding: 8px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 4px;
+}
+
+.suggestions-popup button {
+  background: transparent;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  line-height: 1.4;
+}
+
+.suggestions-popup button:hover {
+  background: #E3F2FD;
+  color: #0D47A1;
+}
+
+@keyframes slideUpPopup {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Text Replacement Left-to-Right Scanner Effect */
+.replace-overlay {
+  position: absolute;
+  left: 16px;
+  top: 4px;
+  bottom: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #0D47A1;
+  background-color: #E3F2FD;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid #1976D2;
+  box-shadow: 2px 0 10px rgba(25, 118, 210, 0.6);
+  width: 0;
+  animation: sweepReplace 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  z-index: 5;
+  border-radius: 4px;
+}
+
+@keyframes sweepReplace {
+  0% { 
+    width: 0; 
+  }
+  100% { 
+    width: calc(100% - 48px); /* Stops right before the send button */
+  }
 }

@@ -97,7 +97,7 @@ export const initialMessages = [
   {
     id: 'm7',
     senderId: 'c2', // Jake
-    text: 'bet. ill be there.',
+    text: 'bet. ill be there, im lowkey struggling in science so i need this grade lol',
     timestamp: '4:45 PM'
   }
 ];

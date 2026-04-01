@@ -8,7 +8,11 @@ import naviUpsetImg from '../assets/Navi Upset.png';
 export default function ChatWindow({ messages, onSendMessage, currentChat }) {
   const [inputText, setInputText] = useState('');
   const [showNavi, setShowNavi] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isReplacing, setIsReplacing] = useState(false);
+  const [replacingText, setReplacingText] = useState('');
+  const [isNaviExiting, setIsNaviExiting] = useState(false);
   const messagesEndRef = useRef(null);
 
   const isGroup = currentChat.isGroup;
@@ -32,6 +36,29 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
     }, 10);
     
     setShowNavi(true);
+    setShowSuggestions(false);
+  };
+
+  const closeNavi = () => {
+    setIsNaviExiting(true);
+    setTimeout(() => {
+      setShowNavi(false);
+      setIsNaviExiting(false);
+    }, 400); // Wait for the slideDownNavi animation to finish
+  };
+
+  const handleApplySuggestion = (suggestion) => {
+    setReplacingText(suggestion);
+    setIsReplacing(true);
+    setShowSuggestions(false);
+    closeNavi();
+
+    setTimeout(() => {
+      setInputText(suggestion);
+      setIsError(false);
+      setIsReplacing(false);
+      setReplacingText('');
+    }, 600); // 600ms correlates with the sweep sweepRight animation time
   };
 
   return (
@@ -73,18 +100,34 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
 
       {/* Navi Clippy Upset Assistant */}
       {showNavi && (
-        <div className="navi-clippy-container">
+        <div className={`navi-clippy-container ${isNaviExiting ? 'navi-exiting' : ''}`}>
           <div className="navi-dialogue">
             <p>That message might be hurtful.<br />Want help responding?</p>
             <div className="navi-options">
               <div className="navi-options-row">
-                <button className="navi-btn" onClick={() => setShowNavi(false)}>Respond Politely</button>
-                <button className="navi-btn ignore" onClick={() => setShowNavi(false)}>Ignore</button>
+                <button className="navi-btn" onClick={() => setShowSuggestions(true)}>Respond Politely</button>
+                <button className="navi-btn ignore" onClick={closeNavi}>Ignore</button>
               </div>
-              <button className="navi-btn" onClick={() => setShowNavi(false)}>Ask An Adult For Help</button>
+              <button className="navi-btn" onClick={closeNavi}>Ask An Adult For Help</button>
             </div>
           </div>
           <img src={naviUpsetImg} alt="Navi Upset" className="navi-img" />
+        </div>
+      )}
+
+      {/* Suggestions Popup */}
+      {showSuggestions && (
+        <div className="suggestions-popup">
+          <div className="suggestions-header">Try one of these instead:</div>
+          <button onClick={() => handleApplySuggestion("jake maybe we can study science together sometime?")}>
+            jake maybe we can study science together sometime?
+          </button>
+          <button onClick={() => handleApplySuggestion("science is super hard tbh, don't worry jake!")}>
+            science is super hard tbh, don't worry jake!
+          </button>
+          <button onClick={() => handleApplySuggestion("haha science is tough jake, we'll get it next time!")}>
+            haha science is tough jake, we'll get it next time!
+          </button>
         </div>
       )}
 
@@ -104,6 +147,11 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
               if (isError) setIsError(false);
             }}
           />
+          {isReplacing && (
+            <div className="replace-overlay">
+              {replacingText}
+            </div>
+          )}
           <button type="submit" className="send-btn" disabled={!inputText.trim()}>
             <Send size={20} />
           </button>
