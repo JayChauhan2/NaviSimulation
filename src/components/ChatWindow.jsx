@@ -3,9 +3,11 @@ import { Send, Phone, Video, MoreVertical, Paperclip, Smile } from 'lucide-react
 import { currentUser, getSimulatedTimestamp } from '../data/fakeData';
 import './ChatWindow.css';
 import MessageBubble from './MessageBubble';
+import naviUpsetImg from '../assets/Navi Upset.png';
 
 export default function ChatWindow({ messages, onSendMessage, currentChat }) {
   const [inputText, setInputText] = useState('');
+  const [showNavi, setShowNavi] = useState(false);
   const messagesEndRef = useRef(null);
 
   const isGroup = currentChat.isGroup;
@@ -30,6 +32,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
     });
     
     setInputText('');
+    setShowNavi(true);
   };
 
   return (
@@ -68,6 +71,20 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
           <div ref={messagesEndRef} />
         </div>
       </div>
+
+      {/* Navi Clippy Upset Assistant */}
+      {showNavi && (
+        <div className="navi-clippy-container">
+          <div className="navi-dialogue">
+            <p>That message might be hurtful.<br />Want help responding?</p>
+            <div className="navi-options">
+              <button className="navi-btn" onClick={() => setShowNavi(false)}>Respond politely</button>
+              <button className="navi-btn ignore" onClick={() => setShowNavi(false)}>Ignore</button>
+            </div>
+          </div>
+          <img src={naviUpsetImg} alt="Navi Upset" className="navi-img" />
+        </div>
+      )}
 
       {/* Input Area */}
       <footer className="chat-footer">

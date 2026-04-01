@@ -73,6 +73,8 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  position: relative;
+  z-index: 20;
 }
 
 .footer-actions {
@@ -118,4 +120,101 @@
 
 .send-btn:not(:disabled):hover {
   transform: scale(1.1);
+}
+
+/* Navi Mascot Notification Styles */
+.navi-clippy-container {
+  position: absolute;
+  bottom: 25px; /* Sits partially behind the footer */
+  right: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideUpNavi 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes slideUpNavi {
+  0% { transform: translateY(120px) scale(0.8); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.navi-dialogue {
+  background-color: #E3F2FD;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: -10px; /* Overlap image slightly */
+  z-index: 15;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  position: relative;
+  text-align: center;
+  border: 1px solid rgba(13, 71, 161, 0.1);
+  animation: fadeInPop 0.4s ease forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+@keyframes fadeInPop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.navi-dialogue::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 50%;
+  transform: translateX(50%);
+  border-width: 8px 8px 0;
+  border-style: solid;
+  border-color: #E3F2FD transparent transparent transparent;
+}
+
+.navi-dialogue p {
+  color: #0D47A1;
+  margin: 0 0 12px 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.navi-options {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.navi-btn {
+  background-color: #1976D2;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.navi-btn:hover {
+  background-color: #1565C0;
+  transform: translateY(-1px);
+}
+
+.navi-btn.ignore {
+  background-color: transparent;
+  color: #1976D2;
+  border: 1px solid #1976D2;
+}
+
+.navi-btn.ignore:hover {
+  background-color: rgba(25, 118, 210, 0.1);
+}
+
+.navi-img {
+  width: 140px;
+  height: auto;
+  z-index: 12;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
 }
