@@ -10,6 +10,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
   const [inputText, setInputText] = useState('');
   const [showNavi, setShowNavi] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [naviMood, setNaviMood] = useState('upset');
   const [isError, setIsError] = useState(false);
   const [isReplacing, setIsReplacing] = useState(false);
   const [replacingText, setReplacingText] = useState('');
@@ -53,6 +54,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
     
     setShowNavi(true);
     setShowSuggestions(false);
+    setNaviMood('upset');
   };
 
   const closeNavi = () => {
@@ -129,7 +131,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
             <p>That message might be hurtful.<br />Want help responding?</p>
             <div className="navi-options">
               <div className="navi-options-row">
-                <button className="navi-btn" onClick={() => setShowSuggestions(true)}>Respond Politely</button>
+                <button className="navi-btn" onClick={() => { setShowSuggestions(true); setNaviMood('happy'); }}>Respond Politely</button>
                 <button className="navi-btn ignore" onClick={closeNavi}>Ignore</button>
               </div>
               <button className="navi-btn" onClick={closeNavi}>Ask An Adult For Help</button>
@@ -139,12 +141,12 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
             <img 
               src={naviUpsetImg} 
               alt="Navi Upset" 
-              className={`navi-img ${showSuggestions ? 'hidden' : 'visible'}`} 
+              className={`navi-img ${naviMood === 'happy' ? 'hidden' : 'visible'}`} 
             />
             <img 
               src={naviHappyImg} 
               alt="Navi Happy" 
-              className={`navi-img ${showSuggestions ? 'visible' : 'hidden'}`} 
+              className={`navi-img ${naviMood === 'happy' ? 'visible' : 'hidden'}`} 
             />
           </div>
         </div>
