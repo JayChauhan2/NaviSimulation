@@ -1,9 +1,11 @@
 import React from 'react';
 import { Search, MoreVertical, Edit } from 'lucide-react';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 import './Sidebar.css';
 import { currentUser } from '../data/fakeData';
 
-export default function Sidebar({ chatList, activeChatId, onSelectChat }) {
+export default function Sidebar({ chatList, activeChatId, onSelectChat, messagesMap }) {
+  const [listRef] = useAutoAnimate();
   return (
     <aside className="sidebar">
       {/* Header */}
@@ -27,23 +29,33 @@ export default function Sidebar({ chatList, activeChatId, onSelectChat }) {
       </div>
 
       {/* Contacts List */}
-      <ul className="contact-list">
-        {chatList.map((chat) => (
-          <li 
-            key={chat.id} 
-            className={`contact-item ${activeChatId === chat.id ? 'active' : ''} ${chat.isNew ? 'slide-in-left' : ''}`}
-            onClick={() => onSelectChat(chat.id)}
-          >
-            <img src={chat.avatar} alt={chat.name} className="avatar-lg" />
-            <div className="contact-info">
-              <div className="contact-meta">
-                <h4>{chat.name}</h4>
-                <span className="time">4:45 PM</span>
+      <ul className="contact-list" ref={listRef}>
+        {chatList.map((chat) => {
+          const thread = messagesMap && messagesMap[chat.id];
+          const latestMsg = thread && thread.length > 0 
+            ? thread[thread.length - 1].text 
+            : chat.status;
+          const latestTime = thread && thread.length > 0 
+            ? thread[thread.length - 1].timestamp 
+            : '4:45 PM';
+
+          return (
+            <li 
+              key={chat.id} 
+              className={`contact-item ${activeChatId === chat.id ? 'active' : ''} ${chat.isNew ? 'slide-in-left' : ''}`}
+              onClick={() => onSelectChat(chat.id)}
+            >
+              <img src={chat.avatar} alt={chat.name} className="avatar-lg" />
+              <div className="contact-info">
+                <div className="contact-meta">
+                  <h4>{chat.name}</h4>
+                  <span className="time">{latestTime}</span>
+                </div>
+                <p className="status-snippet">{latestMsg}</p>
               </div>
-              <p className="status-snippet">{chat.status}</p>
-            </div>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
     </aside>
   );

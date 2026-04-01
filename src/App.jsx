@@ -104,9 +104,10 @@ function App() {
     <>
       <div className="app-container">
         <Sidebar 
-        chatList={chats}
-        activeChatId={activeChatId} 
-        onSelectChat={handleSelectChat} 
+          chatList={chats}
+          activeChatId={activeChatId} 
+          onSelectChat={handleSelectChat} 
+          messagesMap={messagesMap}
       />
       {currentChat ? (
           <ChatWindow 
