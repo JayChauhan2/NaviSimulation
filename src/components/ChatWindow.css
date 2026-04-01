@@ -295,6 +295,46 @@
   background-color: rgba(25, 118, 210, 0.1);
 }
 
+/* Navi Danger/Warning Styles */
+.navi-dialogue.navi-danger {
+  background-color: #FFF3E0;
+  border-color: #FF9800;
+}
+
+.navi-dialogue.navi-danger::after {
+  border-color: #FFF3E0 transparent transparent transparent;
+}
+
+.navi-dialogue.navi-danger p {
+  color: #E65100;
+}
+
+.navi-danger-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #D84315;
+  margin-bottom: 8px;
+}
+
+.navi-btn.danger {
+  background-color: #F4511E;
+}
+
+.navi-btn.danger:hover {
+  background-color: #E64A19;
+}
+
+.navi-dialogue.navi-danger .navi-btn.ignore {
+  color: #F4511E;
+  border-color: #F4511E;
+}
+
+.navi-dialogue.navi-danger .navi-btn.ignore:hover {
+  background-color: rgba(244, 81, 30, 0.1);
+}
+
 .navi-img-container {
   display: grid;
   place-items: center;

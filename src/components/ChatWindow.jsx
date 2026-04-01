@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Phone, Video, MoreVertical, Paperclip, Smile } from 'lucide-react';
+import { Send, Phone, Video, MoreVertical, Paperclip, Smile, AlertTriangle } from 'lucide-react';
 import { currentUser, getSimulatedTimestamp } from '../data/fakeData';
 import './ChatWindow.css';
 import MessageBubble from './MessageBubble';
 import naviUpsetImg from '../assets/Navi Upset.png';
 import naviHappyImg from '../assets/Navi Happy.png';
+import naviConcernedImg from '../assets/Navi Concerned.png';
 
 export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode }) {
   const [inputText, setInputText] = useState('');
@@ -29,6 +30,13 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     // Add small delay to let CSS padding transition start before scrolling
     setTimeout(scrollToBottom, 50);
   }, [messages, showNavi, showSuggestions, isJakeTyping]);
+
+  useEffect(() => {
+    if (demoMode === '2' && currentChat.id === 'unknown_1') {
+      setShowNavi(true);
+      setNaviMood('concerned');
+    }
+  }, [demoMode, currentChat.id]);
 
   const handleSend = (e) => {
     e.preventDefault();
@@ -167,26 +175,49 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       {/* Navi Clippy Upset Assistant */}
       {showNavi && (
         <div className={`navi-clippy-container ${isNaviExiting ? 'navi-exiting' : ''}`}>
-          <div className="navi-dialogue">
-            <p>That message might be hurtful.<br />Want help responding?</p>
-            <div className="navi-options">
-              <div className="navi-options-row">
-                <button className="navi-btn" onClick={() => { setShowSuggestions(true); setNaviMood('happy'); }}>Respond Politely</button>
-                <button className="navi-btn ignore" onClick={closeNavi}>Ignore</button>
-              </div>
-              <button className="navi-btn" onClick={closeNavi}>Ask An Adult For Help</button>
-            </div>
+          <div className={`navi-dialogue ${naviMood === 'concerned' ? 'navi-danger' : ''}`}>
+            {naviMood === 'concerned' ? (
+              <>
+                <div className="navi-danger-header">
+                  <AlertTriangle size={20} className="alert-icon" />
+                  <strong>PII Request Detected</strong>
+                </div>
+                <p>I think this person is asking for private information.<br />This is unsafe. Should I alert your Trusted Adult?</p>
+                <div className="navi-options">
+                  <div className="navi-options-row">
+                    <button className="navi-btn danger" onClick={closeNavi}>Alert Trusted Adult</button>
+                    <button className="navi-btn ignore" onClick={closeNavi}>I'll handle it</button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <p>That message might be hurtful.<br />Want help responding?</p>
+                <div className="navi-options">
+                  <div className="navi-options-row">
+                    <button className="navi-btn" onClick={() => { setShowSuggestions(true); setNaviMood('happy'); }}>Respond Politely</button>
+                    <button className="navi-btn ignore" onClick={closeNavi}>Ignore</button>
+                  </div>
+                  <button className="navi-btn" onClick={closeNavi}>Ask An Adult For Help</button>
+                </div>
+              </>
+            )}
           </div>
           <div className="navi-img-container">
             <img
               src={naviUpsetImg}
               alt="Navi Upset"
-              className={`navi-img ${naviMood === 'happy' ? 'hidden' : 'visible'}`}
+              className={`navi-img ${naviMood === 'upset' ? 'visible' : 'hidden'}`}
             />
             <img
               src={naviHappyImg}
               alt="Navi Happy"
               className={`navi-img ${naviMood === 'happy' ? 'visible' : 'hidden'}`}
+            />
+            <img
+              src={naviConcernedImg}
+              alt="Navi Concerned"
+              className={`navi-img ${naviMood === 'concerned' ? 'visible' : 'hidden'}`}
             />
           </div>
         </div>
