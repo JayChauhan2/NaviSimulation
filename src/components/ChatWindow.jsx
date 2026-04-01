@@ -8,6 +8,7 @@ import naviUpsetImg from '../assets/Navi Upset.png';
 export default function ChatWindow({ messages, onSendMessage, currentChat }) {
   const [inputText, setInputText] = useState('');
   const [showNavi, setShowNavi] = useState(false);
+  const [isError, setIsError] = useState(false);
   const messagesEndRef = useRef(null);
 
   const isGroup = currentChat.isGroup;
@@ -24,14 +25,12 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
     e.preventDefault();
     if (!inputText.trim()) return;
     
-    onSendMessage({
-      id: Date.now().toString(),
-      senderId: currentUser.id,
-      text: inputText,
-      timestamp: getSimulatedTimestamp()
-    });
+    // Temporarily trigger the error state + reset animation instead of actually sending
+    setIsError(false);
+    setTimeout(() => {
+      setIsError(true);
+    }, 10);
     
-    setInputText('');
     setShowNavi(true);
   };
 
@@ -78,8 +77,11 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
           <div className="navi-dialogue">
             <p>That message might be hurtful.<br />Want help responding?</p>
             <div className="navi-options">
-              <button className="navi-btn" onClick={() => setShowNavi(false)}>Respond politely</button>
-              <button className="navi-btn ignore" onClick={() => setShowNavi(false)}>Ignore</button>
+              <div className="navi-options-row">
+                <button className="navi-btn" onClick={() => setShowNavi(false)}>Respond Politely</button>
+                <button className="navi-btn ignore" onClick={() => setShowNavi(false)}>Ignore</button>
+              </div>
+              <button className="navi-btn" onClick={() => setShowNavi(false)}>Ask An Adult For Help</button>
             </div>
           </div>
           <img src={naviUpsetImg} alt="Navi Upset" className="navi-img" />
@@ -92,12 +94,15 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
           <button className="icon-btn"><Smile size={24} /></button>
           <button className="icon-btn"><Paperclip size={24} /></button>
         </div>
-        <form className="input-form" onSubmit={handleSend}>
+        <form className={`input-form ${isError ? 'error-shake' : ''}`} onSubmit={handleSend}>
           <input
             type="text"
             placeholder="Type a message"
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
+            onChange={(e) => {
+              setInputText(e.target.value);
+              if (isError) setIsError(false);
+            }}
           />
           <button type="submit" className="send-btn" disabled={!inputText.trim()}>
             <Send size={20} />

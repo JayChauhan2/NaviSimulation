@@ -97,6 +97,22 @@
   padding: 12px 0;
 }
 
+.input-form.error-shake {
+  animation: iphone-shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.input-form.error-shake input {
+  color: #ff3b30;
+}
+
+@keyframes iphone-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
 .send-btn {
   background: transparent;
   border: none;
@@ -179,6 +195,13 @@
 }
 
 .navi-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.navi-options-row {
   display: flex;
   gap: 8px;
   justify-content: center;
