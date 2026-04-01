@@ -35,6 +35,9 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     if (demoMode === '2' && currentChat.id === 'unknown_1') {
       setShowNavi(true);
       setNaviMood('concerned');
+    } else if (!demoMode) {
+      setShowNavi(false);
+      setShowSuggestions(false);
     }
   }, [demoMode, currentChat.id]);
 

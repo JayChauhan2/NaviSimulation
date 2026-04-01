@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import ChatWindow from './components/ChatWindow';
-import { chatList as initialChatList, initialMessages, groupChatInfo, getSimulatedTimestamp } from './data/fakeData';
+import { chatList as initialChatList, initialMessages, groupChatInfo, getSimulatedTimestamp, dadContact, dadMessages } from './data/fakeData';
 
 function App() {
   const [activeChatId, setActiveChatId] = useState(groupChatInfo.id);
@@ -10,7 +10,8 @@ function App() {
   
   // Store messages by Chat ID
   const [messagesMap, setMessagesMap] = useState({
-    [groupChatInfo.id]: initialMessages
+    [groupChatInfo.id]: initialMessages,
+    [dadContact.id]: dadMessages
   });
 
   React.useEffect(() => {

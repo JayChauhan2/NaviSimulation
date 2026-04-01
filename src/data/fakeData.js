@@ -44,8 +44,17 @@ export const contacts = [
     avatar: getAvatar('A'),
     status: 'sleep',
     isGroup: false
+  },
+  {
+    id: 'c5',
+    name: 'Dad ❤️',
+    avatar: 'https://ui-avatars.com/api/?name=D&background=3b5998&color=fff&rounded=true&bold=true',
+    status: 'At work',
+    isGroup: false
   }
 ];
+
+export const dadContact = contacts.find(c => c.id === 'c5');
 
 export const groupChatInfo = {
   id: 'g1',
@@ -99,5 +108,56 @@ export const initialMessages = [
     senderId: 'c2', // Jake
     text: 'bet. ill be there, im lowkey struggling in science so i need this grade lol',
     timestamp: '4:45 PM'
+  }
+];
+
+export const dadMessages = [
+  {
+    id: 'd1',
+    senderId: 'c5',
+    text: '📞 Voice Call (2m 14s)',
+    timestamp: 'Yesterday'
+  },
+  {
+    id: 'd2',
+    senderId: 'c5',
+    text: 'did you make it back from school okay?',
+    timestamp: 'Yesterday'
+  },
+  {
+    id: 'd3',
+    senderId: 'me',
+    text: 'yep! just got home. eating a snack now 🥪',
+    timestamp: 'Yesterday'
+  },
+  {
+    id: 'd4',
+    senderId: 'c5',
+    text: 'good. make sure to start your homework before i get back',
+    timestamp: 'Yesterday'
+  },
+  {
+    id: 'd5',
+    senderId: 'me',
+    text: 'i knoww dad, i will chill lol',
+    timestamp: 'Yesterday'
+  },
+  {
+    id: 'd6',
+    senderId: 'c5',
+    text: '📞 Missed Voice Call',
+    timestamp: '1:30 PM'
+  },
+  {
+    id: 'd7',
+    senderId: 'me',
+    text: 'sorry missed your call, im in class rn!',
+    timestamp: '1:32 PM'
+  },
+  {
+    id: 'd8',
+    senderId: 'c5',
+    text: 'no worries, just calling to say i might be late tonight. dinner is in the fridge.',
+    timestamp: '1:45 PM'
   }
 ];
