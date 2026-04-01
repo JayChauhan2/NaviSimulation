@@ -87,10 +87,10 @@ body {
 /* Mode Selection Buttons */
 .mode-selection-container {
   position: absolute;
-  bottom: 24px;
-  left: 24px;
+  bottom: 6px;
+  left: 16px;
   display: flex;
-  gap: 16px;
+  gap: 8px;
   z-index: 50;
 }
 
@@ -98,21 +98,21 @@ body {
   background: white;
   color: #333;
   border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 8px;
-  padding: 8px 16px;
+  border-radius: 6px;
+  padding: 2px 8px;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.65rem;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .mode-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 
 .mode-btn.selected {
@@ -124,12 +124,12 @@ body {
 .mode-btn .mode-num {
   background: #f0f0f0;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 14px;
+  height: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   color: #666;
 }
 
