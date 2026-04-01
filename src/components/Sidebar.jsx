@@ -42,16 +42,18 @@ export default function Sidebar({ chatList, activeChatId, onSelectChat, messages
           return (
             <li 
               key={chat.id} 
-              className={`contact-item ${activeChatId === chat.id ? 'active' : ''} ${chat.isNew ? 'slide-in-left' : ''}`}
+              className={`contact-item ${activeChatId === chat.id ? 'active' : ''}`}
               onClick={() => onSelectChat(chat.id)}
             >
-              <img src={chat.avatar} alt={chat.name} className="avatar-lg" />
-              <div className="contact-info">
-                <div className="contact-meta">
-                  <h4>{chat.name}</h4>
-                  <span className="time">{latestTime}</span>
+              <div className={`contact-item-inner ${chat.isNew ? 'slide-in-left' : ''}`}>
+                <img src={chat.avatar} alt={chat.name} className="avatar-lg" />
+                <div className="contact-info">
+                  <div className="contact-meta">
+                    <h4>{chat.name}</h4>
+                    <span className="time">{latestTime}</span>
+                  </div>
+                  <p className="status-snippet">{latestMsg}</p>
                 </div>
-                <p className="status-snippet">{latestMsg}</p>
               </div>
             </li>
           );
