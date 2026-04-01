@@ -18,6 +18,11 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   const [isNaviExiting, setIsNaviExiting] = useState(false);
   const [hasReplaced, setHasReplaced] = useState(false);
   const [isJakeTyping, setIsJakeTyping] = useState(false);
+  
+  // Flagging Morph State
+  const [isFlagging, setIsFlagging] = useState(false);
+  const [oldChatInfo, setOldChatInfo] = useState(null);
+
   const messagesEndRef = useRef(null);
 
   const isGroup = currentChat.isGroup;
@@ -119,6 +124,22 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     }, 800); // 800ms correlates with the text slide-up crossfade time
   };
 
+  const internalHandleAlert = () => {
+    // 1. Snapshot the old chat details before the parent modifies it
+    setOldChatInfo({ name: currentChat.name, avatar: currentChat.avatar });
+    setIsFlagging(true);
+    closeNavi();
+
+    // 2. Trigger the generic parent routine to formally flag it
+    if (onAlertTrustedAdult) onAlertTrustedAdult(currentChat.id);
+
+    // 3. Keep the animation active for its CSS duration
+    setTimeout(() => {
+      setIsFlagging(false);
+      setOldChatInfo(null);
+    }, 800);
+  };
+
   let extraSpaceClass = '';
   if (showSuggestions) {
     extraSpaceClass = 'has-suggestions';
@@ -131,10 +152,19 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       {/* Chat Header */}
       <header className="chat-header">
         <div className="chat-profile">
-          <img src={currentChat.avatar} alt={currentChat.name} className="avatar" />
+          <div className="avatar-morph-container">
+            {!isFlagging && <img src={currentChat.avatar} alt={currentChat.name} className="avatar" />}
+            {isFlagging && oldChatInfo && <img src={oldChatInfo.avatar} alt="Old" className="avatar morph-out-avatar" />}
+            {isFlagging && <img src={currentChat.avatar} alt="New" className="avatar morph-in-avatar" />}
+          </div>
+          
           <div className="chat-meta">
-            <h2>{currentChat.name}</h2>
-            <span className="status">{currentChat.status}</span>
+            <div className="name-morph-container">
+              {!isFlagging && <h2>{currentChat.name}</h2>}
+              {isFlagging && oldChatInfo && <h2 className="morph-out-text">{oldChatInfo.name}</h2>}
+              {isFlagging && <h2 className="morph-in-text">{currentChat.name}</h2>}
+            </div>
+            <span className={`status ${isFlagging ? 'status-morph' : ''}`}>{currentChat.status}</span>
           </div>
         </div>
         <div className="header-actions">
@@ -188,10 +218,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
                 <p>I think this person is asking for private information.<br />This is unsafe. Should I alert your Trusted Adult?</p>
                 <div className="navi-options">
                   <div className="navi-options-row">
-                    <button className="navi-btn danger" onClick={() => {
-                      if (onAlertTrustedAdult) onAlertTrustedAdult(currentChat.id);
-                      closeNavi();
-                    }}>Alert Trusted Adult</button>
+                    <button className="navi-btn danger" onClick={internalHandleAlert}>Alert Trusted Adult</button>
                     <button className="navi-btn ignore" onClick={closeNavi}>I'll handle it</button>
                   </div>
                 </div>
