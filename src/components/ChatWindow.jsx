@@ -4,6 +4,7 @@ import { currentUser, getSimulatedTimestamp } from '../data/fakeData';
 import './ChatWindow.css';
 import MessageBubble from './MessageBubble';
 import naviUpsetImg from '../assets/Navi Upset.png';
+import naviHappyImg from '../assets/Navi Happy.png';
 
 export default function ChatWindow({ messages, onSendMessage, currentChat }) {
   const [inputText, setInputText] = useState('');
@@ -134,7 +135,18 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
               <button className="navi-btn" onClick={closeNavi}>Ask An Adult For Help</button>
             </div>
           </div>
-          <img src={naviUpsetImg} alt="Navi Upset" className="navi-img" />
+          <div className="navi-img-container">
+            <img 
+              src={naviUpsetImg} 
+              alt="Navi Upset" 
+              className={`navi-img ${showSuggestions ? 'hidden' : 'visible'}`} 
+            />
+            <img 
+              src={naviHappyImg} 
+              alt="Navi Happy" 
+              className={`navi-img ${showSuggestions ? 'visible' : 'hidden'}`} 
+            />
+          </div>
         </div>
       )}
 

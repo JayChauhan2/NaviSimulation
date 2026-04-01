@@ -295,11 +295,29 @@
   background-color: rgba(25, 118, 210, 0.1);
 }
 
+.navi-img-container {
+  display: grid;
+  place-items: center;
+  z-index: 12;
+}
+
 .navi-img {
   width: 140px;
   height: auto;
-  z-index: 12;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  grid-area: 1 / 1;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.navi-img.hidden {
+  opacity: 0;
+  transform: scale(0.6) translateY(20px);
+  pointer-events: none;
+}
+
+.navi-img.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
 
 /* Suggestions Popup Styles */
