@@ -16,6 +16,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   const [replacingText, setReplacingText] = useState('');
   const [isNaviExiting, setIsNaviExiting] = useState(false);
   const [hasReplaced, setHasReplaced] = useState(false);
+  const [isJakeTyping, setIsJakeTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
   const isGroup = currentChat.isGroup;
@@ -27,12 +28,12 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   useEffect(() => {
     // Add small delay to let CSS padding transition start before scrolling
     setTimeout(scrollToBottom, 50);
-  }, [messages, showNavi, showSuggestions]);
+  }, [messages, showNavi, showSuggestions, isJakeTyping]);
 
   const handleSend = (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
-    
+
     // If the user has accepted a suggestion, send the message for real
     if (hasReplaced) {
       onSendMessage({
@@ -43,6 +44,22 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       });
       setInputText('');
       setHasReplaced(false); // Reset for their next message
+
+      // If in teaching mode, have Jake respond after a short delay
+      if (demoMode === '1') {
+        setTimeout(() => {
+          setIsJakeTyping(true);
+          setTimeout(() => {
+            setIsJakeTyping(false);
+            onSendMessage({
+              id: Date.now().toString() + 'jake',
+              senderId: 'c2', // Jake's ID
+              text: "wait really?? bet thats awesome 🔥 ill bring my textbook and we can grind it out after the project",
+              timestamp: getSimulatedTimestamp()
+            });
+          }, 2000); // Jake types for 1.5 seconds
+        }, 1200); // 1.2 second pause before he starts typing
+      }
       return;
     }
 
@@ -52,7 +69,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setTimeout(() => {
         setIsError(true);
       }, 10);
-      
+
       setShowNavi(true);
       setShowSuggestions(false);
       setNaviMood('upset');
@@ -123,14 +140,26 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
           {messages.map((msg, index) => {
             const isMine = msg.senderId === currentUser.id;
             return (
-              <MessageBubble 
-                key={msg.id} 
-                message={msg} 
-                isMine={isMine} 
+              <MessageBubble
+                key={msg.id}
+                message={msg}
+                isMine={isMine}
                 showSender={!isMine && isGroup && (index === 0 || messages[index - 1].senderId !== msg.senderId)}
               />
             );
           })}
+
+          {isJakeTyping && (
+            <div className="typing-indicator-wrapper">
+              <img src="https://ui-avatars.com/api/?name=J&background=random&color=fff&rounded=true&bold=true" alt="Jake" className="avatar message-avatar" style={{ width: '28px', height: '28px' }} />
+              <div className="typing-indicator">
+                <span className="dot"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
+              </div>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
       </div>
@@ -149,15 +178,15 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
             </div>
           </div>
           <div className="navi-img-container">
-            <img 
-              src={naviUpsetImg} 
-              alt="Navi Upset" 
-              className={`navi-img ${naviMood === 'happy' ? 'hidden' : 'visible'}`} 
+            <img
+              src={naviUpsetImg}
+              alt="Navi Upset"
+              className={`navi-img ${naviMood === 'happy' ? 'hidden' : 'visible'}`}
             />
-            <img 
-              src={naviHappyImg} 
-              alt="Navi Happy" 
-              className={`navi-img ${naviMood === 'happy' ? 'visible' : 'hidden'}`} 
+            <img
+              src={naviHappyImg}
+              alt="Navi Happy"
+              className={`navi-img ${naviMood === 'happy' ? 'visible' : 'hidden'}`}
             />
           </div>
         </div>
