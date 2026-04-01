@@ -1,10 +1,10 @@
 import React from 'react';
 import './MessageBubble.css';
-import { contacts } from '../data/fakeData';
+import { chatList } from '../data/fakeData';
 
 export default function MessageBubble({ message, isMine, showSender }) {
   // Find sender name and avatar for group chat logic
-  const sender = isMine ? null : contacts.find((c) => c.id === message.senderId);
+  const sender = isMine ? null : chatList.find((c) => c.id === message.senderId);
 
   return (
     <div className={`message-row ${isMine ? 'mine' : 'theirs'}`}>

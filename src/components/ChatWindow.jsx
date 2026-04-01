@@ -1,17 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Phone, Video, MoreVertical, Paperclip, Smile } from 'lucide-react';
-import { groupChatInfo, currentUser } from '../data/fakeData';
+import { currentUser } from '../data/fakeData';
 import './ChatWindow.css';
 import MessageBubble from './MessageBubble';
 
-export default function ChatWindow({ messages, onSendMessage, activeContact }) {
+export default function ChatWindow({ messages, onSendMessage, currentChat }) {
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef(null);
 
-  const isGroup = !activeContact;
-  const chatInfo = isGroup 
-    ? { name: groupChatInfo.name, avatar: groupChatInfo.avatar, status: 'tap here for group info' }
-    : { name: activeContact.name, avatar: activeContact.avatar, status: activeContact.status };
+  const isGroup = currentChat.isGroup;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -25,7 +22,6 @@ export default function ChatWindow({ messages, onSendMessage, activeContact }) {
     e.preventDefault();
     if (!inputText.trim()) return;
     
-    // Simulating sending a message
     onSendMessage({
       id: Date.now().toString(),
       senderId: currentUser.id,
@@ -41,10 +37,10 @@ export default function ChatWindow({ messages, onSendMessage, activeContact }) {
       {/* Chat Header */}
       <header className="chat-header">
         <div className="chat-profile">
-          <img src={chatInfo.avatar} alt={chatInfo.name} className="avatar" />
+          <img src={currentChat.avatar} alt={currentChat.name} className="avatar" />
           <div className="chat-meta">
-            <h2>{chatInfo.name}</h2>
-            <span className="status">{chatInfo.status}</span>
+            <h2>{currentChat.name}</h2>
+            <span className="status">{currentChat.status}</span>
           </div>
         </div>
         <div className="header-actions">

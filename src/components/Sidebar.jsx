@@ -1,9 +1,9 @@
 import React from 'react';
 import { Search, MoreVertical, Edit } from 'lucide-react';
 import './Sidebar.css';
-import { contacts, currentUser } from '../data/fakeData';
+import { currentUser } from '../data/fakeData';
 
-export default function Sidebar({ activeContact, onSelectContact }) {
+export default function Sidebar({ chatList, activeChatId, onSelectChat }) {
   return (
     <aside className="sidebar">
       {/* Header */}
@@ -28,19 +28,19 @@ export default function Sidebar({ activeContact, onSelectContact }) {
 
       {/* Contacts List */}
       <ul className="contact-list">
-        {contacts.map((contact) => (
+        {chatList.map((chat) => (
           <li 
-            key={contact.id} 
-            className={`contact-item ${activeContact?.id === contact.id ? 'active' : ''}`}
-            onClick={() => onSelectContact(contact)}
+            key={chat.id} 
+            className={`contact-item ${activeChatId === chat.id ? 'active' : ''}`}
+            onClick={() => onSelectChat(chat.id)}
           >
-            <img src={contact.avatar} alt={contact.name} className="avatar-lg" />
+            <img src={chat.avatar} alt={chat.name} className="avatar-lg" />
             <div className="contact-info">
               <div className="contact-meta">
-                <h4>{contact.name}</h4>
-                <span className="time">12:34 PM</span>
+                <h4>{chat.name}</h4>
+                <span className="time">4:45 PM</span>
               </div>
-              <p className="status-snippet">{contact.status}</p>
+              <p className="status-snippet">{chat.status}</p>
             </div>
           </li>
         ))}

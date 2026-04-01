@@ -1,45 +1,48 @@
 import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import ChatWindow from './components/ChatWindow';
-import { initialMessages } from './data/fakeData';
+import { chatList, initialMessages, groupChatInfo } from './data/fakeData';
 
 function App() {
-  const [activeContact, setActiveContact] = useState(null);
+  const [activeChatId, setActiveChatId] = useState(groupChatInfo.id);
   
-  // Manage separate states for group chat and individual chats
-  const [groupMessages, setGroupMessages] = useState(initialMessages);
-  const [directMessages, setDirectMessages] = useState({});
+  // Store messages by Chat ID
+  const [messagesMap, setMessagesMap] = useState({
+    [groupChatInfo.id]: initialMessages
+  });
 
-  const handleSelectContact = (contact) => {
-    setActiveContact(contact);
+  const handleSelectChat = (chatId) => {
+    setActiveChatId(chatId);
   };
 
-  const currentMessages = activeContact 
-    ? (directMessages[activeContact.id] || [])
-    : groupMessages;
+  const currentChat = chatList.find((chat) => chat.id === activeChatId);
+  const currentMessages = messagesMap[activeChatId] || [];
 
   const handleSendMessage = (message) => {
-    if (activeContact) {
-      setDirectMessages(prev => ({
-        ...prev,
-        [activeContact.id]: [...(prev[activeContact.id] || []), message]
-      }));
-    } else {
-      setGroupMessages(prev => [...prev, message]);
-    }
+    setMessagesMap(prev => ({
+      ...prev,
+      [activeChatId]: [...(prev[activeChatId] || []), message]
+    }));
   };
 
   return (
     <div className="app-container">
       <Sidebar 
-        activeContact={activeContact} 
-        onSelectContact={handleSelectContact} 
+        chatList={chatList}
+        activeChatId={activeChatId} 
+        onSelectChat={handleSelectChat} 
       />
-      <ChatWindow 
-        messages={currentMessages}
-        onSendMessage={handleSendMessage}
-        activeContact={activeContact}
-      />
+      {currentChat ? (
+        <ChatWindow 
+          messages={currentMessages}
+          onSendMessage={handleSendMessage}
+          currentChat={currentChat}
+        />
+      ) : (
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--bg-primary)' }}>
+          <p style={{ color: 'var(--text-muted)' }}>Select a chat to start messaging</p>
+        </div>
+      )}
     </div>
   );
 }

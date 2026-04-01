@@ -1,82 +1,93 @@
-// Generate default placeholder avatars using ui-avatars
-
 const getAvatar = (name) => `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&rounded=true&bold=true`;
 
 export const currentUser = {
   id: 'me',
-  name: 'Me',
-  avatar: getAvatar('M')
+  name: 'Me', // Teenage Girl
+  avatar: getAvatar('Me')
 };
 
 export const contacts = [
   {
     id: 'c1',
-    name: 'Alex',
-    avatar: getAvatar('Alex'),
-    status: 'Sleeping...'
+    name: 'Chloe',
+    avatar: getAvatar('C'),
+    status: 'doing homework...',
+    isGroup: false
   },
   {
     id: 'c2',
-    name: 'Bro',
-    avatar: getAvatar('Bro'),
-    status: 'Urgent calls only'
+    name: 'Jake',
+    avatar: getAvatar('J'),
+    status: 'gym',
+    isGroup: false
   },
   {
     id: 'c3',
-    name: 'Chris',
-    avatar: getAvatar('Chris'),
-    status: 'Battery about to die fr'
+    name: 'Mia',
+    avatar: getAvatar('M'),
+    status: 'Snapchat me',
+    isGroup: false
   },
   {
     id: 'c4',
-    name: 'Dani',
-    avatar: getAvatar('Dani'),
-    status: 'Gaming'
-  },
-  {
-    id: 'c5',
-    name: 'Eli',
-    avatar: getAvatar('Eli'),
-    status: 'Available'
-  },
+    name: 'Alex',
+    avatar: getAvatar('A'),
+    status: 'sleep',
+    isGroup: false
+  }
 ];
 
 export const groupChatInfo = {
   id: 'g1',
-  name: 'The Squad 💀',
-  avatar: getAvatar('S'),
-  members: ['me', 'c1', 'c2', 'c3']
+  name: 'Science Project 🔬',
+  avatar: getAvatar('SP'),
+  status: 'Jake, Mia, Chloe, Alex, You',
+  isGroup: true
 };
+
+export const chatList = [groupChatInfo, ...contacts];
 
 export const initialMessages = [
   {
     id: 'm1',
-    senderId: 'c1',
-    text: 'yo are we still linking up today??',
-    timestamp: '10:00 AM'
+    senderId: 'me',
+    text: 'Hey guys! When are we meeting up to start the science project?? It\'s literally due next week 😭',
+    timestamp: '4:30 PM'
   },
   {
     id: 'm2',
-    senderId: 'c2',
-    text: 'yeah bro im already omw',
-    timestamp: '10:05 AM'
+    senderId: 'c2', // Jake
+    text: 'bro idk whenever just lmk',
+    timestamp: '4:35 PM'
   },
   {
     id: 'm3',
-    senderId: 'c3',
-    text: 'wait drop the pin idek where we going tbh',
-    timestamp: '10:12 AM'
+    senderId: 'c3', // Mia
+    text: 'I can do tomorrow right after school! Does that work for everyone?',
+    timestamp: '4:37 PM'
   },
   {
     id: 'm4',
-    senderId: 'me',
-    text: 'bro literally look at the gc description 💀',
-    timestamp: '10:15 AM'
+    senderId: 'c4', // Alex
+    text: 'nah cant do tmrw got practice.',
+    timestamp: '4:40 PM'
   },
   {
     id: 'm5',
-    senderId: 'c1',
-    text: 'nah fr bro is lost 😭',
-    timestamp: '10:16 AM'
+    senderId: 'me', // User
+    text: 'Okay what about Thursday then? We really need to get the poster board done.',
+    timestamp: '4:42 PM'
+  },
+  {
+    id: 'm6',
+    senderId: 'c1', // Chloe
+    text: 'Thursday works perfectly for me! I can bring the markers and stuff.',
+    timestamp: '4:44 PM'
+  },
+  {
+    id: 'm7',
+    senderId: 'c2', // Jake
+    text: 'bet. ill be there.',
+    timestamp: '4:45 PM'
   }
 ];
