@@ -6,7 +6,7 @@ import MessageBubble from './MessageBubble';
 import naviUpsetImg from '../assets/Navi Upset.png';
 import naviHappyImg from '../assets/Navi Happy.png';
 
-export default function ChatWindow({ messages, onSendMessage, currentChat }) {
+export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode }) {
   const [inputText, setInputText] = useState('');
   const [showNavi, setShowNavi] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -46,15 +46,26 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
       return;
     }
 
-    // Temporarily trigger the error state + reset animation instead of actually sending
-    setIsError(false);
-    setTimeout(() => {
-      setIsError(true);
-    }, 10);
-    
-    setShowNavi(true);
-    setShowSuggestions(false);
-    setNaviMood('upset');
+    if (demoMode === '1') {
+      // Temporarily trigger the error state + reset animation instead of actually sending
+      setIsError(false);
+      setTimeout(() => {
+        setIsError(true);
+      }, 10);
+      
+      setShowNavi(true);
+      setShowSuggestions(false);
+      setNaviMood('upset');
+    } else {
+      // Send normally if not in Teaching Mode
+      onSendMessage({
+        id: Date.now().toString(),
+        senderId: currentUser.id,
+        text: inputText,
+        timestamp: getSimulatedTimestamp()
+      });
+      setInputText('');
+    }
   };
 
   const closeNavi = () => {
