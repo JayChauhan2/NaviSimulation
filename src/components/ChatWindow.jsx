@@ -7,7 +7,7 @@ import naviUpsetImg from '../assets/Navi Upset.png';
 import naviHappyImg from '../assets/Navi Happy.png';
 import naviConcernedImg from '../assets/Navi Concerned.png';
 
-export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode }) {
+export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode, onAlertTrustedAdult }) {
   const [inputText, setInputText] = useState('');
   const [showNavi, setShowNavi] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -188,7 +188,10 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
                 <p>I think this person is asking for private information.<br />This is unsafe. Should I alert your Trusted Adult?</p>
                 <div className="navi-options">
                   <div className="navi-options-row">
-                    <button className="navi-btn danger" onClick={closeNavi}>Alert Trusted Adult</button>
+                    <button className="navi-btn danger" onClick={() => {
+                      if (onAlertTrustedAdult) onAlertTrustedAdult(currentChat.id);
+                      closeNavi();
+                    }}>Alert Trusted Adult</button>
                     <button className="navi-btn ignore" onClick={closeNavi}>I'll handle it</button>
                   </div>
                 </div>

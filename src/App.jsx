@@ -73,6 +73,33 @@ function App() {
     }));
   };
 
+  const handleAlertTrustedAdult = (suspiciousChatId) => {
+    setChats(prev => prev.map(chat => {
+      if (chat.id === suspiciousChatId) {
+        return {
+          ...chat,
+          name: '🚩 Flagged Contact',
+          avatar: 'https://ui-avatars.com/api/?name=%E2%9A%A0%EF%B8%8F&background=FF3B30&color=fff&rounded=true&bold=true',
+          status: 'Reported to Trusted Adult'
+        };
+      }
+      return chat;
+    }));
+
+    setMessagesMap(prev => ({
+      ...prev,
+      [dadContact.id]: [
+        ...(prev[dadContact.id] || []),
+        {
+          id: Date.now().toString(),
+          senderId: 'me',
+          text: `🚨 I just got a sketchy message from an unknown number asking for personal info. I flagged it.`,
+          timestamp: getSimulatedTimestamp()
+        }
+      ]
+    }));
+  };
+
   return (
     <>
       <div className="app-container">
@@ -87,6 +114,7 @@ function App() {
             onSendMessage={handleSendMessage}
             currentChat={currentChat}
             demoMode={demoMode}
+            onAlertTrustedAdult={handleAlertTrustedAdult}
           />
         ) : (
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--bg-primary)' }}>
