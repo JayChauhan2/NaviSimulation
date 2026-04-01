@@ -4,7 +4,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import './Sidebar.css';
 import { currentUser } from '../data/fakeData';
 
-export default function Sidebar({ chatList, activeChatId, onSelectChat, messagesMap, morphingChatId, oldMorphInfo, bumpedChatId, oldBumpedSnippet }) {
+export default function Sidebar({ chatList, activeChatId, onSelectChat, messagesMap, morphingChatId, oldMorphInfo, bumpedChatId, oldBumpedSnippet, typingChatId }) {
   const [listRef] = useAutoAnimate();
   return (
     <aside className="sidebar">
@@ -31,9 +31,14 @@ export default function Sidebar({ chatList, activeChatId, onSelectChat, messages
       <ul className="contact-list" ref={listRef}>
         {chatList.map((chat) => {
           const thread = messagesMap && messagesMap[chat.id];
-          const latestMsg = thread && thread.length > 0
-            ? thread[thread.length - 1].text
+          let latestMsg = thread && thread.length > 0 
+            ? thread[thread.length - 1].text 
             : chat.status;
+            
+          if (typeof latestMsg === 'string') {
+            latestMsg = latestMsg.replace(/_/g, '').replace(/\n\n/g, ' - ').replace(/\n/g, ' ');
+          }
+          
           const latestTime = thread && thread.length > 0
             ? thread[thread.length - 1].timestamp
             : '4:45 PM';
@@ -65,10 +70,16 @@ export default function Sidebar({ chatList, activeChatId, onSelectChat, messages
                   </div>
                   
                   <div className="status-snippet-container">
-                    {!isFlagged && !isBumped && <p className="status-snippet">{latestMsg}</p>}
-                    {isFlagged && <p className="status-snippet status-morph">{latestMsg}</p>}
-                    {isBumped && oldBumpedSnippet && <p className="status-snippet morph-out-text">{oldBumpedSnippet}</p>}
-                    {isBumped && <p className="status-snippet morph-in-text">{latestMsg}</p>}
+                    {typingChatId === chat.id ? (
+                      <p className="status-snippet" style={{ color: 'var(--primary-color)', fontStyle: 'italic', fontWeight: '500' }}>typing...</p>
+                    ) : (
+                      <>
+                        {!isFlagged && !isBumped && <p className="status-snippet">{latestMsg}</p>}
+                        {isFlagged && <p className="status-snippet status-morph">{latestMsg}</p>}
+                        {isBumped && oldBumpedSnippet && <p className="status-snippet morph-out-text">{oldBumpedSnippet}</p>}
+                        {isBumped && <p className="status-snippet morph-in-text">{latestMsg}</p>}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

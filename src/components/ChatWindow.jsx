@@ -7,7 +7,7 @@ import naviUpsetImg from '../assets/Navi Upset.png';
 import naviHappyImg from '../assets/Navi Happy.png';
 import naviConcernedImg from '../assets/Navi Concerned.png';
 
-export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode, onAlertTrustedAdult, morphingChatId, oldMorphInfo }) {
+export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode, onAlertTrustedAdult, morphingChatId, oldMorphInfo, typingChatId }) {
   const [inputText, setInputText] = useState('');
   const [showNavi, setShowNavi] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -171,9 +171,9 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
             );
           })}
 
-          {isJakeTyping && (
+          {(isJakeTyping || typingChatId === currentChat.id) && (
             <div className="typing-indicator-wrapper">
-              <img src="https://ui-avatars.com/api/?name=J&background=random&color=fff&rounded=true&bold=true" alt="Jake" className="avatar message-avatar" style={{ width: '28px', height: '28px' }} />
+              <img src={isJakeTyping ? "https://ui-avatars.com/api/?name=J&background=random&color=fff&rounded=true&bold=true" : currentChat.avatar} alt="Typing" className="avatar message-avatar" style={{ width: '28px', height: '28px' }} />
               <div className="typing-indicator">
                 <span className="dot"></span>
                 <span className="dot"></span>

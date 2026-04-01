@@ -17,7 +17,14 @@ export default function MessageBubble({ message, isMine, showSender }) {
         {!isMine && showSender && sender && (
           <span className="sender-name">{sender.name}</span>
         )}
-        <p className="message-text">{message.text}</p>
+        <p className="message-text">
+          {message.text.split('\n').map((line, i, arr) => (
+            <React.Fragment key={i}>
+              {line.split(/_(.*?)_/g).map((part, j) => j % 2 === 1 ? <i key={j}>{part}</i> : part)}
+              {i < arr.length - 1 && <br />}
+            </React.Fragment>
+          ))}
+        </p>
         <span className="timestamp">{message.timestamp}</span>
       </div>
     </div>
