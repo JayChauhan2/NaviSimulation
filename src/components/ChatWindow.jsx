@@ -58,7 +58,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
       setIsError(false);
       setIsReplacing(false);
       setReplacingText('');
-    }, 600); // 600ms correlates with the sweep sweepRight animation time
+    }, 800); // 800ms correlates with the text slide-up crossfade time
   };
 
   return (
@@ -137,7 +137,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
           <button className="icon-btn"><Smile size={24} /></button>
           <button className="icon-btn"><Paperclip size={24} /></button>
         </div>
-        <form className={`input-form ${isError ? 'error-shake' : ''}`} onSubmit={handleSend}>
+        <form className={`input-form ${isError ? 'error-shake' : ''} ${isReplacing ? 'morph-replacing' : ''}`} onSubmit={handleSend}>
           <input
             type="text"
             placeholder="Type a message"

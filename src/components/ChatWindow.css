@@ -349,7 +349,16 @@
   100% { transform: translateY(0); opacity: 1; }
 }
 
-/* Text Replacement Left-to-Right Scanner Effect */
+/* Text Morph Replacement Effect */
+.input-form.morph-replacing input {
+  animation: fadeOutUpText 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeOutUpText {
+  0% { transform: translateY(0); opacity: 1; filter: blur(0); }
+  100% { transform: translateY(-8px); opacity: 0; filter: blur(3px); }
+}
+
 .replace-overlay {
   position: absolute;
   left: 16px;
@@ -358,23 +367,17 @@
   display: flex;
   align-items: center;
   font-size: 0.95rem;
-  color: #0D47A1;
-  background-color: #E3F2FD;
+  color: #1976D2;
   white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid #1976D2;
-  box-shadow: 2px 0 10px rgba(25, 118, 210, 0.6);
-  width: 0;
-  animation: sweepReplace 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  width: max-content;
+  max-width: calc(100% - 48px);
   z-index: 5;
-  border-radius: 4px;
+  opacity: 0;
+  animation: fadeInUpText 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 0.15s;
 }
 
-@keyframes sweepReplace {
-  0% { 
-    width: 0; 
-  }
-  100% { 
-    width: calc(100% - 48px); /* Stops right before the send button */
-  }
+@keyframes fadeInUpText {
+  0% { transform: translateY(8px); opacity: 0; filter: blur(3px); }
+  100% { transform: translateY(0); opacity: 1; filter: blur(0); }
 }
