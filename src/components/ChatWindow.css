@@ -65,6 +65,17 @@
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
+  transition: padding-bottom 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.messages-container.has-navi {
+  padding-bottom: 240px;
+  /* Space for the Mascot pop-up */
+}
+
+.messages-container.has-suggestions {
+  padding-bottom: 220px;
+  /* Space for the Suggestions pop-up */
 }
 
 .chat-footer {
@@ -189,6 +200,7 @@
     transform: translateY(0) scale(1);
     opacity: 1;
   }
+
   100% {
     transform: translateY(120px) scale(0.8);
     opacity: 0;
@@ -293,7 +305,7 @@
 /* Suggestions Popup Styles */
 .suggestions-popup {
   position: absolute;
-  bottom: calc(100% + 15px); 
+  bottom: calc(100% + 15px);
   left: 0;
   max-width: 380px;
   background-color: #E3F2FD;
@@ -347,8 +359,15 @@
 }
 
 @keyframes slideUpPopup {
-  0% { transform: translateY(20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Text Morph Replacement Effect */
@@ -357,8 +376,17 @@
 }
 
 @keyframes fadeOutUpText {
-  0% { transform: translateY(0); opacity: 1; filter: blur(0); }
-  100% { transform: translateY(-8px); opacity: 0; filter: blur(3px); }
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  100% {
+    transform: translateY(-8px);
+    opacity: 0;
+    filter: blur(3px);
+  }
 }
 
 .replace-overlay {
@@ -380,6 +408,15 @@
 }
 
 @keyframes fadeInUpText {
-  0% { transform: translateY(8px); opacity: 0; filter: blur(3px); }
-  100% { transform: translateY(0); opacity: 1; filter: blur(0); }
+  0% {
+    transform: translateY(8px);
+    opacity: 0;
+    filter: blur(3px);
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+    filter: blur(0);
+  }
 }

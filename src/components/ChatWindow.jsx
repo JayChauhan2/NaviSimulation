@@ -23,8 +23,9 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    // Add small delay to let CSS padding transition start before scrolling
+    setTimeout(scrollToBottom, 50);
+  }, [messages, showNavi, showSuggestions]);
 
   const handleSend = (e) => {
     e.preventDefault();
@@ -76,6 +77,13 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
     }, 800); // 800ms correlates with the text slide-up crossfade time
   };
 
+  let extraSpaceClass = '';
+  if (showSuggestions) {
+    extraSpaceClass = 'has-suggestions';
+  } else if (showNavi || isNaviExiting) {
+    extraSpaceClass = 'has-navi';
+  }
+
   return (
     <main className="chat-window">
       {/* Chat Header */}
@@ -97,7 +105,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
 
       {/* Messages Area */}
       <div className="messages-area">
-        <div className="messages-container">
+        <div className={`messages-container ${extraSpaceClass}`}>
           {messages.map((msg, index) => {
             const isMine = msg.senderId === currentUser.id;
             return (
