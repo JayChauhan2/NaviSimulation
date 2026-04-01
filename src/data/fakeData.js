@@ -113,6 +113,24 @@ export const initialMessages = [
 
 export const dadMessages = [
   {
+    id: 'd_alert1',
+    senderId: 'me',
+    text: `🚨 Navi and I just got a sketchy message from an unknown number asking for personal info. We flagged it:\n\n_Contact: +1 (800) 993-2198_\n_Message: "URGENT: Your package delivery failed. Please click here to update your shipping address and pay the $1.99 redelivery fee!"_`,
+    timestamp: 'Last Tuesday'
+  },
+  {
+    id: 'd_alert2',
+    senderId: 'c5',
+    text: 'wow definitely a scammer trying to steal your credit card info. great job noticing that, never click those links! did you block the number?',
+    timestamp: 'Last Tuesday'
+  },
+  {
+    id: 'd_alert3',
+    senderId: 'me',
+    text: 'yeah blocked and deleted immediately 🙅‍♀️',
+    timestamp: 'Last Tuesday'
+  },
+  {
     id: 'd1',
     senderId: 'c5',
     text: '📞 Voice Call (2m 14s)',
