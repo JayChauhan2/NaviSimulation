@@ -74,17 +74,28 @@ function App() {
   };
 
   const handleAlertTrustedAdult = (suspiciousChatId) => {
-    setChats(prev => prev.map(chat => {
-      if (chat.id === suspiciousChatId) {
-        return {
-          ...chat,
+    setChats(prev => {
+      const newChats = [...prev];
+      const suspiciousIdx = newChats.findIndex(c => c.id === suspiciousChatId);
+      const dadIdx = newChats.findIndex(c => c.id === dadContact.id);
+
+      if (suspiciousIdx !== -1) {
+        newChats[suspiciousIdx] = {
+          ...newChats[suspiciousIdx],
           name: '🚩 Flagged Contact',
           avatar: 'https://ui-avatars.com/api/?name=%E2%9A%A0%EF%B8%8F&background=FF3B30&color=fff&rounded=true&bold=true',
           status: 'Reported to Trusted Adult'
         };
+        delete newChats[suspiciousIdx].isNew;
       }
-      return chat;
-    }));
+
+      if (dadIdx !== -1) {
+        const dadChat = newChats.splice(dadIdx, 1)[0];
+        newChats.unshift(dadChat);
+      }
+
+      return newChats;
+    });
 
     setMessagesMap(prev => ({
       ...prev,

@@ -110,6 +110,7 @@ input::placeholder {
 }
 
 .contact-item {
+  display: block;
   cursor: pointer;
   border-bottom: 1px solid var(--bg-glass);
   transition: background 0.1s ease;
