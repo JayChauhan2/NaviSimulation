@@ -37,6 +37,12 @@
   object-fit: cover;
 }
 
+.sidebar-avatar {
+  min-width: 48px;
+  width: 48px;
+  height: 48px;
+}
+
 h2 {
   font-size: 1.25rem;
   font-weight: 600;
@@ -181,4 +187,30 @@ input::placeholder {
 
 .slide-in-left {
   animation: slideInLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.status-snippet-container {
+  position: relative;
+  height: 18px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+p.status-snippet.morph-out-text,
+p.status-snippet.morph-in-text {
+  font-size: 0.85rem;
+  font-weight: 400;
+  width: 100%;
+}
+
+.flash-update {
+  animation: flashHighlight 1.2s ease;
+}
+
+@keyframes flashHighlight {
+  0% { background-color: var(--bg-glass-hover); }
+  35% { background-color: rgba(25, 118, 210, 0.15); }
+  100% { background-color: transparent; }
 }

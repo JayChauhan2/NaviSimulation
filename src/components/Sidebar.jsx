@@ -4,14 +4,13 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import './Sidebar.css';
 import { currentUser } from '../data/fakeData';
 
-export default function Sidebar({ chatList, activeChatId, onSelectChat, messagesMap }) {
+export default function Sidebar({ chatList, activeChatId, onSelectChat, messagesMap, morphingChatId, oldMorphInfo, bumpedChatId, oldBumpedSnippet }) {
   const [listRef] = useAutoAnimate();
   return (
     <aside className="sidebar">
       {/* Header */}
       <header className="sidebar-header">
         <div className="user-profile">
-          <img src={currentUser.avatar} alt="Me" className="avatar" />
           <h2>Chats</h2>
         </div>
         <div className="header-actions">
@@ -32,27 +31,45 @@ export default function Sidebar({ chatList, activeChatId, onSelectChat, messages
       <ul className="contact-list" ref={listRef}>
         {chatList.map((chat) => {
           const thread = messagesMap && messagesMap[chat.id];
-          const latestMsg = thread && thread.length > 0 
-            ? thread[thread.length - 1].text 
+          const latestMsg = thread && thread.length > 0
+            ? thread[thread.length - 1].text
             : chat.status;
-          const latestTime = thread && thread.length > 0 
-            ? thread[thread.length - 1].timestamp 
+          const latestTime = thread && thread.length > 0
+            ? thread[thread.length - 1].timestamp
             : '4:45 PM';
+
+          const isFlagged = morphingChatId === chat.id;
+          const isBumped = bumpedChatId === chat.id;
 
           return (
             <li 
               key={chat.id} 
-              className={`contact-item ${activeChatId === chat.id ? 'active' : ''}`}
+              className={`contact-item ${activeChatId === chat.id ? 'active' : ''} ${isBumped ? 'flash-update' : ''}`}
               onClick={() => onSelectChat(chat.id)}
             >
               <div className={`contact-item-inner ${chat.isNew ? 'slide-in-left' : ''}`}>
-                <img src={chat.avatar} alt={chat.name} className="avatar-lg" />
+                <div className="avatar-morph-container sidebar-avatar">
+                  {!isFlagged && <img src={chat.avatar} alt={chat.name} className="avatar-lg" />}
+                  {isFlagged && oldMorphInfo && <img src={oldMorphInfo.avatar} className="avatar-lg morph-out-avatar" />}
+                  {isFlagged && <img src={chat.avatar} className="avatar-lg morph-in-avatar" />}
+                </div>
+
                 <div className="contact-info">
                   <div className="contact-meta">
-                    <h4>{chat.name}</h4>
+                    <div className="name-morph-container">
+                      {!isFlagged && <h4>{chat.name}</h4>}
+                      {isFlagged && oldMorphInfo && <h4 className="morph-out-text">{oldMorphInfo.name}</h4>}
+                      {isFlagged && <h4 className="morph-in-text">{chat.name}</h4>}
+                    </div>
                     <span className="time">{latestTime}</span>
                   </div>
-                  <p className="status-snippet">{latestMsg}</p>
+                  
+                  <div className="status-snippet-container">
+                    {!isFlagged && !isBumped && <p className="status-snippet">{latestMsg}</p>}
+                    {isFlagged && <p className="status-snippet status-morph">{latestMsg}</p>}
+                    {isBumped && oldBumpedSnippet && <p className="status-snippet morph-out-text">{oldBumpedSnippet}</p>}
+                    {isBumped && <p className="status-snippet morph-in-text">{latestMsg}</p>}
+                  </div>
                 </div>
               </div>
             </li>

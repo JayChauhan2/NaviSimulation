@@ -14,6 +14,14 @@ function App() {
     [dadContact.id]: dadMessages
   });
 
+  // Global morphing state
+  const [morphingChatId, setMorphingChatId] = useState(null);
+  const [oldMorphInfo, setOldMorphInfo] = useState(null);
+  
+  // Bumped contact state (for Dad alerting)
+  const [bumpedChatId, setBumpedChatId] = useState(null);
+  const [oldBumpedSnippet, setOldBumpedSnippet] = useState(null);
+
   React.useEffect(() => {
     if (demoMode === '2') {
       const unknownId = 'unknown_1';
@@ -74,6 +82,26 @@ function App() {
   };
 
   const handleAlertTrustedAdult = (suspiciousChatId) => {
+    // 1. Flagging contact morph tracking
+    const chatToFlag = chats.find(c => c.id === suspiciousChatId);
+    if (chatToFlag) {
+      setOldMorphInfo({ name: chatToFlag.name, avatar: chatToFlag.avatar });
+      setMorphingChatId(suspiciousChatId);
+    }
+    
+    // 2. Bump tracking for Dad's contact update
+    const dadMsgs = messagesMap[dadContact.id];
+    const oldDadSnippet = dadMsgs && dadMsgs.length > 0 ? dadMsgs[dadMsgs.length - 1].text : '';
+    setBumpedChatId(dadContact.id);
+    setOldBumpedSnippet(oldDadSnippet);
+
+    setTimeout(() => {
+      setMorphingChatId(null);
+      setOldMorphInfo(null);
+      setBumpedChatId(null);
+      setOldBumpedSnippet(null);
+    }, 800);
+
     setChats(prev => {
       const newChats = [...prev];
       const suspiciousIdx = newChats.findIndex(c => c.id === suspiciousChatId);
@@ -119,6 +147,10 @@ function App() {
           activeChatId={activeChatId} 
           onSelectChat={handleSelectChat} 
           messagesMap={messagesMap}
+          morphingChatId={morphingChatId}
+          oldMorphInfo={oldMorphInfo}
+          bumpedChatId={bumpedChatId}
+          oldBumpedSnippet={oldBumpedSnippet}
       />
       {currentChat ? (
           <ChatWindow 
@@ -127,6 +159,8 @@ function App() {
             currentChat={currentChat}
             demoMode={demoMode}
             onAlertTrustedAdult={handleAlertTrustedAdult}
+            morphingChatId={morphingChatId}
+            oldMorphInfo={oldMorphInfo}
           />
         ) : (
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--bg-primary)' }}>
