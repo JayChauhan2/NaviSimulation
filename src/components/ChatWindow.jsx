@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Phone, Video, MoreVertical, Paperclip, Smile } from 'lucide-react';
-import { currentUser } from '../data/fakeData';
+import { currentUser, getSimulatedTimestamp } from '../data/fakeData';
 import './ChatWindow.css';
 import MessageBubble from './MessageBubble';
 
@@ -26,7 +26,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
       id: Date.now().toString(),
       senderId: currentUser.id,
       text: inputText,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      timestamp: getSimulatedTimestamp()
     });
     
     setInputText('');

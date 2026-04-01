@@ -1,3 +1,13 @@
+export const APP_START_TIME = Date.now();
+const SIMULATED_START_TIME = new Date();
+SIMULATED_START_TIME.setHours(16, 46, 0, 0); // Start at 4:46 PM
+
+export const getSimulatedTimestamp = () => {
+  const elapsed = Date.now() - APP_START_TIME;
+  const simulatedNow = new Date(SIMULATED_START_TIME.getTime() + elapsed);
+  return simulatedNow.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+};
+
 const getAvatar = (name) => `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&rounded=true&bold=true`;
 
 export const currentUser = {
