@@ -31,7 +31,7 @@ export default function Sidebar({ chatList, activeChatId, onSelectChat }) {
         {chatList.map((chat) => (
           <li 
             key={chat.id} 
-            className={`contact-item ${activeChatId === chat.id ? 'active' : ''}`}
+            className={`contact-item ${activeChatId === chat.id ? 'active' : ''} ${chat.isNew ? 'slide-in-left' : ''}`}
             onClick={() => onSelectChat(chat.id)}
           >
             <img src={chat.avatar} alt={chat.name} className="avatar-lg" />
