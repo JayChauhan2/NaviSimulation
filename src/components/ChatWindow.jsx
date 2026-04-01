@@ -13,6 +13,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
   const [isReplacing, setIsReplacing] = useState(false);
   const [replacingText, setReplacingText] = useState('');
   const [isNaviExiting, setIsNaviExiting] = useState(false);
+  const [hasReplaced, setHasReplaced] = useState(false);
   const messagesEndRef = useRef(null);
 
   const isGroup = currentChat.isGroup;
@@ -29,6 +30,19 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
     e.preventDefault();
     if (!inputText.trim()) return;
     
+    // If the user has accepted a suggestion, send the message for real
+    if (hasReplaced) {
+      onSendMessage({
+        id: Date.now().toString(),
+        senderId: currentUser.id,
+        text: inputText,
+        timestamp: getSimulatedTimestamp()
+      });
+      setInputText('');
+      setHasReplaced(false); // Reset for their next message
+      return;
+    }
+
     // Temporarily trigger the error state + reset animation instead of actually sending
     setIsError(false);
     setTimeout(() => {
@@ -55,9 +69,10 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
 
     setTimeout(() => {
       setInputText(suggestion);
-      setIsError(false);
+      setIsError(false); // remove error styling since it's nice now
       setIsReplacing(false);
       setReplacingText('');
+      setHasReplaced(true); // Unlock sending capability
     }, 800); // 800ms correlates with the text slide-up crossfade time
   };
 
