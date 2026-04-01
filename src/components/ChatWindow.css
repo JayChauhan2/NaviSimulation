@@ -90,6 +90,7 @@
   border-radius: var(--radius-sm);
   padding: 4px 16px;
   gap: 12px;
+  position: relative;
 }
 
 .input-form input {
@@ -292,10 +293,10 @@
 /* Suggestions Popup Styles */
 .suggestions-popup {
   position: absolute;
-  bottom: 80px; 
-  left: 20px;
+  bottom: calc(100% + 15px); 
+  left: 0;
   max-width: 380px;
-  background: white;
+  background-color: #E3F2FD;
   border-radius: 12px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
   display: flex;
@@ -303,25 +304,25 @@
   padding: 8px;
   z-index: 30;
   animation: slideUpPopup 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(13, 71, 161, 0.1);
 }
 
 .suggestions-popup::after {
   content: '';
   position: absolute;
   bottom: -8px;
-  left: 30px;
+  left: 16px;
   border-width: 8px 8px 0;
   border-style: solid;
-  border-color: white transparent transparent transparent;
+  border-color: #E3F2FD transparent transparent transparent;
 }
 
 .suggestions-header {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #666;
+  color: #0D47A1;
   padding: 8px 12px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid rgba(13, 71, 161, 0.15);
   margin-bottom: 4px;
 }
 
@@ -332,15 +333,16 @@
   border-radius: 8px;
   text-align: left;
   font-size: 0.95rem;
-  color: #333;
+  color: #0D47A1;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
   line-height: 1.4;
+  font-weight: 500;
 }
 
 .suggestions-popup button:hover {
-  background: #E3F2FD;
+  background: rgba(13, 71, 161, 0.1);
   color: #0D47A1;
 }
 

@@ -130,22 +130,6 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
         </div>
       )}
 
-      {/* Suggestions Popup */}
-      {showSuggestions && (
-        <div className="suggestions-popup">
-          <div className="suggestions-header">Try one of these instead:</div>
-          <button onClick={() => handleApplySuggestion("jake maybe we can study science together sometime?")}>
-            jake maybe we can study science together sometime?
-          </button>
-          <button onClick={() => handleApplySuggestion("science is super hard tbh, don't worry jake!")}>
-            science is super hard tbh, don't worry jake!
-          </button>
-          <button onClick={() => handleApplySuggestion("haha science is tough jake, we'll get it next time!")}>
-            haha science is tough jake, we'll get it next time!
-          </button>
-        </div>
-      )}
-
       {/* Input Area */}
       <footer className="chat-footer">
         <div className="footer-actions">
@@ -153,6 +137,21 @@ export default function ChatWindow({ messages, onSendMessage, currentChat }) {
           <button className="icon-btn"><Paperclip size={24} /></button>
         </div>
         <form className={`input-form ${isError ? 'error-shake' : ''} ${isReplacing ? 'morph-replacing' : ''}`} onSubmit={handleSend}>
+          {/* Suggestions Popup */}
+          {showSuggestions && (
+            <div className="suggestions-popup">
+              <div className="suggestions-header">Try one of these instead:</div>
+              <button onClick={() => handleApplySuggestion("jake maybe we can study science together sometime?")}>
+                jake maybe we can study science together sometime?
+              </button>
+              <button onClick={() => handleApplySuggestion("science is super hard tbh, don't worry jake!")}>
+                science is super hard tbh, don't worry jake!
+              </button>
+              <button onClick={() => handleApplySuggestion("haha science is tough jake, we'll get it next time!")}>
+                haha science is tough jake, we'll get it next time!
+              </button>
+            </div>
+          )}
           <input
             type="text"
             placeholder="Type a message"
