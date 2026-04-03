@@ -87,11 +87,18 @@ body {
 /* Mode Selection Buttons */
 .mode-selection-container {
   position: absolute;
-  bottom: 6px;
-  left: 16px;
+  bottom: 0;
+  left: 0;
   display: flex;
   gap: 8px;
   z-index: 50;
+  padding: 40px 40px 6px 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.mode-selection-container:hover {
+  opacity: 1;
 }
 
 .mode-btn {
