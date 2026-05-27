@@ -76,13 +76,12 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     setAnalyzerPhase('waiting');
     const timers = [
       setTimeout(() => setAnalyzerPhase('message'), 550),
-      setTimeout(() => setAnalyzerPhase('scanning'), 1550),
-      setTimeout(() => setAnalyzerPhase('focus'), 3300),
-      setTimeout(() => setAnalyzerPhase('tokens'), 4500),
-      setTimeout(() => setAnalyzerPhase('stopwords'), 7000),
-      setTimeout(() => setAnalyzerPhase('vocabulary'), 9300),
-      setTimeout(() => setAnalyzerPhase('classifier'), 11600),
-      setTimeout(() => setAnalyzerPhase('graph'), 14800),
+      setTimeout(() => setAnalyzerPhase('focus'), 1350),
+      setTimeout(() => setAnalyzerPhase('tokens'), 4700),
+      setTimeout(() => setAnalyzerPhase('stopwords'), 7600),
+      setTimeout(() => setAnalyzerPhase('vocabulary'), 10600),
+      setTimeout(() => setAnalyzerPhase('classifier'), 12900),
+      setTimeout(() => setAnalyzerPhase('graph'), 16100),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -335,8 +334,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 }
 
 function AnalyzerDemo({ phase }) {
-  const showMessage = ['message', 'scanning', 'focus', 'tokens', 'stopwords', 'vocabulary', 'classifier', 'graph'].includes(phase);
-  const showScanning = ['scanning'].includes(phase);
+  const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'vocabulary', 'classifier', 'graph'].includes(phase);
   const showCinema = ['focus', 'tokens', 'stopwords', 'vocabulary', 'classifier', 'graph'].includes(phase);
   const showTokens = ['tokens', 'stopwords', 'vocabulary', 'classifier', 'graph'].includes(phase);
   const showStopWords = ['stopwords', 'vocabulary', 'classifier', 'graph'].includes(phase);
@@ -362,23 +360,12 @@ function AnalyzerDemo({ phase }) {
               className="message-avatar"
               title="Jake"
             />
-            <div className={`message-bubble theirs show-tail analyzer-message ${showScanning ? 'is-scanning' : ''}`}>
+            <div className="message-bubble theirs show-tail analyzer-message">
               <span className="sender-name">Jake</span>
               <p className="message-text">Adya, you suck at science.</p>
               <span className="timestamp">4:47 PM</span>
-              {showScanning && <span className="scan-line" />}
             </div>
           </div>
-
-          {showScanning && (
-            <div className="navi-scanner">
-              <img src={magnifyingGlassImg} alt="Navi scanner" className="scanner-lens" />
-              <div className="scanner-copy">
-                <strong>Navi is reading the message</strong>
-                <span>Computer vision finds the text, then NLP starts.</span>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
@@ -387,33 +374,25 @@ function AnalyzerDemo({ phase }) {
           <div className="cinema-card">
             <div className="cinema-message">
               <span className="cinema-sender">Jake</span>
-              <span>Adya, you suck at science.</span>
+              <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showClassifier ? 'classified' : ''}`}>
+                {!showTokens ? (
+                  <span className="raw-focused-message">Adya, you suck at science.</span>
+                ) : (
+                  ANALYZER_TOKENS.map((token, index) => (
+                    <span
+                      className={`cinema-token ${token.role} ${!token.keep && showStopWords ? 'removed' : ''}`}
+                      style={{ '--token-delay': `${index * 95}ms`, '--compact-index': token.keep ? index : 0 }}
+                      key={`${token.text}-${index}`}
+                    >
+                      {token.text}
+                    </span>
+                  ))
+                )}
+              </div>
+              {phase === 'focus' && (
+                <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
+              )}
             </div>
-
-            <StageLabel phase={phase} />
-
-            {showTokens && (
-              <div className={`cinema-token-row ${showStopWords ? 'removing-stopwords' : ''} ${showClassifier ? 'classified' : ''}`}>
-                {ANALYZER_TOKENS.map((token, index) => (
-                  <span
-                    className={`cinema-token ${token.role} ${!token.keep && showStopWords ? 'removed' : ''}`}
-                    style={{ '--token-delay': `${index * 95}ms` }}
-                    key={`${token.text}-${index}`}
-                  >
-                    {token.text}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {showStopWords && (
-              <div className="discard-tray">
-                <span>Removed filler tokens</span>
-                <strong>,</strong>
-                <strong>at</strong>
-                <strong>.</strong>
-              </div>
-            )}
 
             {showVocabulary && (
               <div className="vocabulary-map">
@@ -442,43 +421,6 @@ function AnalyzerDemo({ phase }) {
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-function StageLabel({ phase }) {
-  const copy = {
-    focus: {
-      title: 'Navi is reading the message',
-      text: 'Computer vision finds the chat bubble and extracts the text.',
-    },
-    tokens: {
-      title: 'Tokenization',
-      text: 'The sentence breaks into small pieces called tokens.',
-    },
-    stopwords: {
-      title: 'Stop-word removal',
-      text: 'Filler tokens are moved aside so the important words stand out.',
-    },
-    vocabulary: {
-      title: 'Vocabulary indexing',
-      text: 'Navi checks each important token against its meaning list.',
-    },
-    classifier: {
-      title: 'Sentiment classifier',
-      text: 'The heart model looks for who is targeted and how negative the words are.',
-    },
-    graph: {
-      title: 'Sentiment classifier',
-      text: 'The word scores land above the safety threshold with high confidence.',
-    },
-  };
-  const active = copy[phase] || copy.focus;
-
-  return (
-    <div className={`stage-label phase-${phase}`}>
-      <strong>{active.title}</strong>
-      <span>{active.text}</span>
     </div>
   );
 }
