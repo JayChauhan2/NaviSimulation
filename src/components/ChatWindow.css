@@ -22,17 +22,22 @@
   align-items: center;
   gap: 16px;
   cursor: pointer;
+  min-width: 0;
+  flex: 1;
 }
 
 .chat-meta {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .chat-meta h2 {
   font-size: 1rem;
   font-weight: 500;
   margin: 0 0 2px 0;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .chat-meta .status {
@@ -45,6 +50,46 @@
   height: 24px;
   background-color: var(--border-glass);
   margin: 0 8px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.icon-btn:hover {
+  background: var(--bg-glass-hover);
+}
+
+.icon-btn:focus-visible,
+.send-btn:focus-visible {
+  outline: 2px solid rgba(0, 168, 132, 0.45);
+  outline-offset: 2px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
 
 .messages-area {
@@ -732,6 +777,12 @@
 }
 
 .input-form input {
+  appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  width: 100%;
   font-size: 0.95rem;
   padding: 12px 0;
 }
@@ -769,6 +820,7 @@
 }
 
 .send-btn {
+  appearance: none;
   background: transparent;
   border: none;
   color: var(--text-secondary);
