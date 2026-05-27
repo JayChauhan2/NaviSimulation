@@ -12,8 +12,8 @@ const getAvatar = (name) => `https://ui-avatars.com/api/?name=${name}&background
 
 export const currentUser = {
   id: 'me',
-  name: 'Me', // Teenage Girl
-  avatar: getAvatar('Me')
+  name: 'Adya',
+  avatar: getAvatar('Adya')
 };
 
 export const contacts = [
@@ -60,7 +60,7 @@ export const groupChatInfo = {
   id: 'g1',
   name: 'Science Project 🔬',
   avatar: getAvatar('SP'),
-  status: 'Jake, Mia, Chloe, Alex, You',
+  status: 'Jake, Mia, Chloe, Alex, Adya',
   isGroup: true
 };
 

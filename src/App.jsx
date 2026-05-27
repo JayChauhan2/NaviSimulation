@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import ChatWindow from './components/ChatWindow';
 import { chatList as initialChatList, initialMessages, groupChatInfo, getSimulatedTimestamp, dadContact, dadMessages } from './data/fakeData';
-import magnifyingGlass from './assets/MagnifyingGlass.png';
+
 function App() {
   const [activeChatId, setActiveChatId] = useState(groupChatInfo.id);
   const [demoMode, setDemoMode] = useState(null); // '1' or '2'
@@ -74,7 +74,9 @@ function App() {
   };
 
   const currentChat = chats.find((chat) => chat.id === activeChatId);
-  const currentMessages = messagesMap[activeChatId] || [];
+  const currentMessages = demoMode === '1' && activeChatId === groupChatInfo.id
+    ? []
+    : messagesMap[activeChatId] || [];
 
   const handleSendMessage = (message) => {
     setMessagesMap(prev => ({
@@ -235,17 +237,6 @@ function App() {
           <span className="mode-num">3</span> Scenario 1 SEES
         </button>
       </div>
-      
-      {demoMode === '3' && (
-        <div className="scenario-3-overlay">
-          <div className="scenario-3-bubble-container">
-            <div className="scenario-3-bubble">
-              lol jake you SUCK at science!
-            </div>
-            <img src={magnifyingGlass} alt="magnifier" className="scenario-3-magnify" />
-          </div>
-        </div>
-      )}
     </>
   );
 }
