@@ -208,8 +208,8 @@
   flex-direction: column;
   gap: 4px;
   position: relative;
-  width: fit-content;
-  max-width: min(720px, 100%);
+  width: min(820px, calc(100vw - 56px));
+  max-width: 100%;
   padding: 20px 24px;
   border-radius: 8px;
   background: #ffffff;
@@ -244,7 +244,13 @@
 }
 
 .message-token-surface.stopwords-removed {
+  flex-wrap: nowrap;
   gap: 6px;
+}
+
+.message-token-surface.classified {
+  flex-wrap: nowrap;
+  gap: 8px;
 }
 
 .raw-focused-message {
@@ -258,7 +264,7 @@
   width: clamp(78px, 11vw, 118px);
   height: auto;
   left: 0;
-  bottom: 8px;
+  bottom: -18px;
   filter: drop-shadow(0 8px 12px rgba(11, 20, 26, 0.26));
   pointer-events: none;
   animation: magnifierSearch 3s ease-in-out forwards;
@@ -275,6 +281,7 @@
   color: #263238;
   font-size: clamp(1rem, 2vw, 1.35rem);
   font-weight: 800;
+  white-space: nowrap;
   max-width: 140px;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(11, 20, 26, 0.06);
@@ -298,6 +305,8 @@
 
 .message-token-surface.classified .cinema-token.target,
 .message-token-surface.classified .cinema-token.hurtful {
+  padding: 7px 11px;
+  font-size: clamp(0.95rem, 1.65vw, 1.2rem);
   border-color: #E5484D;
   background: #FFF1F1;
   color: #D7263D;
@@ -305,6 +314,8 @@
 }
 
 .message-token-surface.classified .cinema-token.topic {
+  padding: 7px 4px;
+  font-size: clamp(0.95rem, 1.65vw, 1.2rem);
   border-color: transparent;
   background: transparent;
   color: #2F80ED;
@@ -623,37 +634,37 @@
 @keyframes magnifierSearch {
   0% {
     opacity: 0;
-    transform: translate(-26%, 16%) scale(0.9) rotate(-12deg);
+    transform: translate(-26%, 34%) scale(0.9) rotate(-12deg);
   }
 
   10% {
     opacity: 1;
-    transform: translate(0, 0) scale(1) rotate(-8deg);
+    transform: translate(0, 18%) scale(1) rotate(-8deg);
   }
 
   28% {
     opacity: 1;
-    transform: translate(32%, -18%) scale(1.04) rotate(7deg);
+    transform: translate(32%, 4%) scale(1.04) rotate(7deg);
   }
 
   48% {
     opacity: 1;
-    transform: translate(92%, 8%) scale(1.06) rotate(-3deg);
+    transform: translate(92%, 28%) scale(1.06) rotate(-3deg);
   }
 
   68% {
     opacity: 1;
-    transform: translate(178%, -16%) scale(1.02) rotate(8deg);
+    transform: translate(178%, 6%) scale(1.02) rotate(8deg);
   }
 
   88% {
     opacity: 1;
-    transform: translate(250%, 4%) scale(1) rotate(-6deg);
+    transform: translate(250%, 24%) scale(1) rotate(-6deg);
   }
 
   100% {
     opacity: 0;
-    transform: translate(310%, 18%) scale(0.92) rotate(8deg);
+    transform: translate(310%, 38%) scale(0.92) rotate(8deg);
   }
 }
 
