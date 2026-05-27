@@ -208,8 +208,8 @@
   flex-direction: column;
   gap: 4px;
   position: relative;
-  width: min(820px, calc(100vw - 56px));
-  max-width: 100%;
+  width: fit-content;
+  max-width: calc(100vw - 56px);
   padding: 20px 24px;
   border-radius: 8px;
   background: #ffffff;
@@ -251,6 +251,8 @@
 .message-token-surface.classified {
   flex-wrap: nowrap;
   gap: 8px;
+  width: max-content;
+  max-width: 100%;
 }
 
 .raw-focused-message {
