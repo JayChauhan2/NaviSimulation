@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Phone, Video, MoreVertical, Paperclip, Smile, AlertTriangle, Heart } from 'lucide-react';
+import { Send, Phone, Video, MoreVertical, Paperclip, Smile, AlertTriangle } from 'lucide-react';
 import { currentUser, getSimulatedTimestamp } from '../data/fakeData';
 import './ChatWindow.css';
 import MessageBubble from './MessageBubble';
@@ -16,13 +16,6 @@ const ANALYZER_TOKENS = [
   { text: 'at', role: 'stop', keep: false, score: 14, y: 128 },
   { text: 'science', role: 'topic', keep: true, score: 35, y: 150 },
   { text: '.', role: 'stop', keep: false, score: 6, y: 136 },
-];
-
-const VOCABULARY_MATCHES = [
-  { token: 'Adya', value: 'person being targeted' },
-  { token: 'you', value: 'direct address' },
-  { token: 'suck', value: 'hurtful phrase' },
-  { token: 'science', value: 'school topic' },
 ];
 
 export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode, onAlertTrustedAdult, morphingChatId, oldMorphInfo, typingChatId }) {
@@ -79,9 +72,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setTimeout(() => setAnalyzerPhase('focus'), 1350),
       setTimeout(() => setAnalyzerPhase('tokens'), 4700),
       setTimeout(() => setAnalyzerPhase('stopwords'), 7600),
-      setTimeout(() => setAnalyzerPhase('vocabulary'), 10600),
-      setTimeout(() => setAnalyzerPhase('classifier'), 12900),
-      setTimeout(() => setAnalyzerPhase('graph'), 16100),
+      setTimeout(() => setAnalyzerPhase('highlight'), 10600),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -334,13 +325,11 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 }
 
 function AnalyzerDemo({ phase }) {
-  const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'vocabulary', 'classifier', 'graph'].includes(phase);
-  const showCinema = ['focus', 'tokens', 'stopwords', 'vocabulary', 'classifier', 'graph'].includes(phase);
-  const showTokens = ['tokens', 'stopwords', 'vocabulary', 'classifier', 'graph'].includes(phase);
-  const showStopWords = ['stopwords', 'vocabulary', 'classifier', 'graph'].includes(phase);
-  const showVocabulary = ['vocabulary', 'classifier', 'graph'].includes(phase);
-  const showClassifier = ['classifier', 'graph'].includes(phase);
-  const showGraph = phase === 'graph';
+  const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight'].includes(phase);
+  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight'].includes(phase);
+  const showTokens = ['tokens', 'stopwords', 'highlight'].includes(phase);
+  const showStopWords = ['stopwords', 'highlight'].includes(phase);
+  const showHighlight = phase === 'highlight';
 
   return (
     <div className="analyzer-demo">
@@ -374,7 +363,7 @@ function AnalyzerDemo({ phase }) {
           <div className="cinema-card">
             <div className="cinema-message">
               <span className="cinema-sender">Jake</span>
-              <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showClassifier ? 'classified' : ''}`}>
+              <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
                 {!showTokens ? (
                   <span className="raw-focused-message">Adya, you suck at science.</span>
                 ) : (
@@ -394,72 +383,9 @@ function AnalyzerDemo({ phase }) {
               )}
             </div>
 
-            {showVocabulary && (
-              <div className="vocabulary-map">
-                {VOCABULARY_MATCHES.map((match, index) => (
-                  <div className="vocabulary-link" style={{ '--vocab-delay': `${index * 120}ms` }} key={match.token}>
-                    <span>{match.token}</span>
-                    <strong>{match.value}</strong>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {showClassifier && (
-              <div className="classifier-band">
-                <div className="classifier-heart">
-                  <Heart size={30} fill="currentColor" />
-                </div>
-                <div>
-                  <span>Sentiment classifier</span>
-                  <strong>Targeted negative language detected</strong>
-                </div>
-              </div>
-            )}
-
-            {showGraph && <SentimentGraph />}
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-function SentimentGraph() {
-  const keptTokens = ANALYZER_TOKENS.filter((token) => token.keep);
-
-  return (
-    <div className="sentiment-graph-card">
-      <div className="graph-header">
-        <span>Confidence Score</span>
-        <strong>94%</strong>
-      </div>
-      <div className="graph-plot" aria-label="Sentiment classifier graph">
-        <svg viewBox="0 0 520 240" role="img">
-          <defs>
-            <linearGradient id="sentimentLine" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#2F80ED" />
-              <stop offset="100%" stopColor="#D7263D" />
-            </linearGradient>
-          </defs>
-          <line className="axis" x1="46" y1="198" x2="486" y2="198" />
-          <line className="axis" x1="46" y1="28" x2="46" y2="198" />
-          <line className="threshold" x1="46" y1="72" x2="486" y2="72" />
-          <text className="axis-label" x="52" y="62">90% threshold</text>
-          <path className="best-fit" d="M72 172 C175 144, 255 95, 462 52" />
-          {keptTokens.map((token, index) => {
-            const x = 92 + index * 112;
-            return (
-              <g className={`graph-word ${token.role}`} style={{ '--graph-delay': `${index * 140}ms` }} key={token.text}>
-                <circle cx={x} cy={token.y} r="9" />
-                <text x={x} y={token.y - 18}>{token.text}</text>
-              </g>
-            );
-          })}
-          <text className="x-label" x="265" y="228">Message tokens</text>
-          <text className="y-label" x="18" y="132" transform="rotate(-90 18 132)">Negative signal</text>
-        </svg>
-      </div>
     </div>
   );
 }

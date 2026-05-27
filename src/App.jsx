@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Sidebar from './components/Sidebar';
 import ChatWindow from './components/ChatWindow';
 import { chatList as initialChatList, initialMessages, groupChatInfo, getSimulatedTimestamp, dadContact, dadMessages } from './data/fakeData';
 
@@ -188,17 +187,6 @@ function App() {
   return (
     <>
       <div className="app-container">
-        <Sidebar 
-          chatList={chats}
-          activeChatId={activeChatId} 
-          onSelectChat={handleSelectChat} 
-          messagesMap={messagesMap}
-          morphingChatId={morphingChatId}
-          oldMorphInfo={oldMorphInfo}
-          bumpedChatId={bumpedChatId}
-          oldBumpedSnippet={oldBumpedSnippet}
-          typingChatId={typingChatId}
-      />
       {currentChat ? (
           <ChatWindow 
             messages={currentMessages}
