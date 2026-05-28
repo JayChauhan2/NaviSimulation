@@ -23,6 +23,30 @@ function App() {
   
   const [typingChatId, setTypingChatId] = useState(null);
 
+  const toggleDemoMode = React.useCallback((mode) => {
+    setDemoMode(prev => prev === mode ? null : mode);
+  }, []);
+
+  React.useEffect(() => {
+    const handleKeyDown = (event) => {
+      const target = event.target;
+      const isTypingTarget = target instanceof HTMLElement && (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.isContentEditable
+      );
+
+      if (isTypingTarget || event.metaKey || event.ctrlKey || event.altKey) return;
+      if (!['1', '2', '3'].includes(event.key)) return;
+
+      event.preventDefault();
+      toggleDemoMode(event.key);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [toggleDemoMode]);
+
   React.useEffect(() => {
     if (demoMode === '2') {
       const unknownId = 'unknown_1';
@@ -208,19 +232,19 @@ function App() {
       <div className="mode-selection-container">
         <button 
           className={`mode-btn ${demoMode === '1' ? 'selected' : ''}`} 
-          onClick={() => setDemoMode(demoMode === '1' ? null : '1')}
+          onClick={() => toggleDemoMode('1')}
         >
           <span className="mode-num">1</span> Teaching
         </button>
         <button 
           className={`mode-btn ${demoMode === '2' ? 'selected' : ''}`} 
-          onClick={() => setDemoMode(demoMode === '2' ? null : '2')}
+          onClick={() => toggleDemoMode('2')}
         >
           <span className="mode-num">2</span> Safety
         </button>
         <button 
           className={`mode-btn ${demoMode === '3' ? 'selected' : ''}`} 
-          onClick={() => setDemoMode(demoMode === '3' ? null : '3')}
+          onClick={() => toggleDemoMode('3')}
         >
           <span className="mode-num">3</span> Scenario 1 SEES
         </button>
