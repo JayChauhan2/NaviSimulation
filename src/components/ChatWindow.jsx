@@ -328,7 +328,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 function AnalyzerDemo({ phase }) {
   const showTyping = phase === 'typing';
   const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight'].includes(phase);
-  const focusMessage = ['focus', 'tokens', 'stopwords', 'highlight'].includes(phase);
+  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight'].includes(phase);
   const showTokens = ['tokens', 'stopwords', 'highlight'].includes(phase);
   const showStopWords = ['stopwords', 'highlight'].includes(phase);
   const showHighlight = phase === 'highlight';
@@ -361,16 +361,28 @@ function AnalyzerDemo({ phase }) {
       )}
 
       {showMessage && (
-        <div className={`analyzer-message-zone ${focusMessage ? 'is-focused' : ''}`}>
-          <div className={`message-row theirs analyzer-message-row ${focusMessage ? 'is-focused' : ''}`}>
+        <div className="analyzer-message-zone">
+          <div className="message-row theirs analyzer-message-row">
             <img
               src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"
               alt="Jake"
               className="message-avatar"
               title="Jake"
             />
-            <div className={`message-bubble theirs show-tail analyzer-message ${focusMessage ? 'is-focused' : ''}`}>
+            <div className="message-bubble theirs show-tail analyzer-message">
               <span className="sender-name">Jake</span>
+              <p className="message-text">Adya, you suck at science.</p>
+              <span className="timestamp">4:47 PM</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCinema && (
+        <div className="analysis-cinema">
+          <div className="cinema-card">
+            <div className="cinema-message">
+              <span className="cinema-sender">Jake</span>
               <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
                 {!showTokens ? (
                   <span className="raw-focused-message">Adya, you suck at science.</span>
@@ -386,11 +398,11 @@ function AnalyzerDemo({ phase }) {
                   ))
                 )}
               </div>
-              <span className="timestamp">4:47 PM</span>
               {phase === 'focus' && (
                 <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
               )}
             </div>
+
           </div>
         </div>
       )}
