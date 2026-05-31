@@ -25,6 +25,13 @@ const VOCABULARY_INDEX = [
   { word: 'science', id: 4519 },
 ];
 
+const SENTIMENT_POINTS = [
+  { word: 'Adya', id: 1042, x: 50, y: 49 },
+  { word: 'you', id: 203, x: 41, y: 55 },
+  { word: 'suck', id: 8801, x: 18, y: 80 },
+  { word: 'science', id: 4519, x: 55, y: 47 },
+];
+
 export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode, onAlertTrustedAdult, morphingChatId, oldMorphInfo, typingChatId }) {
   const [inputText, setInputText] = useState('');
   const [showNavi, setShowNavi] = useState(false);
@@ -42,7 +49,9 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   const messagesEndRef = useRef(null);
 
   const isGroup = currentChat.isGroup;
-  const showAnalyzerDemo = demoMode === '1' && currentChat.id === 'g1';
+  const showTeachingAnalyzer = demoMode === '1' && currentChat.id === 'g1';
+  const showSentimentAnalyzer = demoMode === '2' && currentChat.id === 'g1';
+  const showAnalyzerDemo = showTeachingAnalyzer || showSentimentAnalyzer;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -55,10 +64,10 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   }, [messages, showNavi, showSuggestions, isJakeTyping, analyzerPhase, showAnalyzerDemo]);
 
   useEffect(() => {
-    if (demoMode === '2' && currentChat.id === 'unknown_1') {
+    if (demoMode === 'safety-disabled' && currentChat.id === 'unknown_1') {
       setShowNavi(true);
       setNaviMood('concerned');
-    } else if (demoMode === '1') {
+    } else if (demoMode === '1' || demoMode === '2') {
       setShowNavi(false);
       setShowSuggestions(false);
     } else if (!demoMode) {
@@ -73,6 +82,15 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       return undefined;
     }
 
+    if (showSentimentAnalyzer) {
+      setAnalyzerPhase('sentiment-vocabulary');
+      const timers = [
+        setTimeout(() => setAnalyzerPhase('context-window'), 3000),
+      ];
+
+      return () => timers.forEach(clearTimeout);
+    }
+
     setAnalyzerPhase('typing');
     const timers = [
       setTimeout(() => setAnalyzerPhase('message'), 2000),
@@ -84,7 +102,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     ];
 
     return () => timers.forEach(clearTimeout);
-  }, [showAnalyzerDemo]);
+  }, [showAnalyzerDemo, showSentimentAnalyzer]);
 
   const handleSend = (e) => {
     e.preventDefault();
@@ -335,22 +353,25 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 function AnalyzerDemo({ phase }) {
   const showTyping = phase === 'typing';
   const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
-  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
+  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary', 'sentiment-vocabulary', 'context-window'].includes(phase);
   const showTokens = ['tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
   const showStopWords = ['stopwords', 'highlight', 'vocabulary'].includes(phase);
   const showHighlight = ['highlight', 'vocabulary'].includes(phase);
-  const showVocabulary = phase === 'vocabulary';
+  const showVocabulary = phase === 'vocabulary' || phase === 'sentiment-vocabulary';
+  const showContextWindow = phase === 'context-window';
   const phaseLabel = {
     focus: 'NLP',
     tokens: 'Tokenization',
     stopwords: 'Stop-Word Removal',
     highlight: 'Sentiment Classifier',
     vocabulary: 'Vocabulary Indexing',
+    'sentiment-vocabulary': 'Vocabulary Indexing',
+    'context-window': 'Context Window',
   }[phase];
 
   return (
     <div className="analyzer-demo">
-      {!showMessage && !showTyping && (
+      {!showMessage && !showTyping && !showCinema && (
         <div className="empty-thread">
           <span className="empty-thread-dot"></span>
           Waiting for a new Science Project message...
@@ -396,7 +417,7 @@ function AnalyzerDemo({ phase }) {
       {showCinema && (
         <div className="analysis-cinema">
           <div className="cinema-card">
-            {!showVocabulary && (
+            {!showVocabulary && !showContextWindow && (
               <div className="cinema-message">
                 <span className="cinema-sender">Jake</span>
                 <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
@@ -439,6 +460,42 @@ function AnalyzerDemo({ phase }) {
                     <span className="vocab-id">{item.id}</span>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {showContextWindow && (
+              <div className="sentiment-plot-panel">
+                <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
+                <svg className="context-plot" viewBox="0 0 520 360" role="img" aria-label="Context window sentiment plot">
+                  <defs>
+                    <filter id="contextShadow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="0" dy="7" stdDeviation="7" floodColor="#0d47a1" floodOpacity="0.18" />
+                    </filter>
+                  </defs>
+                  <line className="context-axis" x1="78" y1="286" x2="466" y2="286" />
+                  <line className="context-axis" x1="78" y1="286" x2="78" y2="52" />
+                  <text className="context-axis-label y-top" x="66" y="48">K</text>
+                  <text className="context-axis-label y-bottom" x="66" y="310">M</text>
+                  <text className="context-axis-label x-left" x="78" y="326">Unsafe</text>
+                  <text className="context-axis-label x-right" x="466" y="326">Safe</text>
+                  <path
+                    className="context-blob"
+                    d="M 108 244 C 126 166, 214 122, 312 132 C 390 140, 418 194, 388 244 C 350 304, 180 310, 108 244 Z"
+                  />
+                  <text className="context-window-label" x="330" y="122">Context Window</text>
+                  {SENTIMENT_POINTS.map((point, index) => (
+                    <g
+                      className={`context-point point-${point.word.toLowerCase()}`}
+                      style={{ '--plot-delay': `${index * 220}ms` }}
+                      transform={`translate(${78 + point.x * 3.88} ${286 - point.y * 2.34})`}
+                      key={point.word}
+                    >
+                      <circle r="8" />
+                      <text className="context-word" x="0" y="-15">{point.word}</text>
+                      <text className="context-id" x="0" y="27">ID {point.id}</text>
+                    </g>
+                  ))}
+                </svg>
               </div>
             )}
 

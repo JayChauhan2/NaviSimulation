@@ -479,6 +479,106 @@
   transform: translateY(-50%) rotate(45deg);
 }
 
+.sentiment-plot-panel {
+  position: relative;
+  width: min(560px, calc(100vw - 42px));
+  padding: 12px 14px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(25, 118, 210, 0.18);
+  box-shadow: 0 12px 30px rgba(11, 20, 26, 0.16);
+  animation: vocabularyPanelIn 0.52s ease both;
+}
+
+.context-plot {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.context-axis {
+  stroke: #60717D;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.context-axis-label {
+  fill: #22313A;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.x-left {
+  text-anchor: start;
+}
+
+.x-right {
+  text-anchor: end;
+}
+
+.y-top,
+.y-bottom {
+  text-anchor: middle;
+}
+
+.context-blob {
+  fill: rgba(25, 118, 210, 0.1);
+  stroke: #1976D2;
+  stroke-width: 4;
+  stroke-linejoin: round;
+  filter: url(#contextShadow);
+  stroke-dasharray: 760;
+  stroke-dashoffset: 760;
+  opacity: 0;
+  animation: contextBlobDraw 1.05s ease forwards;
+  animation-delay: 1s;
+}
+
+.context-window-label {
+  fill: #0D47A1;
+  font-size: 17px;
+  font-weight: 900;
+  opacity: 0;
+  animation: contextLabelIn 0.4s ease forwards;
+  animation-delay: 1.85s;
+}
+
+.context-point {
+  opacity: 0;
+  animation: contextPointIn 0.5s cubic-bezier(0.18, 0.95, 0.28, 1.18) forwards;
+  animation-delay: var(--plot-delay);
+}
+
+.context-point circle {
+  fill: #ffffff;
+  stroke: #1976D2;
+  stroke-width: 4;
+}
+
+.context-point.point-suck circle {
+  stroke: #D7263D;
+}
+
+.context-word {
+  fill: #22313A;
+  font-size: 17px;
+  font-weight: 900;
+  text-anchor: middle;
+}
+
+.context-id {
+  fill: #0D47A1;
+  font-size: 13px;
+  font-weight: 900;
+  text-anchor: middle;
+}
+
+.point-suck .context-word,
+.point-suck .context-id {
+  fill: #D7263D;
+}
+
 .vocabulary-map {
   display: grid;
   grid-template-columns: repeat(4, minmax(120px, 1fr));
@@ -985,6 +1085,51 @@
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes contextPointIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.64);
+  }
+
+  68% {
+    opacity: 1;
+    transform: translateY(3px) scale(1.12);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes contextBlobDraw {
+  0% {
+    opacity: 0;
+    stroke-dashoffset: 760;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes contextLabelIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

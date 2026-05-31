@@ -4,7 +4,7 @@ import { chatList as initialChatList, initialMessages, groupChatInfo, getSimulat
 
 function App() {
   const [activeChatId, setActiveChatId] = useState(groupChatInfo.id);
-  const [demoMode, setDemoMode] = useState(null); // '1' or '2'
+  const [demoMode, setDemoMode] = useState(null);
   const [chats, setChats] = useState(initialChatList);
   
   // Store messages by Chat ID
@@ -48,48 +48,18 @@ function App() {
   }, [toggleDemoMode]);
 
   React.useEffect(() => {
-    if (demoMode === '2') {
-      const unknownId = 'unknown_1';
-      const unknownChat = {
-        id: unknownId,
-        name: '+1 (415) 555-0198',
-        avatar: 'https://ui-avatars.com/api/?name=%3F&background=A0A0A0&color=fff&rounded=true&bold=true',
-        status: 'Hey, what school do you go to? I have a gift for you! 🎁',
-        isGroup: false,
-        isNew: true
-      };
-      
-      setChats(prev => {
-        if (!prev.find(c => c.id === unknownId)) {
-          return [unknownChat, ...prev];
-        }
-        return prev;
-      });
+    setChats(prev => prev.filter(c => c.id !== 'unknown_1'));
+    setActiveChatId(prev => (
+      prev === 'unknown_1' || demoMode === '1' || demoMode === '2'
+        ? groupChatInfo.id
+        : prev
+    ));
 
-      setMessagesMap(prev => {
-        if (!prev[unknownId]) {
-          return {
-            ...prev,
-            [unknownId]: [{
-              id: Date.now().toString(),
-              senderId: unknownId,
-              text: 'Hey, what school do you go to? I have a gift for you! 🎁',
-              timestamp: getSimulatedTimestamp()
-            }]
-          };
-        }
-        return prev;
-      });
-    } else {
-      setChats(prev => prev.filter(c => c.id !== 'unknown_1'));
-      setActiveChatId(prev => prev === 'unknown_1' ? groupChatInfo.id : prev);
-      
-      setMessagesMap(prev => {
-        const newMap = { ...prev };
-        delete newMap['unknown_1'];
-        return newMap;
-      });
-    }
+    setMessagesMap(prev => {
+      const newMap = { ...prev };
+      delete newMap['unknown_1'];
+      return newMap;
+    });
   }, [demoMode]);
 
   const handleSelectChat = (chatId) => {
@@ -240,7 +210,7 @@ function App() {
           className={`mode-btn ${demoMode === '2' ? 'selected' : ''}`} 
           onClick={() => toggleDemoMode('2')}
         >
-          <span className="mode-num">2</span> Safety
+          <span className="mode-num">2</span> Sentiment
         </button>
         <button 
           className={`mode-btn ${demoMode === '3' ? 'selected' : ''}`} 
