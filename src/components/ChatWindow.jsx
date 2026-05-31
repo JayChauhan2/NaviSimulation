@@ -540,6 +540,10 @@ function ConfidenceScoreCard() {
 
   return (
     <div className="confidence-score-panel">
+      <div className="confidence-message-chip">
+        <span>Jake</span>
+        <strong>Adya, you suck at science.</strong>
+      </div>
       <div className="confidence-score-main">
         <h3>Confidence Score</h3>
         <div className="confidence-number" aria-label={`Confidence score ${score} percent`}>
@@ -550,7 +554,7 @@ function ConfidenceScoreCard() {
         <img src={naviConcernedImg} alt="Worried Navi" className="warning-navi" />
         <div className="warning-sign">
           <AlertTriangle size={28} />
-          <span>Bullying Detected</span>
+          <span>Activate Safety</span>
         </div>
       </div>
     </div>
