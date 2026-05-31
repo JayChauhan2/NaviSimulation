@@ -183,6 +183,7 @@
   gap: 12px;
   width: min(760px, 100%);
   margin-top: auto;
+  animation: scenarioStageIn 0.58s ease both;
 }
 
 .scenario-mean-message {
@@ -616,6 +617,10 @@
   border: 1px solid rgba(25, 118, 210, 0.18);
   box-shadow: 0 14px 34px rgba(11, 20, 26, 0.17);
   animation: confidencePanelIn 0.58s cubic-bezier(0.18, 0.95, 0.28, 1.1) both;
+}
+
+.confidence-score-panel.confidence-exiting {
+  animation: confidencePanelOut 0.58s ease forwards;
 }
 
 .confidence-score-main {
@@ -1318,6 +1323,32 @@
   0% {
     opacity: 0;
     transform: translateY(22px) scale(0.94);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes confidencePanelOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.94);
+    filter: blur(5px);
+  }
+}
+
+@keyframes scenarioStageIn {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
   }
 
   100% {

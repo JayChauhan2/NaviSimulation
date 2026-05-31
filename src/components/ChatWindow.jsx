@@ -126,11 +126,11 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setTimeout(() => setAnalyzerPhase('focus'), 4000),
       setTimeout(() => setAnalyzerPhase('tokens'), 7350),
       setTimeout(() => setAnalyzerPhase('stopwords'), 10250),
-      setTimeout(() => setAnalyzerPhase('highlight'), 13250),
-      setTimeout(() => setAnalyzerPhase('vocabulary'), 16250),
-      setTimeout(() => setAnalyzerPhase('context-window'), 19250),
-      setTimeout(() => setAnalyzerPhase('confidence-score'), 24600),
-      setTimeout(() => setAnalyzerPhase('response-scenario'), 27100),
+      setTimeout(() => setAnalyzerPhase('vocabulary'), 13250),
+      setTimeout(() => setAnalyzerPhase('context-window'), 16250),
+      setTimeout(() => setAnalyzerPhase('confidence-score'), 21600),
+      setTimeout(() => setAnalyzerPhase('confidence-exit'), 26100),
+      setTimeout(() => setAnalyzerPhase('response-scenario'), 26700),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -478,13 +478,13 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 function AnalyzerDemo({ phase }) {
   const showTyping = phase === 'typing';
   const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
-  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary', 'sentiment-vocabulary', 'context-window', 'confidence-score'].includes(phase);
+  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary', 'sentiment-vocabulary', 'context-window', 'confidence-score', 'confidence-exit'].includes(phase);
   const showTokens = ['tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
   const showStopWords = ['stopwords', 'highlight', 'vocabulary'].includes(phase);
   const showHighlight = ['highlight', 'vocabulary'].includes(phase);
   const showVocabulary = phase === 'vocabulary' || phase === 'sentiment-vocabulary';
   const showContextWindow = phase === 'context-window' || phase === 'confidence-score';
-  const showConfidenceScore = phase === 'confidence-score';
+  const showConfidenceScore = phase === 'confidence-score' || phase === 'confidence-exit';
   const phaseLabel = {
     focus: 'NLP',
     tokens: 'Tokenization',
@@ -631,7 +631,7 @@ function AnalyzerDemo({ phase }) {
             )}
 
             {showConfidenceScore && (
-              <ConfidenceScoreCard />
+              <ConfidenceScoreCard isExiting={phase === 'confidence-exit'} />
             )}
 
           </div>
@@ -641,7 +641,7 @@ function AnalyzerDemo({ phase }) {
   );
 }
 
-function ConfidenceScoreCard() {
+function ConfidenceScoreCard({ isExiting = false }) {
   const [score, setScore] = useState(0);
 
   useEffect(() => {
@@ -663,7 +663,7 @@ function ConfidenceScoreCard() {
   }, []);
 
   return (
-    <div className="confidence-score-panel">
+    <div className={`confidence-score-panel ${isExiting ? 'confidence-exiting' : ''}`}>
       <div className="confidence-message-chip">
         <span>Jake</span>
         <strong>Adya, you suck at science.</strong>
