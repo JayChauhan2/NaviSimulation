@@ -86,6 +86,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setAnalyzerPhase('sentiment-vocabulary');
       const timers = [
         setTimeout(() => setAnalyzerPhase('context-window'), 3000),
+        setTimeout(() => setAnalyzerPhase('confidence-score'), 7250),
       ];
 
       return () => timers.forEach(clearTimeout);
@@ -353,12 +354,13 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 function AnalyzerDemo({ phase }) {
   const showTyping = phase === 'typing';
   const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
-  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary', 'sentiment-vocabulary', 'context-window'].includes(phase);
+  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary', 'sentiment-vocabulary', 'context-window', 'confidence-score'].includes(phase);
   const showTokens = ['tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
   const showStopWords = ['stopwords', 'highlight', 'vocabulary'].includes(phase);
   const showHighlight = ['highlight', 'vocabulary'].includes(phase);
   const showVocabulary = phase === 'vocabulary' || phase === 'sentiment-vocabulary';
-  const showContextWindow = phase === 'context-window';
+  const showContextWindow = phase === 'context-window' || phase === 'confidence-score';
+  const showConfidenceScore = phase === 'confidence-score';
   const phaseLabel = {
     focus: 'NLP',
     tokens: 'Tokenization',
@@ -366,7 +368,7 @@ function AnalyzerDemo({ phase }) {
     highlight: 'Sentiment Classifier',
     vocabulary: 'Vocabulary Indexing',
     'sentiment-vocabulary': 'Vocabulary Indexing',
-    'context-window': 'Context Window',
+    'context-window': 'Sentiment Classifier',
   }[phase];
 
   return (
@@ -464,8 +466,10 @@ function AnalyzerDemo({ phase }) {
             )}
 
             {showContextWindow && (
-              <div className="sentiment-plot-panel">
-                <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
+              <div className={`sentiment-plot-panel ${showConfidenceScore ? 'plot-exiting' : ''}`}>
+                {phaseLabel && (
+                  <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
+                )}
                 <svg className="context-plot" viewBox="0 0 520 360" role="img" aria-label="Context window sentiment plot">
                   <defs>
                     <filter id="contextShadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -502,9 +506,53 @@ function AnalyzerDemo({ phase }) {
               </div>
             )}
 
+            {showConfidenceScore && (
+              <ConfidenceScoreCard />
+            )}
+
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function ConfidenceScoreCard() {
+  const [score, setScore] = useState(0);
+
+  useEffect(() => {
+    const startedAt = performance.now();
+    let animationFrame;
+
+    const animate = (now) => {
+      const progress = Math.min((now - startedAt) / 1500, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setScore(Math.round(eased * 96));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
+
+  return (
+    <div className="confidence-score-panel">
+      <div className="confidence-score-main">
+        <h3>Confidence Score</h3>
+        <div className="confidence-number" aria-label={`Confidence score ${score} percent`}>
+          {score}%
+        </div>
+      </div>
+      <div className="bullying-warning-card">
+        <img src={naviConcernedImg} alt="Worried Navi" className="warning-navi" />
+        <div className="warning-sign">
+          <AlertTriangle size={28} />
+          <span>Bullying Detected</span>
+        </div>
+      </div>
     </div>
   );
 }
