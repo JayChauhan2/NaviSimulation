@@ -278,7 +278,8 @@
 
 .scan-tooltip-tag {
   position: absolute;
-  right: -8px;
+  left: calc(100% - 8px);
+  right: auto;
   bottom: -18px;
   z-index: 3;
   padding: 9px 14px 9px 18px;
@@ -292,6 +293,10 @@
   box-shadow: 0 8px 16px rgba(13, 71, 161, 0.26);
   transform-origin: 14px 6px;
   animation: tagPoofSwing 1.05s cubic-bezier(0.18, 0.95, 0.28, 1.18) both;
+}
+
+.scan-tooltip-tag.vocabulary-tag {
+  bottom: -20px;
 }
 
 .scan-tooltip-tag::before {
@@ -370,6 +375,21 @@
   box-shadow: none;
 }
 
+.cinema-message.vocabulary-transfer {
+  animation: messageVocabularyFade 1.25s ease forwards;
+  animation-delay: 0.55s;
+}
+
+.cinema-message.vocabulary-transfer .cinema-token:not(.removed) {
+  animation: tokenFlyToVocabulary 1.15s cubic-bezier(0.24, 0.88, 0.3, 1) forwards;
+  animation-delay: calc(var(--token-delay) + 0.28s);
+}
+
+.cinema-message.vocabulary-transfer .cinema-sender,
+.cinema-message.vocabulary-transfer .cinema-token.removed {
+  animation: vocabularySourceFade 0.8s ease forwards;
+}
+
 .vocabulary-index-panel {
   width: min(380px, calc(100vw - 52px));
   padding: 12px;
@@ -377,19 +397,21 @@
   background: rgba(255, 255, 255, 0.96);
   border: 1px solid rgba(25, 118, 210, 0.18);
   box-shadow: 0 10px 26px rgba(11, 20, 26, 0.14);
-  animation: labelPop 0.38s ease both;
+  opacity: 0;
+  animation: vocabularyPanelIn 0.62s ease forwards;
+  animation-delay: 0.55s;
 }
 
 .vocab-index-header,
 .vocab-index-row {
   display: grid;
-  grid-template-columns: minmax(92px, 1fr) 58px minmax(72px, 0.8fr);
+  grid-template-columns: minmax(98px, 1fr) 64px 86px;
   align-items: center;
   gap: 10px;
 }
 
 .vocab-index-header {
-  padding: 0 8px 8px;
+  padding: 0 10px 8px;
   color: #1976D2;
   font-size: 0.76rem;
   font-weight: 900;
@@ -419,14 +441,19 @@
 
 .vocab-word {
   color: #22313A;
+  opacity: 0;
+  animation: vocabWordLand 0.46s cubic-bezier(0.18, 0.95, 0.28, 1.16) forwards;
+  animation-delay: var(--vocab-word-delay);
 }
 
 .vocab-id {
-  justify-self: end;
+  justify-self: center;
   color: #0D47A1;
   padding: 3px 8px;
   border-radius: 999px;
   background: #E3F2FD;
+  min-width: 52px;
+  text-align: center;
 }
 
 .vocab-arrow {
@@ -866,6 +893,55 @@
   }
 }
 
+@keyframes messageVocabularyFade {
+  0% {
+    background: #ffffff;
+    box-shadow: 0 8px 26px rgba(11, 20, 26, 0.14);
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    background: transparent;
+    box-shadow: none;
+    transform: translateY(-18px) scale(0.92);
+  }
+}
+
+@keyframes vocabularySourceFade {
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes tokenFlyToVocabulary {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  65% {
+    opacity: 0.86;
+    transform: translateY(92px) scale(0.92);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(138px) scale(0.72);
+  }
+}
+
+@keyframes vocabularyPanelIn {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes vocabIndexRowIn {
   0% {
     opacity: 0;
@@ -881,6 +957,23 @@
 @keyframes vocabArrowDraw {
   100% {
     transform: scaleX(1);
+  }
+}
+
+@keyframes vocabWordLand {
+  0% {
+    opacity: 0;
+    transform: translateY(-34px) scale(1.22);
+  }
+
+  62% {
+    opacity: 1;
+    transform: translateY(3px) scale(0.96);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 

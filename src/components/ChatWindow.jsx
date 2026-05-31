@@ -396,7 +396,7 @@ function AnalyzerDemo({ phase }) {
       {showCinema && (
         <div className="analysis-cinema">
           <div className="cinema-card">
-            <div className="cinema-message">
+            <div className={`cinema-message ${showVocabulary ? 'vocabulary-transfer' : ''}`}>
               <span className="cinema-sender">Jake</span>
               <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
                 {!showTokens ? (
@@ -417,7 +417,7 @@ function AnalyzerDemo({ phase }) {
                 <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
               )}
               {phaseLabel && (
-                <div className="scan-tooltip-tag" key={phaseLabel}>{phaseLabel}</div>
+                <div className={`scan-tooltip-tag ${showVocabulary ? 'vocabulary-tag' : ''}`} key={phaseLabel}>{phaseLabel}</div>
               )}
             </div>
 
@@ -429,7 +429,7 @@ function AnalyzerDemo({ phase }) {
                 </div>
                 {VOCABULARY_INDEX.map((item, index) => (
                   <div className="vocab-index-row" style={{ '--vocab-row-delay': `${index * 140}ms` }} key={item.word}>
-                    <span className="vocab-word">{item.word}</span>
+                    <span className="vocab-word" style={{ '--vocab-word-delay': `${index * 140 + 440}ms` }}>{item.word}</span>
                     <span className="vocab-arrow" aria-hidden="true"></span>
                     <span className="vocab-id">{item.id}</span>
                   </div>
