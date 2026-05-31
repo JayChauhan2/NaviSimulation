@@ -392,7 +392,7 @@
   display: grid;
   grid-template-columns: 88px 34px 58px;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
 }
 
 .vocab-index-header {
@@ -425,7 +425,9 @@
 }
 
 .vocab-word {
+  justify-self: end;
   color: #22313A;
+  text-align: right;
   opacity: 0;
   animation: vocabWordLand 0.46s cubic-bezier(0.18, 0.95, 0.28, 1.16) forwards;
   animation-delay: var(--vocab-word-delay);
