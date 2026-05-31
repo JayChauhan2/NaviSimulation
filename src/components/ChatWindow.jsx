@@ -9,9 +9,9 @@ import naviConcernedImg from '../assets/Navi Concerned.png';
 import magnifyingGlassImg from '../assets/MagnifyingGlass.png';
 
 const ANALYZER_TOKENS = [
-  { text: 'Adya', role: 'target', keep: true, score: 92, y: 84 },
+  { text: 'Adya', role: 'target', keep: false, score: 92, y: 84 },
   { text: ',', role: 'stop', keep: false, score: 8, y: 132 },
-  { text: 'you', role: 'target', keep: true, score: 89, y: 92 },
+  { text: 'you', role: 'target', keep: false, score: 89, y: 92 },
   { text: 'suck', role: 'hurtful', keep: true, score: 97, y: 52 },
   { text: 'at', role: 'stop', keep: false, score: 14, y: 128 },
   { text: 'science', role: 'topic', keep: true, score: 35, y: 150 },
@@ -19,15 +19,11 @@ const ANALYZER_TOKENS = [
 ];
 
 const VOCABULARY_INDEX = [
-  { word: 'Adya', id: 1042 },
-  { word: 'you', id: 203 },
   { word: 'suck', id: 8801 },
   { word: 'science', id: 4519 },
 ];
 
 const SENTIMENT_POINTS = [
-  { word: 'Adya', id: 1042, x: 0, y: 0 },
-  { word: 'you', id: 203, x: -0.26, y: 0.01 },
   { word: 'suck', id: 8801, x: -0.78, y: -0.7 },
   { word: 'science', id: 4519, x: 0.34, y: 0.05 },
 ];
@@ -113,8 +109,8 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     if (showSentimentAnalyzer) {
       setAnalyzerPhase('sentiment-vocabulary');
       const timers = [
-        setTimeout(() => setAnalyzerPhase('context-window'), 3000),
-        setTimeout(() => setAnalyzerPhase('confidence-score'), 8350),
+        setTimeout(() => setAnalyzerPhase('context-window'), 5000),
+        setTimeout(() => setAnalyzerPhase('confidence-score'), 10350),
       ];
 
       return () => timers.forEach(clearTimeout);
@@ -128,10 +124,10 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setTimeout(() => setAnalyzerPhase('stopwords'), 10250),
       setTimeout(() => setAnalyzerPhase('vocabulary-transition'), 13250),
       setTimeout(() => setAnalyzerPhase('vocabulary'), 14050),
-      setTimeout(() => setAnalyzerPhase('context-window'), 17050),
-      setTimeout(() => setAnalyzerPhase('confidence-score'), 24600),
-      setTimeout(() => setAnalyzerPhase('confidence-exit'), 29100),
-      setTimeout(() => setAnalyzerPhase('response-scenario'), 29800),
+      setTimeout(() => setAnalyzerPhase('context-window'), 19050),
+      setTimeout(() => setAnalyzerPhase('confidence-score'), 26600),
+      setTimeout(() => setAnalyzerPhase('confidence-exit'), 31100),
+      setTimeout(() => setAnalyzerPhase('response-scenario'), 31800),
     ];
 
     return () => timers.forEach(clearTimeout);
