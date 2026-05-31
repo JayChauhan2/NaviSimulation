@@ -398,7 +398,10 @@ function AnalyzerDemo({ phase }) {
                 )}
               </div>
               {phase === 'focus' && (
-                <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
+                <>
+                  <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
+                  <div className="scan-tooltip-tag">Placeholder Text</div>
+                </>
               )}
             </div>
 
