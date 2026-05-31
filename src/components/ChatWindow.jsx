@@ -331,6 +331,12 @@ function AnalyzerDemo({ phase }) {
   const showTokens = ['tokens', 'stopwords', 'highlight'].includes(phase);
   const showStopWords = ['stopwords', 'highlight'].includes(phase);
   const showHighlight = phase === 'highlight';
+  const phaseLabel = {
+    focus: 'NLP',
+    tokens: 'Tokenization',
+    stopwords: 'Stop-Word Removal',
+    highlight: 'Sentiment Classifier',
+  }[phase];
 
   return (
     <div className="analyzer-demo">
@@ -398,10 +404,10 @@ function AnalyzerDemo({ phase }) {
                 )}
               </div>
               {phase === 'focus' && (
-                <>
-                  <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
-                  <div className="scan-tooltip-tag">Placeholder Text</div>
-                </>
+                <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
+              )}
+              {phaseLabel && (
+                <div className="scan-tooltip-tag" key={phaseLabel}>{phaseLabel}</div>
               )}
             </div>
 
