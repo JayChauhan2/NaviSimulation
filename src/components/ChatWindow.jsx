@@ -494,7 +494,7 @@ function AnalyzerDemo({ phase }) {
                       >
                         <circle r="8" />
                         <text className="context-word" x="0" y="-15">{point.word}</text>
-                        <text className="context-id" x="0" y="27">ID {point.id}</text>
+                        <text className="context-id" x="0" y="27">{point.id}</text>
                       </g>
                     </g>
                   ))}
