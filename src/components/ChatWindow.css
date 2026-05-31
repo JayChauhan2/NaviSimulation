@@ -390,9 +390,9 @@
 .vocab-index-header,
 .vocab-index-row {
   display: grid;
-  grid-template-columns: 88px 34px 58px;
+  grid-template-columns: 124px 58px;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
 }
 
 .vocab-index-header {
@@ -403,8 +403,15 @@
   text-transform: uppercase;
 }
 
+.vocab-index-header span:first-child {
+  justify-self: end;
+  text-align: right;
+  transform: translateX(-32px);
+}
+
 .vocab-index-header span:last-child {
-  grid-column: 3;
+  grid-column: 2;
+  justify-self: start;
 }
 
 .vocab-index-row {
@@ -424,8 +431,14 @@
   font-weight: 900;
 }
 
-.vocab-word {
+.vocab-word-cell {
+  display: inline-flex;
+  align-items: center;
   justify-self: end;
+  gap: 2px;
+}
+
+.vocab-word {
   color: #22313A;
   text-align: right;
   opacity: 0;
@@ -434,7 +447,7 @@
 }
 
 .vocab-id {
-  justify-self: center;
+  justify-self: start;
   color: #0D47A1;
   padding: 3px 7px;
   border-radius: 999px;

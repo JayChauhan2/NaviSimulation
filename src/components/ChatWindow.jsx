@@ -432,8 +432,10 @@ function AnalyzerDemo({ phase }) {
                 </div>
                 {VOCABULARY_INDEX.map((item, index) => (
                   <div className="vocab-index-row" style={{ '--vocab-row-delay': `${index * 140}ms` }} key={item.word}>
-                    <span className="vocab-word" style={{ '--vocab-word-delay': `${index * 140 + 440}ms` }}>{item.word}</span>
-                    <span className="vocab-arrow" aria-hidden="true"></span>
+                    <span className="vocab-word-cell">
+                      <span className="vocab-word" style={{ '--vocab-word-delay': `${index * 140 + 440}ms` }}>{item.word}</span>
+                      <span className="vocab-arrow" aria-hidden="true"></span>
+                    </span>
                     <span className="vocab-id">{item.id}</span>
                   </div>
                 ))}
