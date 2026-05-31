@@ -86,7 +86,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setAnalyzerPhase('sentiment-vocabulary');
       const timers = [
         setTimeout(() => setAnalyzerPhase('context-window'), 3000),
-        setTimeout(() => setAnalyzerPhase('confidence-score'), 7250),
+        setTimeout(() => setAnalyzerPhase('confidence-score'), 8350),
       ];
 
       return () => timers.forEach(clearTimeout);
