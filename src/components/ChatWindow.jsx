@@ -126,11 +126,12 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setTimeout(() => setAnalyzerPhase('focus'), 4000),
       setTimeout(() => setAnalyzerPhase('tokens'), 7350),
       setTimeout(() => setAnalyzerPhase('stopwords'), 10250),
-      setTimeout(() => setAnalyzerPhase('vocabulary'), 13250),
-      setTimeout(() => setAnalyzerPhase('context-window'), 16250),
-      setTimeout(() => setAnalyzerPhase('confidence-score'), 21600),
-      setTimeout(() => setAnalyzerPhase('confidence-exit'), 26100),
-      setTimeout(() => setAnalyzerPhase('response-scenario'), 26700),
+      setTimeout(() => setAnalyzerPhase('vocabulary-transition'), 13250),
+      setTimeout(() => setAnalyzerPhase('vocabulary'), 14050),
+      setTimeout(() => setAnalyzerPhase('context-window'), 17050),
+      setTimeout(() => setAnalyzerPhase('confidence-score'), 24600),
+      setTimeout(() => setAnalyzerPhase('confidence-exit'), 29100),
+      setTimeout(() => setAnalyzerPhase('response-scenario'), 29800),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -477,14 +478,15 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
 function AnalyzerDemo({ phase }) {
   const showTyping = phase === 'typing';
-  const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
-  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary', 'sentiment-vocabulary', 'context-window', 'confidence-score', 'confidence-exit'].includes(phase);
-  const showTokens = ['tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
-  const showStopWords = ['stopwords', 'highlight', 'vocabulary'].includes(phase);
+  const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight', 'vocabulary-transition', 'vocabulary'].includes(phase);
+  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary-transition', 'vocabulary', 'sentiment-vocabulary', 'context-window', 'confidence-score', 'confidence-exit'].includes(phase);
+  const showTokens = ['tokens', 'stopwords', 'highlight', 'vocabulary-transition', 'vocabulary'].includes(phase);
+  const showStopWords = ['stopwords', 'highlight', 'vocabulary-transition', 'vocabulary'].includes(phase);
   const showHighlight = ['highlight', 'vocabulary'].includes(phase);
   const showVocabulary = phase === 'vocabulary' || phase === 'sentiment-vocabulary';
   const showContextWindow = phase === 'context-window' || phase === 'confidence-score';
   const showConfidenceScore = phase === 'confidence-score' || phase === 'confidence-exit';
+  const showTokenMessage = !showVocabulary && !showContextWindow && !showConfidenceScore;
   const phaseLabel = {
     focus: 'NLP',
     tokens: 'Tokenization',
@@ -543,8 +545,8 @@ function AnalyzerDemo({ phase }) {
       {showCinema && (
         <div className="analysis-cinema">
           <div className="cinema-card">
-            {!showVocabulary && !showContextWindow && (
-              <div className="cinema-message">
+            {showTokenMessage && (
+              <div className={`cinema-message ${phase === 'vocabulary-transition' ? 'vocabulary-handoff' : ''}`}>
                 <span className="cinema-sender">Jake</span>
                 <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
                   {!showTokens ? (
