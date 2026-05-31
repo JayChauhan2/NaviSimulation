@@ -68,11 +68,12 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
     setAnalyzerPhase('waiting');
     const timers = [
-      setTimeout(() => setAnalyzerPhase('message'), 550),
-      setTimeout(() => setAnalyzerPhase('focus'), 1350),
-      setTimeout(() => setAnalyzerPhase('tokens'), 4700),
-      setTimeout(() => setAnalyzerPhase('stopwords'), 7600),
-      setTimeout(() => setAnalyzerPhase('highlight'), 10600),
+      setTimeout(() => setAnalyzerPhase('typing'), 250),
+      setTimeout(() => setAnalyzerPhase('message'), 2250),
+      setTimeout(() => setAnalyzerPhase('focus'), 4250),
+      setTimeout(() => setAnalyzerPhase('tokens'), 7600),
+      setTimeout(() => setAnalyzerPhase('stopwords'), 10500),
+      setTimeout(() => setAnalyzerPhase('highlight'), 13500),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -325,6 +326,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 }
 
 function AnalyzerDemo({ phase }) {
+  const showTyping = phase === 'typing';
   const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight'].includes(phase);
   const showCinema = ['focus', 'tokens', 'stopwords', 'highlight'].includes(phase);
   const showTokens = ['tokens', 'stopwords', 'highlight'].includes(phase);
@@ -336,7 +338,25 @@ function AnalyzerDemo({ phase }) {
       {!showMessage && (
         <div className="empty-thread">
           <span className="empty-thread-dot"></span>
-          Waiting for a new Science Project message...
+          {showTyping ? 'Jake is typing...' : 'Waiting for a new Science Project message...'}
+        </div>
+      )}
+
+      {showTyping && (
+        <div className="analyzer-message-zone">
+          <div className="typing-indicator-wrapper analyzer-typing">
+            <img
+              src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"
+              alt="Jake"
+              className="avatar message-avatar"
+              title="Jake"
+            />
+            <div className="typing-indicator">
+              <span className="dot"></span>
+              <span className="dot"></span>
+              <span className="dot"></span>
+            </div>
+          </div>
         </div>
       )}
 
