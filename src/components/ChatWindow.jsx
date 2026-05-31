@@ -66,14 +66,13 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       return undefined;
     }
 
-    setAnalyzerPhase('waiting');
+    setAnalyzerPhase('typing');
     const timers = [
-      setTimeout(() => setAnalyzerPhase('typing'), 250),
-      setTimeout(() => setAnalyzerPhase('message'), 2250),
-      setTimeout(() => setAnalyzerPhase('focus'), 4250),
-      setTimeout(() => setAnalyzerPhase('tokens'), 7600),
-      setTimeout(() => setAnalyzerPhase('stopwords'), 10500),
-      setTimeout(() => setAnalyzerPhase('highlight'), 13500),
+      setTimeout(() => setAnalyzerPhase('message'), 2000),
+      setTimeout(() => setAnalyzerPhase('focus'), 4000),
+      setTimeout(() => setAnalyzerPhase('tokens'), 7350),
+      setTimeout(() => setAnalyzerPhase('stopwords'), 10250),
+      setTimeout(() => setAnalyzerPhase('highlight'), 13250),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -335,10 +334,10 @@ function AnalyzerDemo({ phase }) {
 
   return (
     <div className="analyzer-demo">
-      {!showMessage && (
+      {!showMessage && !showTyping && (
         <div className="empty-thread">
           <span className="empty-thread-dot"></span>
-          {showTyping ? 'Jake is typing...' : 'Waiting for a new Science Project message...'}
+          Waiting for a new Science Project message...
         </div>
       )}
 

@@ -97,7 +97,7 @@ function App() {
   };
 
   const currentChat = chats.find((chat) => chat.id === activeChatId);
-  const currentMessages = demoMode === '1' && activeChatId === groupChatInfo.id
+  const currentMessages = activeChatId === groupChatInfo.id
     ? []
     : messagesMap[activeChatId] || [];
 
