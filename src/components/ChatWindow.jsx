@@ -51,9 +51,10 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   const messagesEndRef = useRef(null);
 
   const isGroup = currentChat.isGroup;
-  const showTeachingAnalyzer = demoMode === '1' && currentChat.id === 'g1';
+  const showMergedResponseDemo = demoMode === '1' && currentChat.id === 'g1' && analyzerPhase === 'response-scenario';
+  const showTeachingAnalyzer = demoMode === '1' && currentChat.id === 'g1' && !showMergedResponseDemo;
   const showSentimentAnalyzer = demoMode === '2' && currentChat.id === 'g1';
-  const showScenarioDemo = demoMode === '3' && currentChat.id === 'g1';
+  const showScenarioDemo = (demoMode === '3' && currentChat.id === 'g1') || showMergedResponseDemo;
   const showAnalyzerDemo = showTeachingAnalyzer || showSentimentAnalyzer;
 
   const scrollToBottom = () => {
@@ -90,8 +91,22 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   }, [demoMode, currentChat.id]);
 
   useEffect(() => {
-    if (!showAnalyzerDemo) {
+    if (!showMergedResponseDemo) return;
+
+    setShowNavi(true);
+    setShowSuggestions(false);
+    setNaviMood('upset');
+    setScenarioMessages([]);
+    setIsScenarioTyping(false);
+  }, [showMergedResponseDemo]);
+
+  useEffect(() => {
+    if (!showAnalyzerDemo && !showMergedResponseDemo) {
       setAnalyzerPhase('idle');
+      return undefined;
+    }
+
+    if (showMergedResponseDemo) {
       return undefined;
     }
 
@@ -113,10 +128,13 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setTimeout(() => setAnalyzerPhase('stopwords'), 10250),
       setTimeout(() => setAnalyzerPhase('highlight'), 13250),
       setTimeout(() => setAnalyzerPhase('vocabulary'), 16250),
+      setTimeout(() => setAnalyzerPhase('context-window'), 19250),
+      setTimeout(() => setAnalyzerPhase('confidence-score'), 24600),
+      setTimeout(() => setAnalyzerPhase('response-scenario'), 27100),
     ];
 
     return () => timers.forEach(clearTimeout);
-  }, [showAnalyzerDemo, showSentimentAnalyzer]);
+  }, [showAnalyzerDemo, showSentimentAnalyzer, showMergedResponseDemo]);
 
   const handleSend = (e) => {
     e.preventDefault();
