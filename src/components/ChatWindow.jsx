@@ -71,7 +71,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     } else if (demoMode === '3' && currentChat.id === 'g1') {
       setShowNavi(true);
       setShowSuggestions(false);
-      setNaviMood('concerned');
+      setNaviMood('upset');
     } else if (demoMode === '1' || demoMode === '2') {
       setShowNavi(false);
       setShowSuggestions(false);
@@ -282,8 +282,8 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
                 <p>I detected a mean message from Jake.<br />What would you like to do next?</p>
                 <div className="navi-options">
                   <div className="navi-options-row">
-                    <button className="navi-btn ignore" onClick={closeNavi}>Ignore</button>
                     <button className="navi-btn" onClick={() => { setShowSuggestions(true); setNaviMood('happy'); }}>Respond Politely</button>
+                    <button className="navi-btn ignore" onClick={closeNavi}>Ignore</button>
                   </div>
                   <button className="navi-btn danger" onClick={closeNavi}>Alert a Trusted Adult</button>
                 </div>
