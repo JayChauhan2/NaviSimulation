@@ -195,6 +195,18 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     extraSpaceClass = 'has-navi';
   }
 
+  const suggestionOptions = showScenarioDemo
+    ? [
+        "Jake, that hurt my feelings. Please don't talk to me like that.",
+        "Let's keep the chat kind. I want us to work well on the science project.",
+        "I don't like being insulted. Can we focus on finishing the project together?",
+      ]
+    : [
+        "jake maybe we can study science together sometime?",
+        "science is super hard tbh, don't worry jake!",
+        "haha science is tough jake, we'll get it next time!",
+      ];
+
   return (
     <main className="chat-window">
       {/* Chat Header */}
@@ -349,15 +361,11 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
           {showSuggestions && (
             <div className="suggestions-popup">
               <div className="suggestions-header">Try one of these instead:</div>
-              <button onClick={() => handleApplySuggestion("jake maybe we can study science together sometime?")}>
-                jake maybe we can study science together sometime?
-              </button>
-              <button onClick={() => handleApplySuggestion("science is super hard tbh, don't worry jake!")}>
-                science is super hard tbh, don't worry jake!
-              </button>
-              <button onClick={() => handleApplySuggestion("haha science is tough jake, we'll get it next time!")}>
-                haha science is tough jake, we'll get it next time!
-              </button>
+              {suggestionOptions.map((suggestion) => (
+                <button onClick={() => handleApplySuggestion(suggestion)} key={suggestion}>
+                  {suggestion}
+                </button>
+              ))}
             </div>
           )}
           <input
