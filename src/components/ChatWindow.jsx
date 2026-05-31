@@ -474,8 +474,8 @@ function AnalyzerDemo({ phase }) {
                   </defs>
                   <line className="context-axis" x1="70" y1="180" x2="470" y2="180" />
                   <line className="context-axis" x1="260" y1="46" x2="260" y2="314" />
-                  <text className="context-axis-label y-top" x="260" y="34">K</text>
-                  <text className="context-axis-label y-bottom" x="260" y="338">M</text>
+                  <text className="context-axis-label y-top" x="260" y="34">Kind</text>
+                  <text className="context-axis-label y-bottom" x="260" y="338">Mean</text>
                   <text className="context-axis-label x-left" x="70" y="170">Unsafe</text>
                   <text className="context-axis-label x-right" x="470" y="170">Safe</text>
                   <path
