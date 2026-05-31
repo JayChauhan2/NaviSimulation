@@ -44,6 +44,8 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   const [hasReplaced, setHasReplaced] = useState(false);
   const [isJakeTyping, setIsJakeTyping] = useState(false);
   const [analyzerPhase, setAnalyzerPhase] = useState('idle');
+  const [scenarioMessages, setScenarioMessages] = useState([]);
+  const [isScenarioTyping, setIsScenarioTyping] = useState(false);
   
   const isFlagging = morphingChatId === currentChat.id;
   const messagesEndRef = useRef(null);
@@ -62,7 +64,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     if (showAnalyzerDemo) return;
     // Add small delay to let CSS padding transition start before scrolling
     setTimeout(scrollToBottom, 50);
-  }, [messages, showNavi, showSuggestions, isJakeTyping, analyzerPhase, showAnalyzerDemo]);
+  }, [messages, showNavi, showSuggestions, isJakeTyping, analyzerPhase, showAnalyzerDemo, scenarioMessages, isScenarioTyping]);
 
   useEffect(() => {
     if (demoMode === 'safety-disabled' && currentChat.id === 'unknown_1') {
@@ -72,12 +74,18 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setShowNavi(true);
       setShowSuggestions(false);
       setNaviMood('upset');
+      setScenarioMessages([]);
+      setIsScenarioTyping(false);
     } else if (demoMode === '1' || demoMode === '2') {
       setShowNavi(false);
       setShowSuggestions(false);
+      setScenarioMessages([]);
+      setIsScenarioTyping(false);
     } else if (!demoMode) {
       setShowNavi(false);
       setShowSuggestions(false);
+      setScenarioMessages([]);
+      setIsScenarioTyping(false);
     }
   }, [demoMode, currentChat.id]);
 
@@ -116,6 +124,36 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
     // If the user has accepted a suggestion, send the message for real
     if (hasReplaced) {
+      if (showScenarioDemo) {
+        const sentMessage = {
+          id: Date.now().toString(),
+          senderId: currentUser.id,
+          text: inputText,
+          timestamp: getSimulatedTimestamp()
+        };
+
+        setScenarioMessages(prev => [...prev, sentMessage]);
+        setInputText('');
+        setHasReplaced(false);
+
+        setTimeout(() => {
+          setIsScenarioTyping(true);
+          setTimeout(() => {
+            setIsScenarioTyping(false);
+            setScenarioMessages(prev => [
+              ...prev,
+              {
+                id: Date.now().toString() + 'chloe',
+                senderId: 'c1',
+                text: "Yeah, let's focus on the project and not be mean.",
+                timestamp: getSimulatedTimestamp()
+              }
+            ]);
+          }, 2000);
+        }, 500);
+        return;
+      }
+
       onSendMessage({
         id: Date.now().toString(),
         senderId: currentUser.id,
@@ -255,6 +293,34 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
                   <span className="timestamp">4:47 PM</span>
                 </div>
               </div>
+              {scenarioMessages.map((msg, index) => {
+                const isMine = msg.senderId === currentUser.id;
+                const previous = scenarioMessages[index - 1];
+                return (
+                  <MessageBubble
+                    key={msg.id}
+                    message={msg}
+                    isMine={isMine}
+                    showSender={!isMine && (!previous || previous.senderId !== msg.senderId)}
+                  />
+                );
+              })}
+              {isScenarioTyping && (
+                <div className="typing-indicator-wrapper scenario-typing">
+                  <img
+                    src="https://ui-avatars.com/api/?name=C&background=random&color=fff&rounded=true&bold=true"
+                    alt="Chloe typing"
+                    className="avatar message-avatar"
+                    title="Chloe"
+                    style={{ width: '28px', height: '28px' }}
+                  />
+                  <div className="typing-indicator">
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             messages.map((msg, index) => {
