@@ -633,6 +633,7 @@
 }
 
 .confidence-message-chip span {
+  color: #7B61FF;
   font-size: 0.62rem;
   font-weight: 900;
   line-height: 1;
