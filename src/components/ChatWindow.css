@@ -278,7 +278,7 @@
 
 .scan-tooltip-tag {
   position: absolute;
-  left: calc(100% - 8px);
+  right: -8px;
   bottom: -18px;
   z-index: 3;
   padding: 9px 14px 9px 18px;
@@ -368,6 +368,87 @@
   background: transparent;
   color: #2F80ED;
   box-shadow: none;
+}
+
+.vocabulary-index-panel {
+  width: min(380px, calc(100vw - 52px));
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(25, 118, 210, 0.18);
+  box-shadow: 0 10px 26px rgba(11, 20, 26, 0.14);
+  animation: labelPop 0.38s ease both;
+}
+
+.vocab-index-header,
+.vocab-index-row {
+  display: grid;
+  grid-template-columns: minmax(92px, 1fr) 58px minmax(72px, 0.8fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.vocab-index-header {
+  padding: 0 8px 8px;
+  color: #1976D2;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.vocab-index-header span:last-child {
+  grid-column: 3;
+}
+
+.vocab-index-row {
+  margin-top: 7px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #F7FAFC;
+  border: 1px solid #DDE5EF;
+  opacity: 0;
+  animation: vocabIndexRowIn 0.4s ease forwards;
+  animation-delay: var(--vocab-row-delay);
+}
+
+.vocab-word,
+.vocab-id {
+  font-size: 0.96rem;
+  font-weight: 900;
+}
+
+.vocab-word {
+  color: #22313A;
+}
+
+.vocab-id {
+  justify-self: end;
+  color: #0D47A1;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #E3F2FD;
+}
+
+.vocab-arrow {
+  position: relative;
+  height: 2px;
+  background: #1976D2;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: vocabArrowDraw 0.42s ease forwards;
+  animation-delay: calc(var(--vocab-row-delay) + 160ms);
+}
+
+.vocab-arrow::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #1976D2;
+  border-right: 2px solid #1976D2;
+  transform: translateY(-50%) rotate(45deg);
 }
 
 .vocabulary-map {
@@ -782,6 +863,24 @@
   100% {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes vocabIndexRowIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes vocabArrowDraw {
+  100% {
+    transform: scaleX(1);
   }
 }
 

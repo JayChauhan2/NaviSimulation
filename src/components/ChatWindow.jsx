@@ -18,6 +18,13 @@ const ANALYZER_TOKENS = [
   { text: '.', role: 'stop', keep: false, score: 6, y: 136 },
 ];
 
+const VOCABULARY_INDEX = [
+  { word: 'Adya', id: 1042 },
+  { word: 'you', id: 203 },
+  { word: 'suck', id: 8801 },
+  { word: 'science', id: 4519 },
+];
+
 export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode, onAlertTrustedAdult, morphingChatId, oldMorphInfo, typingChatId }) {
   const [inputText, setInputText] = useState('');
   const [showNavi, setShowNavi] = useState(false);
@@ -73,6 +80,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setTimeout(() => setAnalyzerPhase('tokens'), 7350),
       setTimeout(() => setAnalyzerPhase('stopwords'), 10250),
       setTimeout(() => setAnalyzerPhase('highlight'), 13250),
+      setTimeout(() => setAnalyzerPhase('vocabulary'), 16250),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -326,16 +334,18 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
 function AnalyzerDemo({ phase }) {
   const showTyping = phase === 'typing';
-  const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight'].includes(phase);
-  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight'].includes(phase);
-  const showTokens = ['tokens', 'stopwords', 'highlight'].includes(phase);
-  const showStopWords = ['stopwords', 'highlight'].includes(phase);
-  const showHighlight = phase === 'highlight';
+  const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
+  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
+  const showTokens = ['tokens', 'stopwords', 'highlight', 'vocabulary'].includes(phase);
+  const showStopWords = ['stopwords', 'highlight', 'vocabulary'].includes(phase);
+  const showHighlight = ['highlight', 'vocabulary'].includes(phase);
+  const showVocabulary = phase === 'vocabulary';
   const phaseLabel = {
     focus: 'NLP',
     tokens: 'Tokenization',
     stopwords: 'Stop-Word Removal',
     highlight: 'Sentiment Classifier',
+    vocabulary: 'Vocabulary Indexing',
   }[phase];
 
   return (
@@ -410,6 +420,22 @@ function AnalyzerDemo({ phase }) {
                 <div className="scan-tooltip-tag" key={phaseLabel}>{phaseLabel}</div>
               )}
             </div>
+
+            {showVocabulary && (
+              <div className="vocabulary-index-panel">
+                <div className="vocab-index-header">
+                  <span>Word</span>
+                  <span>ID</span>
+                </div>
+                {VOCABULARY_INDEX.map((item, index) => (
+                  <div className="vocab-index-row" style={{ '--vocab-row-delay': `${index * 140}ms` }} key={item.word}>
+                    <span className="vocab-word">{item.word}</span>
+                    <span className="vocab-arrow" aria-hidden="true"></span>
+                    <span className="vocab-id">{item.id}</span>
+                  </div>
+                ))}
+              </div>
+            )}
 
           </div>
         </div>
