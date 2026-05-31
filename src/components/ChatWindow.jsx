@@ -494,7 +494,7 @@ function AnalyzerDemo({ phase }) {
                     >
                       <g
                         className={`context-point point-${point.word.toLowerCase()}`}
-                        style={{ '--plot-delay': `${index * 220}ms` }}
+                        style={{ '--plot-delay': `${index * 250}ms` }}
                       >
                         <circle r="8" />
                         <text className="context-word" x="0" y="-15">{point.word}</text>

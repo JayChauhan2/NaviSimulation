@@ -543,7 +543,7 @@
   stroke-dashoffset: 760;
   opacity: 0;
   animation: contextBlobDraw 1.05s ease forwards;
-  animation-delay: 1s;
+  animation-delay: 2.25s;
 }
 
 .context-window-label {
@@ -552,7 +552,7 @@
   font-weight: 900;
   opacity: 0;
   animation: contextLabelIn 0.4s ease forwards;
-  animation-delay: 1.85s;
+  animation-delay: 3.05s;
 }
 
 .context-point {
