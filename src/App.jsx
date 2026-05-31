@@ -50,7 +50,7 @@ function App() {
   React.useEffect(() => {
     setChats(prev => prev.filter(c => c.id !== 'unknown_1'));
     setActiveChatId(prev => (
-      prev === 'unknown_1' || demoMode === '1' || demoMode === '2'
+      prev === 'unknown_1' || demoMode === '1' || demoMode === '2' || demoMode === '3'
         ? groupChatInfo.id
         : prev
     ));
@@ -216,7 +216,7 @@ function App() {
           className={`mode-btn ${demoMode === '3' ? 'selected' : ''}`} 
           onClick={() => toggleDemoMode('3')}
         >
-          <span className="mode-num">3</span> Scenario 1 SEES
+          <span className="mode-num">3</span> Scenario
         </button>
       </div>
     </>

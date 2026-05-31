@@ -51,6 +51,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   const isGroup = currentChat.isGroup;
   const showTeachingAnalyzer = demoMode === '1' && currentChat.id === 'g1';
   const showSentimentAnalyzer = demoMode === '2' && currentChat.id === 'g1';
+  const showScenarioDemo = demoMode === '3' && currentChat.id === 'g1';
   const showAnalyzerDemo = showTeachingAnalyzer || showSentimentAnalyzer;
 
   const scrollToBottom = () => {
@@ -66,6 +67,10 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   useEffect(() => {
     if (demoMode === 'safety-disabled' && currentChat.id === 'unknown_1') {
       setShowNavi(true);
+      setNaviMood('concerned');
+    } else if (demoMode === '3' && currentChat.id === 'g1') {
+      setShowNavi(true);
+      setShowSuggestions(false);
       setNaviMood('concerned');
     } else if (demoMode === '1' || demoMode === '2') {
       setShowNavi(false);
@@ -223,6 +228,22 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
         <div className={`messages-container ${extraSpaceClass}`}>
           {showAnalyzerDemo ? (
             <AnalyzerDemo phase={analyzerPhase} />
+          ) : showScenarioDemo ? (
+            <div className="scenario-message-stage">
+              <div className="message-row theirs analyzer-message-row">
+                <img
+                  src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"
+                  alt="Jake"
+                  className="message-avatar"
+                  title="Jake"
+                />
+                <div className="message-bubble theirs show-tail analyzer-message scenario-mean-message">
+                  <span className="sender-name">Jake</span>
+                  <p className="message-text">Adya, you suck at science.</p>
+                  <span className="timestamp">4:47 PM</span>
+                </div>
+              </div>
+            </div>
           ) : (
             messages.map((msg, index) => {
               const isMine = msg.senderId === currentUser.id;
@@ -256,7 +277,18 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       {showNavi && (
         <div className={`navi-clippy-container ${isNaviExiting ? 'navi-exiting' : ''}`}>
           <div className={`navi-dialogue ${naviMood === 'concerned' ? 'navi-danger' : ''}`}>
-            {naviMood === 'concerned' ? (
+            {showScenarioDemo ? (
+              <>
+                <p>I detected a mean message from Jake.<br />What would you like to do next?</p>
+                <div className="navi-options">
+                  <div className="navi-options-row">
+                    <button className="navi-btn ignore" onClick={closeNavi}>Ignore</button>
+                    <button className="navi-btn" onClick={() => { setShowSuggestions(true); setNaviMood('happy'); }}>Respond Politely</button>
+                  </div>
+                  <button className="navi-btn danger" onClick={closeNavi}>Alert a Trusted Adult</button>
+                </div>
+              </>
+            ) : naviMood === 'concerned' ? (
               <>
                 <div className="navi-danger-header">
                   <AlertTriangle size={20} className="alert-icon" />
