@@ -396,33 +396,36 @@ function AnalyzerDemo({ phase }) {
       {showCinema && (
         <div className="analysis-cinema">
           <div className="cinema-card">
-            <div className={`cinema-message ${showVocabulary ? 'vocabulary-transfer' : ''}`}>
-              <span className="cinema-sender">Jake</span>
-              <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
-                {!showTokens ? (
-                  <span className="raw-focused-message">Adya, you suck at science.</span>
-                ) : (
-                  ANALYZER_TOKENS.map((token, index) => (
-                    <span
-                      className={`cinema-token ${token.role} ${!token.keep && showStopWords ? 'removed' : ''}`}
-                      style={{ '--token-delay': `${index * 95}ms`, '--compact-index': token.keep ? index : 0 }}
-                      key={`${token.text}-${index}`}
-                    >
-                      {token.text}
-                    </span>
-                  ))
+            {!showVocabulary && (
+              <div className="cinema-message">
+                <span className="cinema-sender">Jake</span>
+                <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
+                  {!showTokens ? (
+                    <span className="raw-focused-message">Adya, you suck at science.</span>
+                  ) : (
+                    ANALYZER_TOKENS.map((token, index) => (
+                      <span
+                        className={`cinema-token ${token.role} ${!token.keep && showStopWords ? 'removed' : ''}`}
+                        style={{ '--token-delay': `${index * 95}ms`, '--compact-index': token.keep ? index : 0 }}
+                        key={`${token.text}-${index}`}
+                      >
+                        {token.text}
+                      </span>
+                    ))
+                  )}
+                </div>
+                {phase === 'focus' && (
+                  <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
+                )}
+                {phaseLabel && (
+                  <div className="scan-tooltip-tag" key={phaseLabel}>{phaseLabel}</div>
                 )}
               </div>
-              {phase === 'focus' && (
-                <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
-              )}
-              {phaseLabel && (
-                <div className={`scan-tooltip-tag ${showVocabulary ? 'vocabulary-tag' : ''}`} key={phaseLabel}>{phaseLabel}</div>
-              )}
-            </div>
+            )}
 
             {showVocabulary && (
               <div className="vocabulary-index-panel">
+                <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
                 <div className="vocab-index-header">
                   <span>Word</span>
                   <span>ID</span>
