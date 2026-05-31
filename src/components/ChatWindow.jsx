@@ -285,7 +285,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
                     <button className="navi-btn" onClick={() => { setShowSuggestions(true); setNaviMood('happy'); }}>Respond Politely</button>
                     <button className="navi-btn ignore" onClick={closeNavi}>Ignore</button>
                   </div>
-                  <button className="navi-btn danger" onClick={closeNavi}>Alert a Trusted Adult</button>
+                  <button className="navi-btn" onClick={closeNavi}>Alert a Trusted Adult</button>
                 </div>
               </>
             ) : naviMood === 'concerned' ? (
