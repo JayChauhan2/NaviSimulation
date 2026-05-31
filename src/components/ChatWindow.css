@@ -498,13 +498,13 @@
 }
 
 .context-axis {
-  stroke: #60717D;
-  stroke-width: 3;
+  stroke: rgba(96, 113, 125, 0.34);
+  stroke-width: 2.5;
   stroke-linecap: round;
 }
 
 .context-axis:nth-of-type(1) {
-  stroke: #51636F;
+  stroke: rgba(81, 99, 111, 0.34);
 }
 
 .context-axis-label {

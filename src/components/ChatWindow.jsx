@@ -27,9 +27,9 @@ const VOCABULARY_INDEX = [
 
 const SENTIMENT_POINTS = [
   { word: 'Adya', id: 1042, x: 0, y: 0 },
-  { word: 'you', id: 203, x: -0.26, y: 0.08 },
+  { word: 'you', id: 203, x: -0.26, y: 0.01 },
   { word: 'suck', id: 8801, x: -0.78, y: -0.7 },
-  { word: 'science', id: 4519, x: 0.16, y: 0.05 },
+  { word: 'science', id: 4519, x: 0.34, y: 0.05 },
 ];
 
 export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode, onAlertTrustedAdult, morphingChatId, oldMorphInfo, typingChatId }) {
