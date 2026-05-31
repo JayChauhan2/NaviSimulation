@@ -26,10 +26,10 @@ const VOCABULARY_INDEX = [
 ];
 
 const SENTIMENT_POINTS = [
-  { word: 'Adya', id: 1042, x: 50, y: 49 },
-  { word: 'you', id: 203, x: 41, y: 55 },
-  { word: 'suck', id: 8801, x: 18, y: 80 },
-  { word: 'science', id: 4519, x: 55, y: 47 },
+  { word: 'Adya', id: 1042, x: 0, y: 0 },
+  { word: 'you', id: 203, x: -0.26, y: 0.08 },
+  { word: 'suck', id: 8801, x: -0.78, y: -0.7 },
+  { word: 'science', id: 4519, x: 0.16, y: 0.05 },
 ];
 
 export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode, onAlertTrustedAdult, morphingChatId, oldMorphInfo, typingChatId }) {
@@ -472,27 +472,30 @@ function AnalyzerDemo({ phase }) {
                       <feDropShadow dx="0" dy="7" stdDeviation="7" floodColor="#0d47a1" floodOpacity="0.18" />
                     </filter>
                   </defs>
-                  <line className="context-axis" x1="78" y1="286" x2="466" y2="286" />
-                  <line className="context-axis" x1="78" y1="286" x2="78" y2="52" />
-                  <text className="context-axis-label y-top" x="66" y="48">K</text>
-                  <text className="context-axis-label y-bottom" x="66" y="310">M</text>
-                  <text className="context-axis-label x-left" x="78" y="326">Unsafe</text>
-                  <text className="context-axis-label x-right" x="466" y="326">Safe</text>
+                  <line className="context-axis" x1="70" y1="180" x2="470" y2="180" />
+                  <line className="context-axis" x1="260" y1="46" x2="260" y2="314" />
+                  <text className="context-axis-label y-top" x="260" y="34">K</text>
+                  <text className="context-axis-label y-bottom" x="260" y="338">M</text>
+                  <text className="context-axis-label x-left" x="70" y="170">Unsafe</text>
+                  <text className="context-axis-label x-right" x="470" y="170">Safe</text>
                   <path
                     className="context-blob"
-                    d="M 108 244 C 126 166, 214 122, 312 132 C 390 140, 418 194, 388 244 C 350 304, 180 310, 108 244 Z"
+                    d="M 114 268 C 92 216, 126 144, 212 124 C 314 100, 374 128, 386 188 C 400 260, 310 304, 198 300 C 154 298, 128 286, 114 268 Z"
                   />
-                  <text className="context-window-label" x="330" y="122">Context Window</text>
+                  <text className="context-window-label" x="326" y="112">Context Window</text>
                   {SENTIMENT_POINTS.map((point, index) => (
                     <g
-                      className={`context-point point-${point.word.toLowerCase()}`}
-                      style={{ '--plot-delay': `${index * 220}ms` }}
-                      transform={`translate(${78 + point.x * 3.88} ${286 - point.y * 2.34})`}
+                      transform={`translate(${260 + point.x * 170} ${180 - point.y * 116})`}
                       key={point.word}
                     >
-                      <circle r="8" />
-                      <text className="context-word" x="0" y="-15">{point.word}</text>
-                      <text className="context-id" x="0" y="27">ID {point.id}</text>
+                      <g
+                        className={`context-point point-${point.word.toLowerCase()}`}
+                        style={{ '--plot-delay': `${index * 220}ms` }}
+                      >
+                        <circle r="8" />
+                        <text className="context-word" x="0" y="-15">{point.word}</text>
+                        <text className="context-id" x="0" y="27">ID {point.id}</text>
+                      </g>
                     </g>
                   ))}
                 </svg>

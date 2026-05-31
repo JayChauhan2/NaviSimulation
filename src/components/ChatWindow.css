@@ -503,6 +503,10 @@
   stroke-linecap: round;
 }
 
+.context-axis:nth-of-type(1) {
+  stroke: #51636F;
+}
+
 .context-axis-label {
   fill: #22313A;
   font-size: 18px;
@@ -511,10 +515,12 @@
 
 .x-left {
   text-anchor: start;
+  fill: #D7263D;
 }
 
 .x-right {
   text-anchor: end;
+  fill: #1976D2;
 }
 
 .y-top,
@@ -546,6 +552,8 @@
 
 .context-point {
   opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
   animation: contextPointIn 0.5s cubic-bezier(0.18, 0.95, 0.28, 1.18) forwards;
   animation-delay: var(--plot-delay);
 }
