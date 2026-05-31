@@ -595,12 +595,10 @@
 .confidence-score-panel {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) minmax(210px, 0.82fr);
-  align-items: center;
-  gap: 20px;
-  width: min(680px, calc(100vw - 44px));
-  min-height: 270px;
-  padding: 20px;
+  place-items: center;
+  width: min(330px, calc(100vw - 64px));
+  aspect-ratio: 1;
+  padding: 22px;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.97);
   border: 1px solid rgba(25, 118, 210, 0.18);
@@ -613,7 +611,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 210px;
+  width: 100%;
+  height: 100%;
 }
 
 .confidence-score-main h3 {
@@ -626,7 +625,7 @@
 
 .confidence-number {
   color: #D7263D;
-  font-size: clamp(4.4rem, 11vw, 7.2rem);
+  font-size: clamp(4rem, 11vw, 6.4rem);
   font-weight: 950;
   line-height: 0.95;
   letter-spacing: 0;
@@ -634,37 +633,46 @@
 }
 
 .bullying-warning-card {
-  display: flex;
-  flex-direction: column;
+  position: absolute;
+  right: -116px;
+  bottom: 20px;
+  display: grid;
+  grid-template-rows: 88px auto;
+  justify-items: center;
   align-items: center;
-  gap: 8px;
+  min-width: 250px;
   opacity: 0;
-  transform: translateX(18px) scale(0.94);
-  animation: warningPopIn 0.52s cubic-bezier(0.18, 0.95, 0.28, 1.18) forwards;
+  transform: translateX(26px) scale(0.94);
+  animation: warningShakeIn 0.72s cubic-bezier(0.18, 0.95, 0.28, 1.18) forwards;
   animation-delay: 2s;
 }
 
 .warning-navi {
-  width: 142px;
-  height: 142px;
+  width: 152px;
+  height: 152px;
   object-fit: contain;
+  z-index: 1;
+  transform: translateY(24px);
   filter: drop-shadow(0 8px 12px rgba(11, 20, 26, 0.22));
 }
 
 .warning-sign {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 10px 12px;
+  justify-content: center;
+  gap: 8px;
+  min-width: 220px;
+  padding: 11px 14px;
   border-radius: 8px;
   background: #FFF1F1;
   border: 2px solid rgba(215, 38, 61, 0.26);
   color: #D7263D;
   box-shadow: 0 7px 16px rgba(215, 38, 61, 0.14);
+  z-index: 2;
 }
 
 .warning-sign span {
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   font-weight: 900;
   white-space: nowrap;
 }
@@ -917,6 +925,31 @@
   .x-label,
   .y-label {
     font-size: 12px;
+  }
+
+  .confidence-score-panel {
+    width: min(300px, calc(100vw - 38px));
+  }
+
+  .bullying-warning-card {
+    right: -24px;
+    bottom: -78px;
+    min-width: 210px;
+    transform-origin: center;
+  }
+
+  .warning-navi {
+    width: 126px;
+    height: 126px;
+  }
+
+  .warning-sign {
+    min-width: 194px;
+    padding: 9px 10px;
+  }
+
+  .warning-sign span {
+    font-size: 0.86rem;
   }
 }
 
@@ -1273,15 +1306,23 @@
   }
 }
 
-@keyframes warningPopIn {
+@keyframes warningShakeIn {
   0% {
     opacity: 0;
-    transform: translateX(18px) scale(0.94) rotate(2deg);
+    transform: translateX(34px) scale(0.88) rotate(4deg);
   }
 
-  70% {
+  38% {
     opacity: 1;
-    transform: translateX(-3px) scale(1.04) rotate(-1deg);
+    transform: translateX(-9px) scale(1.06) rotate(-4deg);
+  }
+
+  55% {
+    transform: translateX(7px) scale(1.02) rotate(3deg);
+  }
+
+  72% {
+    transform: translateX(-4px) scale(1.01) rotate(-2deg);
   }
 
   100% {
