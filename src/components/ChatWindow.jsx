@@ -64,7 +64,7 @@ function NaviStageChevron({ activeStage, isExiting = false }) {
   return (
     <div className={`navi-stage-strip ${isExiting ? 'stage-strip-exiting' : ''}`} aria-label="Navi process stages">
       {NAVI_STAGES.map(({ id, label, icon }, index) => (
-        <div className={`navi-stage-chevron ${activeStage === id ? 'active' : ''}`} key={id}>
+        <div className={`navi-stage-chevron stage-${id} ${activeStage === id ? 'active' : ''}`} key={id}>
           <img src={icon} alt="" className="navi-stage-icon" aria-hidden="true" />
           <span>{index + 1}) {label}</span>
         </div>
