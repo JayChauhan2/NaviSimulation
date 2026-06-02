@@ -60,10 +60,10 @@ function getActiveNaviStage({ analyzerPhase, decisionStageComplete, showScenario
 function NaviStageChevron({ activeStage }) {
   return (
     <div className="navi-stage-strip" aria-label="Navi process stages">
-      {NAVI_STAGES.map(({ id, label, Icon }) => (
+      {NAVI_STAGES.map(({ id, label, Icon }, index) => (
         <div className={`navi-stage-chevron ${activeStage === id ? 'active' : ''}`} key={id}>
           <Icon size={17} strokeWidth={2.6} />
-          <span>{label}</span>
+          <span>{index + 1}) {label}</span>
         </div>
       ))}
     </div>
@@ -339,6 +339,9 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
             <span className={`status ${isFlagging ? 'status-morph' : ''}`}>{currentChat.status}</span>
           </div>
         </div>
+        {showNaviStageStrip && (
+          <NaviStageChevron activeStage={activeNaviStage} />
+        )}
         <div className="header-actions">
           <button className="icon-btn"><Video size={20} /></button>
           <button className="icon-btn"><Phone size={20} /></button>
@@ -349,9 +352,6 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
       {/* Messages Area */}
       <div className={`messages-area ${showAnalyzerDemo ? 'analyzer-active' : ''}`}>
-        {showNaviStageStrip && (
-          <NaviStageChevron activeStage={activeNaviStage} />
-        )}
         <div className={`messages-container ${extraSpaceClass}`}>
           {showAnalyzerDemo ? (
             <AnalyzerDemo phase={analyzerPhase} />
