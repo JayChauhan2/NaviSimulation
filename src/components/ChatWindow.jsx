@@ -666,6 +666,7 @@ function ConfidenceScoreCard({ isExiting = false }) {
         <span>Jake</span>
         <strong>Adya, you suck at science.</strong>
       </div>
+      <div className="confidence-mean-label">Mean</div>
       <div className="confidence-score-main">
         <h3>Confidence Score</h3>
         <div className="confidence-number" aria-label={`Confidence score ${score} percent`}>

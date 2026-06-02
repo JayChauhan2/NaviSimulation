@@ -668,6 +668,15 @@
   line-height: 1.15;
 }
 
+.confidence-mean-label {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: #D7263D;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
 .confidence-score-main h3 {
   margin: 0 0 14px;
   color: #22313A;
