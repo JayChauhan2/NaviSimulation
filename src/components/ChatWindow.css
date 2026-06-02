@@ -157,13 +157,16 @@
   transition: color 0.32s ease, transform 0.32s ease;
 }
 
-.navi-stage-chevron.stage-analyzer,
-.navi-stage-chevron.stage-decision {
+.navi-stage-chevron.stage-analyzer {
   flex-grow: 0.78;
 }
 
+.navi-stage-chevron.stage-decision {
+  flex-grow: 0.9;
+}
+
 .navi-stage-chevron.stage-sentiment {
-  flex-grow: 1.08;
+  flex-grow: 0.94;
 }
 
 .navi-stage-chevron::before {
