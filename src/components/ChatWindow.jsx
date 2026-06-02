@@ -60,9 +60,9 @@ function getActiveNaviStage({ analyzerPhase, decisionStageComplete, showScenario
   return 'hidden';
 }
 
-function NaviStageChevron({ activeStage }) {
+function NaviStageChevron({ activeStage, isExiting = false }) {
   return (
-    <div className="navi-stage-strip" aria-label="Navi process stages">
+    <div className={`navi-stage-strip ${isExiting ? 'stage-strip-exiting' : ''}`} aria-label="Navi process stages">
       {NAVI_STAGES.map(({ id, label, icon }, index) => (
         <div className={`navi-stage-chevron ${activeStage === id ? 'active' : ''}`} key={id}>
           <img src={icon} alt="" className="navi-stage-icon" aria-hidden="true" />
@@ -88,6 +88,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   const [scenarioMessages, setScenarioMessages] = useState([]);
   const [isScenarioTyping, setIsScenarioTyping] = useState(false);
   const [decisionStageComplete, setDecisionStageComplete] = useState(false);
+  const [isStageStripExiting, setIsStageStripExiting] = useState(false);
   
   const isFlagging = morphingChatId === currentChat.id;
   const messagesEndRef = useRef(null);
@@ -105,7 +106,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     showSentimentAnalyzer,
     showTeachingAnalyzer,
   });
-  const showNaviStageStrip = currentChat.id === 'g1' && activeNaviStage !== 'hidden';
+  const showNaviStageStrip = currentChat.id === 'g1' && activeNaviStage !== 'hidden' && (!decisionStageComplete || isStageStripExiting);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -128,18 +129,21 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setScenarioMessages([]);
       setIsScenarioTyping(false);
       setDecisionStageComplete(false);
+      setIsStageStripExiting(false);
     } else if (demoMode === '1' || demoMode === '2') {
       setShowNavi(false);
       setShowSuggestions(false);
       setScenarioMessages([]);
       setIsScenarioTyping(false);
       setDecisionStageComplete(false);
+      setIsStageStripExiting(false);
     } else if (!demoMode) {
       setShowNavi(false);
       setShowSuggestions(false);
       setScenarioMessages([]);
       setIsScenarioTyping(false);
       setDecisionStageComplete(false);
+      setIsStageStripExiting(false);
     }
   }, [demoMode, currentChat.id]);
 
@@ -152,6 +156,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     setScenarioMessages([]);
     setIsScenarioTyping(false);
     setDecisionStageComplete(false);
+    setIsStageStripExiting(false);
   }, [showMergedResponseDemo]);
 
   useEffect(() => {
@@ -286,7 +291,11 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
   const handleApplySuggestion = (suggestion) => {
     if (showScenarioDemo) {
-      setDecisionStageComplete(true);
+      setIsStageStripExiting(true);
+      setTimeout(() => {
+        setDecisionStageComplete(true);
+        setIsStageStripExiting(false);
+      }, 520);
     }
 
     setReplacingText(suggestion);
@@ -343,7 +352,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
           </div>
         </div>
         {showNaviStageStrip && (
-          <NaviStageChevron activeStage={activeNaviStage} />
+          <NaviStageChevron activeStage={activeNaviStage} isExiting={isStageStripExiting} />
         )}
         <div className="header-actions">
           <button className="icon-btn"><Video size={20} /></button>

@@ -17,6 +17,7 @@
   max-width: 100%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   background: var(--bg-glass);
+  position: relative;
   z-index: 10;
 }
 
@@ -27,6 +28,7 @@
   cursor: pointer;
   min-width: 0;
   flex: 0 1 250px;
+  z-index: 2;
 }
 
 .chat-meta {
@@ -60,6 +62,7 @@
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+  z-index: 2;
 }
 
 .icon-btn {
@@ -112,18 +115,22 @@
 }
 
 .navi-stage-strip {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 50%;
   z-index: 1;
   display: flex;
   align-items: stretch;
-  flex: 0 1 570px;
-  max-width: 570px;
-  min-width: 310px;
-  margin-left: -70px;
-  margin-right: auto;
+  width: min(860px, calc(100% - 330px));
+  min-width: 760px;
+  transform: translate(-50%, -50%);
   filter: drop-shadow(0 8px 14px rgba(11, 20, 26, 0.12));
   pointer-events: none;
   animation: stageStripIn 0.38s ease both;
+}
+
+.navi-stage-strip.stage-strip-exiting {
+  animation: stageStripOut 0.5s ease forwards;
 }
 
 .navi-stage-chevron {
@@ -141,7 +148,7 @@
   --chevron-text: #ffffff;
   background: #111111;
   color: var(--chevron-text);
-  font-size: 0.77rem;
+  font-size: 0.92rem;
   font-weight: 900;
   line-height: 1;
   white-space: nowrap;
@@ -194,8 +201,8 @@
 .navi-stage-chevron span {
   position: relative;
   z-index: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .messages-container {
@@ -1021,6 +1028,9 @@
   }
 
   .navi-stage-strip {
+    position: relative;
+    left: auto;
+    top: auto;
     flex: 1 1 100%;
     order: 3;
     width: calc(100vw - 32px);
@@ -1032,12 +1042,16 @@
     animation-name: stageStripInMobile;
   }
 
+  .navi-stage-strip.stage-strip-exiting {
+    animation-name: stageStripOutMobile;
+  }
+
   .navi-stage-chevron {
     min-height: 58px;
     padding: 9px 10px 9px 16px;
     margin-left: -11px;
     gap: 4px;
-    font-size: 0.55rem;
+    font-size: 0.62rem;
     line-height: 1.05;
     white-space: normal;
   }
@@ -1157,12 +1171,23 @@
 
 @keyframes stageStripIn {
   0% {
-    transform: translateY(-8px) scale(0.98);
+    transform: translate(-50%, calc(-50% - 8px)) scale(0.98);
     opacity: 0;
   }
   100% {
-    transform: translateY(0) scale(1);
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes stageStripOut {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, calc(-50% - 8px)) scale(0.97);
+    opacity: 0;
   }
 }
 
@@ -1174,6 +1199,17 @@
   100% {
     transform: translateY(0) scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes stageStripOutMobile {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-8px) scale(0.97);
+    opacity: 0;
   }
 }
 
