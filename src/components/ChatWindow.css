@@ -189,9 +189,9 @@
 }
 
 .navi-stage-icon {
-  width: 25px;
-  height: 25px;
-  flex: 0 0 25px;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
   object-fit: contain;
   display: block;
   position: relative;
@@ -1061,9 +1061,9 @@
   }
 
   .navi-stage-icon {
-    width: 22px;
-    height: 22px;
-    flex-basis: 22px;
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
   }
 
   .navi-stage-chevron span {

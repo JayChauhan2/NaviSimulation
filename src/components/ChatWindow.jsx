@@ -34,7 +34,7 @@ const SENTIMENT_POINTS = [
 const NAVI_STAGES = [
   { id: 'analyzer', label: 'Message Analyzer', icon: stageEyeIcon },
   { id: 'sentiment', label: 'Sentiment Classifier', icon: stageHeartIcon },
-  { id: 'decision', label: 'Deterministic Decision Engine', icon: stageHandIcon },
+  { id: 'decision', label: 'Decision Engine', icon: stageHandIcon },
 ];
 
 function getActiveNaviStage({ analyzerPhase, decisionStageComplete, showScenarioDemo, showSentimentAnalyzer, showTeachingAnalyzer }) {
