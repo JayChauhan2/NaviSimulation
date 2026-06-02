@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Phone, Video, MoreVertical, Paperclip, Smile, AlertTriangle, Eye, Heart, Hand } from 'lucide-react';
+import { Send, Phone, Video, MoreVertical, Paperclip, Smile, AlertTriangle } from 'lucide-react';
 import { currentUser, getSimulatedTimestamp } from '../data/fakeData';
 import './ChatWindow.css';
 import MessageBubble from './MessageBubble';
@@ -7,6 +7,9 @@ import naviUpsetImg from '../assets/Navi Upset.png';
 import naviHappyImg from '../assets/Navi Happy.png';
 import naviConcernedImg from '../assets/Navi Concerned.png';
 import magnifyingGlassImg from '../assets/MagnifyingGlass.png';
+import stageEyeIcon from '../assets/stage-eye.svg';
+import stageHeartIcon from '../assets/stage-heart.svg';
+import stageHandIcon from '../assets/stage-hand.svg';
 
 const ANALYZER_TOKENS = [
   { text: 'Adya', role: 'target', keep: false, score: 92, y: 84 },
@@ -29,9 +32,9 @@ const SENTIMENT_POINTS = [
 ];
 
 const NAVI_STAGES = [
-  { id: 'analyzer', label: 'Message Analyzer', Icon: Eye },
-  { id: 'sentiment', label: 'Sentiment Classifier', Icon: Heart },
-  { id: 'decision', label: 'Deterministic Decision Engine', Icon: Hand },
+  { id: 'analyzer', label: 'Message Analyzer', icon: stageEyeIcon },
+  { id: 'sentiment', label: 'Sentiment Classifier', icon: stageHeartIcon },
+  { id: 'decision', label: 'Deterministic Decision Engine', icon: stageHandIcon },
 ];
 
 function getActiveNaviStage({ analyzerPhase, decisionStageComplete, showScenarioDemo, showSentimentAnalyzer, showTeachingAnalyzer }) {
@@ -60,9 +63,9 @@ function getActiveNaviStage({ analyzerPhase, decisionStageComplete, showScenario
 function NaviStageChevron({ activeStage }) {
   return (
     <div className="navi-stage-strip" aria-label="Navi process stages">
-      {NAVI_STAGES.map(({ id, label, Icon }, index) => (
+      {NAVI_STAGES.map(({ id, label, icon }, index) => (
         <div className={`navi-stage-chevron ${activeStage === id ? 'active' : ''}`} key={id}>
-          <Icon size={17} strokeWidth={2.6} />
+          <img src={icon} alt="" className="navi-stage-icon" aria-hidden="true" />
           <span>{index + 1}) {label}</span>
         </div>
       ))}
