@@ -137,15 +137,27 @@
   min-height: 52px;
   padding: 11px 24px 11px 28px;
   margin-left: -13px;
-  background: #F9D5DA;
-  color: #87212C;
+  --chevron-fill: #555D66;
+  --chevron-text: #ffffff;
+  background: #111111;
+  color: var(--chevron-text);
   font-size: 0.77rem;
   font-weight: 900;
   line-height: 1;
   white-space: nowrap;
   overflow: hidden;
   clip-path: polygon(0 0, calc(100% - 17px) 0, 100% 50%, calc(100% - 17px) 100%, 0 100%, 17px 50%);
-  transition: background 0.32s ease, color 0.32s ease, transform 0.32s ease;
+  transition: color 0.32s ease, transform 0.32s ease;
+}
+
+.navi-stage-chevron::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  z-index: 0;
+  background: var(--chevron-fill);
+  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%, 15px 50%);
+  transition: background 0.32s ease;
 }
 
 .navi-stage-chevron:first-child {
@@ -154,12 +166,15 @@
   clip-path: polygon(0 0, calc(100% - 17px) 0, 100% 50%, calc(100% - 17px) 100%, 0 100%);
 }
 
+.navi-stage-chevron:first-child::before {
+  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%);
+}
+
 .navi-stage-chevron.active {
   z-index: 1;
-  background: #D7263D;
-  color: #ffffff;
+  --chevron-fill: #D7263D;
+  --chevron-text: #ffffff;
   transform: translateY(-2px);
-  box-shadow: inset 0 0 0 1px rgba(95, 12, 24, 0.16);
 }
 
 .navi-stage-chevron.active .navi-stage-icon {
@@ -172,9 +187,13 @@
   flex: 0 0 25px;
   object-fit: contain;
   display: block;
+  position: relative;
+  z-index: 1;
 }
 
 .navi-stage-chevron span {
+  position: relative;
+  z-index: 1;
   overflow: hidden;
   text-overflow: ellipsis;
 }
