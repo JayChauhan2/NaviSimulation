@@ -121,8 +121,8 @@
   z-index: 1;
   display: flex;
   align-items: stretch;
-  width: min(860px, calc(100% - 330px));
-  min-width: 760px;
+  width: min(640px, calc(100% - 390px));
+  min-width: 560px;
   transform: translate(-50%, -50%);
   filter: drop-shadow(0 8px 14px rgba(11, 20, 26, 0.12));
   pointer-events: none;
@@ -139,16 +139,16 @@
   flex: 1 1 0;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 5px;
   min-width: 0;
   min-height: 52px;
-  padding: 11px 24px 11px 28px;
+  padding: 11px 16px 11px 21px;
   margin-left: -13px;
   --chevron-fill: #555D66;
   --chevron-text: #ffffff;
   background: #111111;
   color: var(--chevron-text);
-  font-size: 0.92rem;
+  font-size: 0.78rem;
   font-weight: 900;
   line-height: 1;
   white-space: nowrap;
@@ -178,7 +178,7 @@
 
 .navi-stage-chevron:first-child {
   margin-left: 0;
-  padding-left: 18px;
+  padding-left: 14px;
   clip-path: polygon(0 0, calc(100% - 17px) 0, 100% 50%, calc(100% - 17px) 100%, 0 100%);
 }
 
@@ -198,9 +198,9 @@
 }
 
 .navi-stage-icon {
-  width: 34px;
-  height: 34px;
-  flex: 0 0 34px;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
   object-fit: contain;
   display: block;
   position: relative;
