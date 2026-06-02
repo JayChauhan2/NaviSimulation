@@ -134,8 +134,8 @@
   justify-content: center;
   gap: 7px;
   min-width: 0;
-  min-height: 38px;
-  padding: 8px 24px 8px 28px;
+  min-height: 52px;
+  padding: 11px 24px 11px 28px;
   margin-left: -13px;
   background: #F9D5DA;
   color: #87212C;
@@ -167,9 +167,9 @@
 }
 
 .navi-stage-icon {
-  width: 17px;
-  height: 17px;
-  flex: 0 0 17px;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
   object-fit: contain;
   display: block;
 }
@@ -1014,8 +1014,8 @@
   }
 
   .navi-stage-chevron {
-    min-height: 42px;
-    padding: 7px 10px 7px 16px;
+    min-height: 58px;
+    padding: 9px 10px 9px 16px;
     margin-left: -11px;
     gap: 4px;
     font-size: 0.55rem;
@@ -1028,9 +1028,9 @@
   }
 
   .navi-stage-icon {
-    width: 13px;
-    height: 13px;
-    flex-basis: 13px;
+    width: 22px;
+    height: 22px;
+    flex-basis: 22px;
   }
 
   .navi-stage-chevron span {
