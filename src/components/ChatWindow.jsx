@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Phone, Video, MoreVertical, Paperclip, Smile, AlertTriangle } from 'lucide-react';
+import { Send, Phone, Video, MoreVertical, Paperclip, Smile, AlertTriangle, Eye, Heart, Hand } from 'lucide-react';
 import { currentUser, getSimulatedTimestamp } from '../data/fakeData';
 import './ChatWindow.css';
 import MessageBubble from './MessageBubble';
@@ -28,6 +28,48 @@ const SENTIMENT_POINTS = [
   { word: 'science', id: 4519, x: 0.34, y: 0.05 },
 ];
 
+const NAVI_STAGES = [
+  { id: 'analyzer', label: 'Message Analyzer', Icon: Eye },
+  { id: 'sentiment', label: 'Sentiment Classifier', Icon: Heart },
+  { id: 'decision', label: 'Deterministic Decision Engine', Icon: Hand },
+];
+
+function getActiveNaviStage({ analyzerPhase, decisionStageComplete, showScenarioDemo, showSentimentAnalyzer, showTeachingAnalyzer }) {
+  if (decisionStageComplete) return null;
+
+  if (showScenarioDemo) return 'decision';
+
+  if (showSentimentAnalyzer) {
+    if (analyzerPhase === 'context-window') return 'sentiment';
+    if (['confidence-score', 'confidence-exit'].includes(analyzerPhase)) return 'decision';
+    if (analyzerPhase === 'sentiment-vocabulary') return 'analyzer';
+  }
+
+  if (!showTeachingAnalyzer) return 'hidden';
+
+  if (['focus', 'tokens', 'stopwords', 'vocabulary-transition', 'vocabulary'].includes(analyzerPhase)) {
+    return 'analyzer';
+  }
+
+  if (analyzerPhase === 'context-window') return 'sentiment';
+  if (['confidence-score', 'confidence-exit', 'response-scenario'].includes(analyzerPhase)) return 'decision';
+
+  return 'hidden';
+}
+
+function NaviStageChevron({ activeStage }) {
+  return (
+    <div className="navi-stage-strip" aria-label="Navi process stages">
+      {NAVI_STAGES.map(({ id, label, Icon }) => (
+        <div className={`navi-stage-chevron ${activeStage === id ? 'active' : ''}`} key={id}>
+          <Icon size={17} strokeWidth={2.6} />
+          <span>{label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode, onAlertTrustedAdult, morphingChatId, oldMorphInfo, typingChatId }) {
   const [inputText, setInputText] = useState('');
   const [showNavi, setShowNavi] = useState(false);
@@ -42,6 +84,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   const [analyzerPhase, setAnalyzerPhase] = useState('idle');
   const [scenarioMessages, setScenarioMessages] = useState([]);
   const [isScenarioTyping, setIsScenarioTyping] = useState(false);
+  const [decisionStageComplete, setDecisionStageComplete] = useState(false);
   
   const isFlagging = morphingChatId === currentChat.id;
   const messagesEndRef = useRef(null);
@@ -52,6 +95,14 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   const showSentimentAnalyzer = demoMode === '2' && currentChat.id === 'g1';
   const showScenarioDemo = (demoMode === '3' && currentChat.id === 'g1') || showMergedResponseDemo;
   const showAnalyzerDemo = showTeachingAnalyzer || showSentimentAnalyzer;
+  const activeNaviStage = getActiveNaviStage({
+    analyzerPhase,
+    decisionStageComplete,
+    showScenarioDemo,
+    showSentimentAnalyzer,
+    showTeachingAnalyzer,
+  });
+  const showNaviStageStrip = currentChat.id === 'g1' && activeNaviStage !== 'hidden';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -73,16 +124,19 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setNaviMood('upset');
       setScenarioMessages([]);
       setIsScenarioTyping(false);
+      setDecisionStageComplete(false);
     } else if (demoMode === '1' || demoMode === '2') {
       setShowNavi(false);
       setShowSuggestions(false);
       setScenarioMessages([]);
       setIsScenarioTyping(false);
+      setDecisionStageComplete(false);
     } else if (!demoMode) {
       setShowNavi(false);
       setShowSuggestions(false);
       setScenarioMessages([]);
       setIsScenarioTyping(false);
+      setDecisionStageComplete(false);
     }
   }, [demoMode, currentChat.id]);
 
@@ -94,6 +148,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     setNaviMood('upset');
     setScenarioMessages([]);
     setIsScenarioTyping(false);
+    setDecisionStageComplete(false);
   }, [showMergedResponseDemo]);
 
   useEffect(() => {
@@ -227,6 +282,10 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   };
 
   const handleApplySuggestion = (suggestion) => {
+    if (showScenarioDemo) {
+      setDecisionStageComplete(true);
+    }
+
     setReplacingText(suggestion);
     setIsReplacing(true);
     setShowSuggestions(false);
@@ -290,6 +349,9 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
       {/* Messages Area */}
       <div className={`messages-area ${showAnalyzerDemo ? 'analyzer-active' : ''}`}>
+        {showNaviStageStrip && (
+          <NaviStageChevron activeStage={activeNaviStage} />
+        )}
         <div className={`messages-container ${extraSpaceClass}`}>
           {showAnalyzerDemo ? (
             <AnalyzerDemo phase={analyzerPhase} />
