@@ -449,7 +449,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
                 <p>I detected a mean message from Jake.<br />What would you like to do next?</p>
                 <div className="navi-options">
                   <div className="navi-options-row">
-                    <button className="navi-btn" onClick={() => { setShowSuggestions(true); setNaviMood('happy'); }}>Respond Politely</button>
+                    <button className="navi-btn recommended" onClick={() => { setShowSuggestions(true); setNaviMood('happy'); }}>Respond Politely</button>
                     <button className="navi-btn ignore" onClick={closeNavi}>Ignore</button>
                   </div>
                   <button className="navi-btn" onClick={closeNavi}>Alert a Trusted Adult</button>
@@ -477,7 +477,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
                 <p>That message might be hurtful.<br />Want help responding?</p>
                 <div className="navi-options">
                   <div className="navi-options-row">
-                    <button className="navi-btn" onClick={() => { setShowSuggestions(true); setNaviMood('happy'); }}>Respond Politely</button>
+                    <button className="navi-btn recommended" onClick={() => { setShowSuggestions(true); setNaviMood('happy'); }}>Respond Politely</button>
                     <button className="navi-btn ignore" onClick={closeNavi}>Ignore</button>
                   </div>
                   <button className="navi-btn" onClick={closeNavi}>Ask An Adult For Help</button>

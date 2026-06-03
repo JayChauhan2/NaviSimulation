@@ -1906,6 +1906,7 @@
 }
 
 .navi-btn {
+  position: relative;
   background-color: #1976D2;
   color: white;
   border: none;
@@ -1918,9 +1919,39 @@
   text-transform: capitalize;
 }
 
+.navi-btn.recommended {
+  background-color: #1976D2;
+  border: 2px solid #FFC400;
+  box-shadow: 0 0 0 3px rgba(255, 196, 0, 0.34), 0 5px 14px rgba(255, 196, 0, 0.3);
+  animation: recommendedNudge 1.35s ease-in-out infinite;
+}
+
+.navi-btn.recommended::after {
+  content: 'Recommended';
+  position: absolute;
+  left: 50%;
+  top: -18px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #FFC400;
+  color: #3A2A00;
+  font-size: 0.58rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 6px rgba(58, 42, 0, 0.18);
+}
+
 .navi-btn:hover {
   background-color: #1565C0;
   transform: translateY(-1px);
+}
+
+.navi-btn.recommended:hover {
+  background-color: #1565C0;
+  box-shadow: 0 0 0 4px rgba(255, 196, 0, 0.42), 0 7px 18px rgba(255, 196, 0, 0.34);
 }
 
 .navi-btn.ignore {
@@ -1931,6 +1962,18 @@
 
 .navi-btn.ignore:hover {
   background-color: rgba(25, 118, 210, 0.1);
+}
+
+@keyframes recommendedNudge {
+  0%,
+  100% {
+    transform: translateY(0);
+    box-shadow: 0 0 0 3px rgba(255, 196, 0, 0.34), 0 5px 14px rgba(255, 196, 0, 0.3);
+  }
+  50% {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 5px rgba(255, 196, 0, 0.46), 0 8px 18px rgba(255, 196, 0, 0.36);
+  }
 }
 
 /* Navi Danger/Warning Styles */
