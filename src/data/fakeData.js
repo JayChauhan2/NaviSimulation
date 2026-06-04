@@ -69,45 +69,27 @@ export const chatList = [groupChatInfo, ...contacts];
 export const initialMessages = [
   {
     id: 'm1',
-    senderId: 'me',
-    text: 'Hey guys! When are we meeting up to start the science project?? It\'s literally due next week 😭',
-    timestamp: '4:30 PM'
-  },
-  {
-    id: 'm2',
-    senderId: 'c2', // Jake
-    text: 'bro idk whenever just lmk',
-    timestamp: '4:35 PM'
-  },
-  {
-    id: 'm3',
     senderId: 'c3', // Mia
-    text: 'I can do tomorrow right after school! Does that work for everyone?',
-    timestamp: '4:37 PM'
-  },
-  {
-    id: 'm4',
-    senderId: 'c4', // Alex
-    text: 'nah cant do tmrw got practice.',
-    timestamp: '4:40 PM'
-  },
-  {
-    id: 'm5',
-    senderId: 'me', // User
-    text: 'Okay what about Thursday then? We really need to get the poster board done.',
-    timestamp: '4:42 PM'
-  },
-  {
-    id: 'm6',
-    senderId: 'c1', // Chloe
-    text: 'Thursday works perfectly for me! I can bring the markers and stuff.',
+    text: 'I can bring the poster board tomorrow.',
     timestamp: '4:44 PM'
   },
   {
-    id: 'm7',
-    senderId: 'c2', // Jake
-    text: 'bet. ill be there, im lowkey struggling in science so i need this grade lol',
+    id: 'm2',
+    senderId: 'me', // User
+    text: 'Nice. I can write the volcano explanation part.',
     timestamp: '4:45 PM'
+  },
+  {
+    id: 'm3',
+    senderId: 'c1', // Chloe
+    text: 'That works. Jake, can you check the science facts?',
+    timestamp: '4:46 PM'
+  },
+  {
+    id: 'm4',
+    senderId: 'c2', // Jake
+    text: 'why is Adya doing the explanation? she always messes up science stuff',
+    timestamp: '4:46 PM'
   }
 ];
 

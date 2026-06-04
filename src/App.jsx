@@ -67,9 +67,7 @@ function App() {
   };
 
   const currentChat = chats.find((chat) => chat.id === activeChatId);
-  const currentMessages = activeChatId === groupChatInfo.id
-    ? []
-    : messagesMap[activeChatId] || [];
+  const currentMessages = messagesMap[activeChatId] || [];
 
   const handleSendMessage = (message) => {
     setMessagesMap(prev => ({
