@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ChatWindow from './components/ChatWindow';
 import { chatList as initialChatList, initialMessages, groupChatInfo, getSimulatedTimestamp, dadContact, dadMessages } from './data/fakeData';
+import { Sliders } from 'lucide-react';
 
 function App() {
   const [activeChatId, setActiveChatId] = useState(groupChatInfo.id);
@@ -197,25 +198,30 @@ function App() {
         )}
       </div>
 
-      <div className="mode-selection-container">
-        <button 
-          className={`mode-btn ${demoMode === '1' ? 'selected' : ''}`} 
-          onClick={() => toggleDemoMode('1')}
-        >
-          <span className="mode-num">1</span> Teaching
+      <div className="demo-control-panel">
+        <button className="demo-trigger-btn" aria-label="Demo Control Panel">
+          <Sliders size={16} />
         </button>
-        <button 
-          className={`mode-btn ${demoMode === '2' ? 'selected' : ''}`} 
-          onClick={() => toggleDemoMode('2')}
-        >
-          <span className="mode-num">2</span> Sentiment
-        </button>
-        <button 
-          className={`mode-btn ${demoMode === '3' ? 'selected' : ''}`} 
-          onClick={() => toggleDemoMode('3')}
-        >
-          <span className="mode-num">3</span> Scenario
-        </button>
+        <div className="mode-selection-container">
+          <button 
+            className={`mode-btn ${demoMode === '1' ? 'selected' : ''}`} 
+            onClick={() => toggleDemoMode('1')}
+          >
+            <span className="mode-num">1</span> Teaching
+          </button>
+          <button 
+            className={`mode-btn ${demoMode === '2' ? 'selected' : ''}`} 
+            onClick={() => toggleDemoMode('2')}
+          >
+            <span className="mode-num">2</span> Sentiment
+          </button>
+          <button 
+            className={`mode-btn ${demoMode === '3' ? 'selected' : ''}`} 
+            onClick={() => toggleDemoMode('3')}
+          >
+            <span className="mode-num">3</span> Scenario
+          </button>
+        </div>
       </div>
     </>
   );
