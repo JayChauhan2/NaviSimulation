@@ -7,9 +7,6 @@ import naviUpsetImg from '../assets/Navi Upset.png';
 import naviHappyImg from '../assets/Navi Happy.png';
 import naviConcernedImg from '../assets/Navi Concerned.png';
 import magnifyingGlassImg from '../assets/MagnifyingGlass.png';
-import stageEyeIcon from '../assets/stage-eye.svg';
-import stageHeartIcon from '../assets/stage-heart.svg';
-import stageHandIcon from '../assets/stage-hand.svg';
 
 const ANALYZER_TOKENS = [
   { text: 'Adya', role: 'target', keep: false, score: 92, y: 84 },
@@ -32,10 +29,15 @@ const SENTIMENT_POINTS = [
 ];
 
 const NAVI_STAGES = [
-  { id: 'analyzer', label: 'Message Analyzer', icon: stageEyeIcon },
-  { id: 'sentiment', label: 'Sentiment Classifier', icon: stageHeartIcon },
-  { id: 'decision', label: 'Decision Engine', icon: stageHandIcon },
+  { id: 'analyzer', label: 'Stage 1: Message Analyzer' },
+  { id: 'sentiment', label: 'Stage 2: Sentiment Classifier' },
+  { id: 'decision', label: 'Stage 3: Decision Engine' },
 ];
+
+const NAVI_STAGE_LABELS = NAVI_STAGES.reduce((labels, stage) => {
+  labels[stage.id] = stage.label;
+  return labels;
+}, {});
 
 function getActiveNaviStage({ analyzerPhase, decisionStageComplete, showScenarioDemo, showSentimentAnalyzer, showTeachingAnalyzer }) {
   if (decisionStageComplete) return null;
@@ -60,15 +62,40 @@ function getActiveNaviStage({ analyzerPhase, decisionStageComplete, showScenario
   return 'hidden';
 }
 
-function NaviStageChevron({ activeStage, isExiting = false }) {
+function NaviStageLabel({ activeStage, isExiting = false }) {
+  const nextLabel = NAVI_STAGE_LABELS[activeStage] || null;
+  const [currentLabel, setCurrentLabel] = useState(nextLabel);
+  const [leavingLabel, setLeavingLabel] = useState(null);
+  const previousLabelRef = useRef(nextLabel);
+
+  useEffect(() => {
+    const previousLabel = previousLabelRef.current;
+    if (previousLabel === nextLabel) return undefined;
+
+    if (previousLabel) {
+      setLeavingLabel(previousLabel);
+    }
+    setCurrentLabel(nextLabel);
+    previousLabelRef.current = nextLabel;
+
+    const timeout = setTimeout(() => setLeavingLabel(null), 520);
+    return () => clearTimeout(timeout);
+  }, [nextLabel]);
+
+  if (!currentLabel && !leavingLabel) return null;
+
   return (
-    <div className={`navi-stage-strip ${isExiting ? 'stage-strip-exiting' : ''}`} aria-label="Navi process stages">
-      {NAVI_STAGES.map(({ id, label, icon }, index) => (
-        <div className={`navi-stage-chevron stage-${id} ${activeStage === id ? 'active' : ''}`} key={id}>
-          <img src={icon} alt="" className="navi-stage-icon" aria-hidden="true" />
-          <span>{index + 1}) {label}</span>
+    <div className="navi-stage-label-stack" aria-live="polite">
+      {leavingLabel && (
+        <div className="navi-stage-label stage-label-leaving" key={`leaving-${leavingLabel}`}>
+          {leavingLabel}
         </div>
-      ))}
+      )}
+      {currentLabel && (
+        <div className={`navi-stage-label ${isExiting ? 'stage-label-exiting' : 'stage-label-entering'}`} key={currentLabel}>
+          {currentLabel}
+        </div>
+      )}
     </div>
   );
 }
@@ -88,7 +115,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   const [scenarioMessages, setScenarioMessages] = useState([]);
   const [isScenarioTyping, setIsScenarioTyping] = useState(false);
   const [decisionStageComplete, setDecisionStageComplete] = useState(false);
-  const [isStageStripExiting, setIsStageStripExiting] = useState(false);
+  const [isStageLabelExiting, setIsStageLabelExiting] = useState(false);
   
   const isFlagging = morphingChatId === currentChat.id;
   const messagesEndRef = useRef(null);
@@ -106,7 +133,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     showSentimentAnalyzer,
     showTeachingAnalyzer,
   });
-  const showNaviStageStrip = currentChat.id === 'g1' && activeNaviStage !== 'hidden' && (!decisionStageComplete || isStageStripExiting);
+  const showNaviStageLabel = currentChat.id === 'g1' && activeNaviStage !== 'hidden' && (!decisionStageComplete || isStageLabelExiting);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -129,21 +156,21 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setScenarioMessages([]);
       setIsScenarioTyping(false);
       setDecisionStageComplete(false);
-      setIsStageStripExiting(false);
+      setIsStageLabelExiting(false);
     } else if (demoMode === '1' || demoMode === '2') {
       setShowNavi(false);
       setShowSuggestions(false);
       setScenarioMessages([]);
       setIsScenarioTyping(false);
       setDecisionStageComplete(false);
-      setIsStageStripExiting(false);
+      setIsStageLabelExiting(false);
     } else if (!demoMode) {
       setShowNavi(false);
       setShowSuggestions(false);
       setScenarioMessages([]);
       setIsScenarioTyping(false);
       setDecisionStageComplete(false);
-      setIsStageStripExiting(false);
+      setIsStageLabelExiting(false);
     }
   }, [demoMode, currentChat.id]);
 
@@ -156,7 +183,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     setScenarioMessages([]);
     setIsScenarioTyping(false);
     setDecisionStageComplete(false);
-    setIsStageStripExiting(false);
+    setIsStageLabelExiting(false);
   }, [showMergedResponseDemo]);
 
   useEffect(() => {
@@ -172,8 +199,8 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     if (showSentimentAnalyzer) {
       setAnalyzerPhase('sentiment-vocabulary');
       const timers = [
-        setTimeout(() => setAnalyzerPhase('context-window'), 5000),
-        setTimeout(() => setAnalyzerPhase('confidence-score'), 10350),
+        setTimeout(() => setAnalyzerPhase('context-window'), 3500),
+        setTimeout(() => setAnalyzerPhase('confidence-score'), 8200),
       ];
 
       return () => timers.forEach(clearTimeout);
@@ -185,12 +212,12 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setTimeout(() => setAnalyzerPhase('focus'), 4000),
       setTimeout(() => setAnalyzerPhase('tokens'), 7350),
       setTimeout(() => setAnalyzerPhase('stopwords'), 10250),
-      setTimeout(() => setAnalyzerPhase('vocabulary-transition'), 13250),
-      setTimeout(() => setAnalyzerPhase('vocabulary'), 14050),
-      setTimeout(() => setAnalyzerPhase('context-window'), 19050),
-      setTimeout(() => setAnalyzerPhase('confidence-score'), 26600),
-      setTimeout(() => setAnalyzerPhase('confidence-exit'), 31100),
-      setTimeout(() => setAnalyzerPhase('response-scenario'), 31800),
+      setTimeout(() => setAnalyzerPhase('vocabulary-transition'), 12250),
+      setTimeout(() => setAnalyzerPhase('vocabulary'), 13050),
+      setTimeout(() => setAnalyzerPhase('context-window'), 16550),
+      setTimeout(() => setAnalyzerPhase('confidence-score'), 23500),
+      setTimeout(() => setAnalyzerPhase('confidence-exit'), 28000),
+      setTimeout(() => setAnalyzerPhase('response-scenario'), 28700),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -291,10 +318,10 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
   const handleApplySuggestion = (suggestion) => {
     if (showScenarioDemo) {
-      setIsStageStripExiting(true);
+      setIsStageLabelExiting(true);
       setTimeout(() => {
         setDecisionStageComplete(true);
-        setIsStageStripExiting(false);
+        setIsStageLabelExiting(false);
       }, 520);
     }
 
@@ -351,9 +378,6 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
             <span className={`status ${isFlagging ? 'status-morph' : ''}`}>{currentChat.status}</span>
           </div>
         </div>
-        {showNaviStageStrip && (
-          <NaviStageChevron activeStage={activeNaviStage} isExiting={isStageStripExiting} />
-        )}
         <div className="header-actions">
           <button className="icon-btn"><Video size={20} /></button>
           <button className="icon-btn"><Phone size={20} /></button>
@@ -364,6 +388,9 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
       {/* Messages Area */}
       <div className={`messages-area ${showAnalyzerDemo ? 'analyzer-active' : ''}`}>
+        {showNaviStageLabel && (
+          <NaviStageLabel activeStage={activeNaviStage} isExiting={isStageLabelExiting} />
+        )}
         <div className={`messages-container ${extraSpaceClass}`}>
           {showAnalyzerDemo ? (
             <AnalyzerDemo phase={analyzerPhase} />
@@ -751,7 +778,7 @@ function ConfidenceScoreCard({ isExiting = false }) {
         <img src={naviConcernedImg} alt="Worried Navi" className="warning-navi" />
         <div className="warning-sign">
           <AlertTriangle size={28} />
-          <span>Activate Safety</span>
+          <span>90% Threshold Breached</span>
         </div>
       </div>
     </div>

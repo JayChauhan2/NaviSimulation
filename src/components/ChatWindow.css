@@ -114,107 +114,42 @@
   overflow: hidden;
 }
 
-.navi-stage-strip {
+.navi-stage-label-stack {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 1;
-  display: flex;
-  align-items: stretch;
-  width: min(640px, calc(100% - 390px));
-  min-width: 560px;
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(0 8px 14px rgba(11, 20, 26, 0.12));
+  top: 18px;
+  left: 18px;
+  z-index: 60;
+  width: min(340px, calc(100% - 36px));
+  min-height: 42px;
   pointer-events: none;
-  animation: stageStripIn 0.38s ease both;
 }
 
-.navi-stage-strip.stage-strip-exiting {
-  animation: stageStripOut 0.5s ease forwards;
-}
-
-.navi-stage-chevron {
-  position: relative;
-  display: inline-flex;
-  flex: 1 1 0;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  min-width: 0;
-  min-height: 52px;
-  padding: 11px 16px 11px 21px;
-  margin-left: -13px;
-  --chevron-fill: #555D66;
-  --chevron-text: #ffffff;
-  background: #111111;
-  color: var(--chevron-text);
-  font-size: 0.78rem;
-  font-weight: 900;
-  line-height: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  clip-path: polygon(0 0, calc(100% - 17px) 0, 100% 50%, calc(100% - 17px) 100%, 0 100%, 17px 50%);
-  transition: color 0.32s ease, transform 0.32s ease;
-}
-
-.navi-stage-chevron.stage-analyzer {
-  flex-grow: 0.78;
-}
-
-.navi-stage-chevron.stage-decision {
-  flex-grow: 0.9;
-}
-
-.navi-stage-chevron.stage-sentiment {
-  flex-grow: 0.94;
-}
-
-.navi-stage-chevron::before {
-  content: '';
+.navi-stage-label {
   position: absolute;
-  inset: 2px;
-  z-index: 0;
-  background: var(--chevron-fill);
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%, 15px 50%);
-  transition: background 0.32s ease;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  background: #111111;
+  border: 2px solid #D7263D;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 900;
+  line-height: 1.1;
+  white-space: nowrap;
+  box-shadow: 0 9px 18px rgba(11, 20, 26, 0.2);
 }
 
-.navi-stage-chevron:first-child {
-  margin-left: 0;
-  padding-left: 14px;
-  clip-path: polygon(0 0, calc(100% - 17px) 0, 100% 50%, calc(100% - 17px) 100%, 0 100%);
+.navi-stage-label.stage-label-entering {
+  animation: stageLabelIn 0.48s cubic-bezier(0.18, 0.95, 0.28, 1.12) both;
 }
 
-.navi-stage-chevron:first-child::before {
-  clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%);
-}
-
-.navi-stage-chevron.active {
-  z-index: 1;
-  --chevron-fill: #D7263D;
-  --chevron-text: #ffffff;
-  transform: translateY(-2px);
-}
-
-.navi-stage-chevron.active .navi-stage-icon {
-  animation: activeStagePulse 1.15s ease-in-out infinite;
-}
-
-.navi-stage-icon {
-  width: 30px;
-  height: 30px;
-  flex: 0 0 30px;
-  object-fit: contain;
-  display: block;
-  position: relative;
-  z-index: 1;
-}
-
-.navi-stage-chevron span {
-  position: relative;
-  z-index: 1;
-  overflow: visible;
-  text-overflow: clip;
+.navi-stage-label.stage-label-leaving,
+.navi-stage-label.stage-label-exiting {
+  animation: stageLabelOut 0.48s ease forwards;
 }
 
 .messages-container {
@@ -1039,50 +974,6 @@
     margin-left: auto;
   }
 
-  .navi-stage-strip {
-    position: relative;
-    left: auto;
-    top: auto;
-    flex: 1 1 100%;
-    order: 3;
-    width: calc(100vw - 32px);
-    max-width: calc(100vw - 32px);
-    min-width: 0;
-    margin-left: 0;
-    margin-right: 0;
-    transform-origin: top center;
-    animation-name: stageStripInMobile;
-  }
-
-  .navi-stage-strip.stage-strip-exiting {
-    animation-name: stageStripOutMobile;
-  }
-
-  .navi-stage-chevron {
-    min-height: 58px;
-    padding: 9px 10px 9px 16px;
-    margin-left: -11px;
-    gap: 4px;
-    font-size: 0.62rem;
-    line-height: 1.05;
-    white-space: normal;
-  }
-
-  .navi-stage-chevron:first-child {
-    padding-left: 12px;
-  }
-
-  .navi-stage-icon {
-    width: 30px;
-    height: 30px;
-    flex-basis: 30px;
-  }
-
-  .navi-stage-chevron span {
-    white-space: normal;
-    text-align: center;
-  }
-
   .analysis-cinema {
     padding: 10px;
   }
@@ -1181,59 +1072,25 @@
   }
 }
 
-@keyframes stageStripIn {
+@keyframes stageLabelIn {
   0% {
-    transform: translate(-50%, calc(-50% - 8px)) scale(0.98);
+    transform: translate(-125%, -18px) scale(0.96);
     opacity: 0;
   }
   100% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(0, 0) scale(1);
     opacity: 1;
   }
 }
 
-@keyframes stageStripOut {
+@keyframes stageLabelOut {
   0% {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(0, 0) scale(1);
     opacity: 1;
   }
   100% {
-    transform: translate(-50%, calc(-50% - 8px)) scale(0.97);
+    transform: translate(-125%, -18px) scale(0.96);
     opacity: 0;
-  }
-}
-
-@keyframes stageStripInMobile {
-  0% {
-    transform: translateY(-8px) scale(1);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes stageStripOutMobile {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-8px) scale(0.97);
-    opacity: 0;
-  }
-}
-
-@keyframes activeStagePulse {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 0 rgba(50, 34, 10, 0));
-    opacity: 1;
-  }
-  50% {
-    filter: drop-shadow(0 0 5px rgba(50, 34, 10, 0.35));
-    opacity: 0.88;
   }
 }
 
