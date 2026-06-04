@@ -257,13 +257,13 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setTimeout(() => setAnalyzerPhase('message'), 2000),
       setTimeout(() => setAnalyzerPhase('focus'), 4000),
       setTimeout(() => setAnalyzerPhase('tokens'), 7350),
-      setTimeout(() => setAnalyzerPhase('stopwords'), 10250),
-      setTimeout(() => setAnalyzerPhase('vocabulary-transition'), 12250),
-      setTimeout(() => setAnalyzerPhase('vocabulary'), 13050),
-      setTimeout(() => setAnalyzerPhase('context-window'), 16550),
-      setTimeout(() => setAnalyzerPhase('confidence-score'), 23500),
-      setTimeout(() => setAnalyzerPhase('confidence-exit'), 28000),
-      setTimeout(() => setAnalyzerPhase('response-scenario'), 28700),
+      setTimeout(() => setAnalyzerPhase('stopwords'), 8800),
+      setTimeout(() => setAnalyzerPhase('vocabulary-transition'), 10800),
+      setTimeout(() => setAnalyzerPhase('vocabulary'), 11600),
+      setTimeout(() => setAnalyzerPhase('context-window'), 15100),
+      setTimeout(() => setAnalyzerPhase('confidence-score'), 22050),
+      setTimeout(() => setAnalyzerPhase('confidence-exit'), 26550),
+      setTimeout(() => setAnalyzerPhase('response-scenario'), 27250),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -627,10 +627,10 @@ function AnalyzerDemo({ phase }) {
   const showTokens = ['tokens', 'stopwords', 'highlight', 'vocabulary-transition', 'vocabulary'].includes(phase);
   const showStopWords = ['stopwords', 'highlight', 'vocabulary-transition', 'vocabulary'].includes(phase);
   const showHighlight = ['highlight', 'vocabulary'].includes(phase);
-  const showVocabulary = phase === 'vocabulary' || phase === 'sentiment-vocabulary';
+  const showVocabulary = phase === 'vocabulary' || phase === 'vocabulary-transition' || phase === 'sentiment-vocabulary';
   const showContextWindow = phase === 'context-window' || phase === 'confidence-score';
   const showConfidenceScore = phase === 'confidence-score' || phase === 'confidence-exit';
-  const showTokenMessage = !showVocabulary && !showContextWindow && !showConfidenceScore;
+  const showTokenMessage = !showContextWindow && !showConfidenceScore && phase !== 'vocabulary' && phase !== 'sentiment-vocabulary';
   const phaseLabel = {
     focus: 'NLP',
     tokens: 'Tokenization',
@@ -688,51 +688,53 @@ function AnalyzerDemo({ phase }) {
       {showCinema && (
         <div className="analysis-cinema">
           <div className="cinema-card">
-            {showTokenMessage && (
-              <div className={`cinema-message ${phase === 'vocabulary-transition' ? 'vocabulary-handoff' : ''}`}>
-                <span className="cinema-sender">Jake</span>
-                <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
-                  {!showTokens ? (
-                    <span className="raw-focused-message">Adya, you suck at science.</span>
-                  ) : (
-                    ANALYZER_TOKENS.map((token, index) => (
-                      <span
-                        className={`cinema-token ${token.role} ${!token.keep && showStopWords ? 'removed' : ''}`}
-                        style={{ '--token-delay': `${index * 95}ms`, '--compact-index': token.keep ? index : 0 }}
-                        key={`${token.text}-${index}`}
-                      >
-                        {token.text}
-                      </span>
-                    ))
+            <div className="cinema-transition-container">
+              {showTokenMessage && (
+                <div className={`cinema-message ${phase === 'vocabulary-transition' ? 'vocabulary-handoff' : ''}`}>
+                  <span className="cinema-sender">Jake</span>
+                  <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
+                    {!showTokens ? (
+                      <span className="raw-focused-message">Adya, you suck at science.</span>
+                    ) : (
+                      ANALYZER_TOKENS.map((token, index) => (
+                        <span
+                          className={`cinema-token ${token.role} ${!token.keep && showStopWords ? 'removed' : ''}`}
+                          style={{ '--token-delay': `${index * 48}ms`, '--compact-index': token.keep ? index : 0 }}
+                          key={`${token.text}-${index}`}
+                        >
+                          {token.text}
+                        </span>
+                      ))
+                    )}
+                  </div>
+                  {phase === 'focus' && (
+                    <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
+                  )}
+                  {phaseLabel && (
+                    <div className="scan-tooltip-tag" key={phaseLabel}>{phaseLabel}</div>
                   )}
                 </div>
-                {phase === 'focus' && (
-                  <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
-                )}
-                {phaseLabel && (
-                  <div className="scan-tooltip-tag" key={phaseLabel}>{phaseLabel}</div>
-                )}
-              </div>
-            )}
+              )}
 
-            {showVocabulary && (
-              <div className="vocabulary-index-panel">
-                <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
-                <div className="vocab-index-header">
-                  <span>Word</span>
-                  <span>ID</span>
-                </div>
-                {VOCABULARY_INDEX.map((item, index) => (
-                  <div className="vocab-index-row" style={{ '--vocab-row-delay': `${index * 140}ms` }} key={item.word}>
-                    <span className="vocab-word-cell">
-                      <span className="vocab-word" style={{ '--vocab-word-delay': `${index * 140 + 440}ms` }}>{item.word}</span>
-                      <span className="vocab-arrow" aria-hidden="true"></span>
-                    </span>
-                    <span className="vocab-id">{item.id}</span>
+              {showVocabulary && (
+                <div className="vocabulary-index-panel">
+                  <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
+                  <div className="vocab-index-header">
+                    <span>Word</span>
+                    <span>ID</span>
                   </div>
-                ))}
-              </div>
-            )}
+                  {VOCABULARY_INDEX.map((item, index) => (
+                    <div className="vocab-index-row" style={{ '--vocab-row-delay': `${index * 140}ms` }} key={item.word}>
+                      <span className="vocab-word-cell">
+                        <span className="vocab-word" style={{ '--vocab-word-delay': `${index * 140 + 440}ms` }}>{item.word}</span>
+                        <span className="vocab-arrow" aria-hidden="true"></span>
+                      </span>
+                      <span className="vocab-id">{item.id}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {showContextWindow && (
               <div className={`sentiment-plot-panel ${showConfidenceScore ? 'plot-exiting' : ''}`}>

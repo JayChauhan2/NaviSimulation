@@ -271,6 +271,18 @@
   overflow: visible;
 }
 
+.cinema-transition-container {
+  display: grid;
+  grid-template-areas: "stack";
+  align-items: center;
+  justify-items: center;
+  width: 100%;
+}
+
+.cinema-transition-container > * {
+  grid-area: stack;
+}
+
 .cinema-message {
   display: flex;
   flex-direction: column;
