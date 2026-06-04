@@ -28,6 +28,33 @@ const SENTIMENT_POINTS = [
   { word: 'science', id: 4519, x: 0.34, y: 0.05 },
 ];
 
+const DEMO_CONTEXT_MESSAGES = [
+  {
+    id: 'demo-context-1',
+    senderId: 'c3',
+    text: 'I can bring the poster board tomorrow.',
+    timestamp: '4:44 PM',
+  },
+  {
+    id: 'demo-context-2',
+    senderId: 'me',
+    text: 'Nice. I can write the volcano explanation part.',
+    timestamp: '4:45 PM',
+  },
+  {
+    id: 'demo-context-3',
+    senderId: 'c1',
+    text: 'That works. Jake, can you check the science facts?',
+    timestamp: '4:46 PM',
+  },
+  {
+    id: 'demo-context-4',
+    senderId: 'c2',
+    text: 'why is Adya doing the explanation? she always messes up science stuff',
+    timestamp: '4:46 PM',
+  },
+];
+
 const NAVI_STAGES = [
   { id: 'analyzer', label: 'Stage 1: Message Analyzer' },
   { id: 'sentiment', label: 'Stage 2: Sentiment Classifier' },
@@ -96,6 +123,25 @@ function NaviStageLabel({ activeStage, isExiting = false }) {
           {currentLabel}
         </div>
       )}
+    </div>
+  );
+}
+
+function DemoContextThread() {
+  return (
+    <div className="demo-context-thread">
+      {DEMO_CONTEXT_MESSAGES.map((message, index) => {
+        const isMine = message.senderId === currentUser.id;
+        const previous = DEMO_CONTEXT_MESSAGES[index - 1];
+        return (
+          <MessageBubble
+            key={message.id}
+            message={message}
+            isMine={isMine}
+            showSender={!isMine && (!previous || previous.senderId !== message.senderId)}
+          />
+        );
+      })}
     </div>
   );
 }
@@ -396,6 +442,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
             <AnalyzerDemo phase={analyzerPhase} />
           ) : showScenarioDemo ? (
             <div className="scenario-message-stage">
+              <DemoContextThread />
               <div className="message-row theirs analyzer-message-row">
                 <img
                   src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"
@@ -597,14 +644,12 @@ function AnalyzerDemo({ phase }) {
   return (
     <div className="analyzer-demo">
       {!showMessage && !showTyping && !showCinema && (
-        <div className="empty-thread">
-          <span className="empty-thread-dot"></span>
-          Waiting for a new Science Project message...
-        </div>
+        <DemoContextThread />
       )}
 
       {showTyping && (
         <div className="analyzer-message-zone">
+          <DemoContextThread />
           <div className="typing-indicator-wrapper analyzer-typing">
             <img
               src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"
@@ -623,6 +668,7 @@ function AnalyzerDemo({ phase }) {
 
       {showMessage && (
         <div className="analyzer-message-zone">
+          <DemoContextThread />
           <div className="message-row theirs analyzer-message-row">
             <img
               src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"

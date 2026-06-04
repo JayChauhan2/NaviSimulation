@@ -209,6 +209,13 @@
   gap: 12px;
 }
 
+.demo-context-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: analyzerMessageIn 0.35s ease both;
+}
+
 .analyzer-typing {
   animation: analyzerMessageIn 0.35s ease both;
 }
