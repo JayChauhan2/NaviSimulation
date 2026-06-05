@@ -127,33 +127,7 @@ function NaviStageLabel({ activeStage, isExiting = false }) {
   );
 }
 
-function DemoContextThread({ messagesList, isScenario }) {
-  return (
-    <div className="demo-context-thread">
-      {messagesList.map((message, index) => {
-        const isMine = message.senderId === currentUser.id;
-        const next = messagesList[index + 1];
-        const previous = messagesList[index - 1];
-        const isNewMsg = message.id === 'demo-new-msg';
-        
-        const showAvatar = !isMine && (!next || next.senderId !== message.senderId);
-        const showSenderName = !isMine && (!previous || previous.senderId !== message.senderId);
-
-        return (
-          <MessageBubble
-            key={message.id}
-            message={message}
-            isMine={isMine}
-            showAvatar={showAvatar}
-            showSenderName={showSenderName}
-            className={isNewMsg ? 'analyzer-message-row' : ''}
-            bubbleClassName={isNewMsg ? `analyzer-message ${isScenario ? 'scenario-mean-message' : ''}` : ''}
-          />
-        );
-      })}
-    </div>
-  );
-}
+// DemoContextThread was removed.
 
 export default function ChatWindow({ messages, onSendMessage, currentChat, demoMode, onAlertTrustedAdult, morphingChatId, oldMorphInfo, typingChatId }) {
   const [inputText, setInputText] = useState('');
@@ -190,12 +164,44 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   });
   const showNaviStageLabel = currentChat.id === 'g1' && activeNaviStage !== 'hidden' && (!decisionStageComplete || isStageLabelExiting);
 
+  const showCinema = showAnalyzerDemo && ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary-transition', 'vocabulary', 'sentiment-vocabulary', 'context-window', 'confidence-score', 'confidence-exit'].includes(analyzerPhase);
+
+  let messagesToRender = [];
+  if (showAnalyzerDemo) {
+    messagesToRender = [...messages];
+    const showMeanMessage = analyzerPhase !== 'typing' && analyzerPhase !== 'idle';
+    if (showMeanMessage) {
+      const exists = messagesToRender.some(m => m.id === 'demo-new-msg' || m.text === 'Adya, you suck at science.');
+      if (!exists) {
+        messagesToRender.push({
+          id: 'demo-new-msg',
+          senderId: 'c2',
+          text: 'Adya, you suck at science.',
+          timestamp: '4:47 PM'
+        });
+      }
+    }
+  } else if (showScenarioDemo) {
+    messagesToRender = [...messages];
+    const exists = messagesToRender.some(m => m.id === 'demo-new-msg' || m.text === 'Adya, you suck at science.');
+    if (!exists) {
+      messagesToRender.push({
+        id: 'demo-new-msg',
+        senderId: 'c2',
+        text: 'Adya, you suck at science.',
+        timestamp: '4:47 PM'
+      });
+    }
+    messagesToRender = [...messagesToRender, ...scenarioMessages];
+  } else {
+    messagesToRender = [...messages];
+  }
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
-    if (showAnalyzerDemo) return;
     // Add small delay to let CSS padding transition start before scrolling
     setTimeout(scrollToBottom, 50);
   }, [messages, showNavi, showSuggestions, isJakeTyping, analyzerPhase, showAnalyzerDemo, scenarioMessages, isScenarioTyping]);
@@ -447,76 +453,70 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
           <NaviStageLabel activeStage={activeNaviStage} isExiting={isStageLabelExiting} />
         )}
         <div className={`messages-container ${extraSpaceClass}`}>
-          {showAnalyzerDemo ? (
-            <AnalyzerDemo phase={analyzerPhase} />
-          ) : showScenarioDemo ? (
-            <div className="scenario-message-stage">
-              <DemoContextThread 
-                messagesList={[
-                  ...DEMO_CONTEXT_MESSAGES, 
-                  { id: 'demo-new-msg', senderId: 'c2', text: 'Adya, you suck at science.', timestamp: '4:47 PM' }
-                ]} 
-                isScenario={true} 
+          {messagesToRender.map((msg, index) => {
+            const isMine = msg.senderId === currentUser.id;
+            const nextMsg = messagesToRender[index + 1];
+            const prevMsg = messagesToRender[index - 1];
+            
+            const showAvatar = !isMine && isGroup && (!nextMsg || nextMsg.senderId !== msg.senderId);
+            const showSenderName = !isMine && isGroup && (!prevMsg || prevMsg.senderId !== msg.senderId);
+            
+            return (
+              <MessageBubble
+                key={msg.id}
+                message={msg}
+                isMine={isMine}
+                showAvatar={showAvatar}
+                showSenderName={showSenderName}
+                className={msg.id === 'demo-new-msg' ? 'analyzer-message-row' : ''}
+                bubbleClassName={msg.id === 'demo-new-msg' ? `analyzer-message ${showScenarioDemo ? 'scenario-mean-message' : ''}` : ''}
               />
-              {scenarioMessages.map((msg, index) => {
-                const isMine = msg.senderId === currentUser.id;
-                const nextMsg = scenarioMessages[index + 1];
-                const prevMsg = scenarioMessages[index - 1];
-                
-                const showAvatar = !isMine && (!nextMsg || nextMsg.senderId !== msg.senderId);
-                const showSenderName = !isMine && (!prevMsg || prevMsg.senderId !== msg.senderId);
-                
-                return (
-                  <MessageBubble
-                    key={msg.id}
-                    message={msg}
-                    isMine={isMine}
-                    showAvatar={showAvatar}
-                    showSenderName={showSenderName}
-                  />
-                );
-              })}
-              {isScenarioTyping && (
-                <div className="typing-indicator-wrapper scenario-typing">
-                  <img
-                    src="https://ui-avatars.com/api/?name=C&background=2F80ED&color=fff&rounded=true&bold=true"
-                    alt="Chloe typing"
-                    className="avatar message-avatar"
-                    title="Chloe"
-                    style={{ width: '28px', height: '28px' }}
-                  />
-                  <div className="typing-indicator">
-                    <span className="dot"></span>
-                    <span className="dot"></span>
-                    <span className="dot"></span>
-                  </div>
-                </div>
-              )}
+            );
+          })}
+
+          {/* Typing Indicators */}
+          {showAnalyzerDemo && analyzerPhase === 'typing' && (
+            <div className="typing-indicator-wrapper analyzer-typing">
+              <img
+                src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"
+                alt="Jake"
+                className="avatar message-avatar"
+                title="Jake"
+                style={{ width: '28px', height: '28px' }}
+              />
+              <div className="typing-indicator">
+                <span className="dot"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
+              </div>
             </div>
-          ) : (
-            messages.map((msg, index) => {
-              const isMine = msg.senderId === currentUser.id;
-              const nextMsg = messages[index + 1];
-              const prevMsg = messages[index - 1];
-              
-              const showAvatar = !isMine && isGroup && (!nextMsg || nextMsg.senderId !== msg.senderId);
-              const showSenderName = !isMine && isGroup && (!prevMsg || prevMsg.senderId !== msg.senderId);
-              
-              return (
-                <MessageBubble
-                  key={msg.id}
-                  message={msg}
-                  isMine={isMine}
-                  showAvatar={showAvatar}
-                  showSenderName={showSenderName}
-                />
-              );
-            })
           )}
 
-          {!showAnalyzerDemo && (isJakeTyping || typingChatId === currentChat.id) && (
+          {showScenarioDemo && isScenarioTyping && (
+            <div className="typing-indicator-wrapper scenario-typing">
+              <img
+                src="https://ui-avatars.com/api/?name=C&background=2F80ED&color=fff&rounded=true&bold=true"
+                alt="Chloe typing"
+                className="avatar message-avatar"
+                title="Chloe"
+                style={{ width: '28px', height: '28px' }}
+              />
+              <div className="typing-indicator">
+                <span className="dot"></span>
+                <span className="dot"></span>
+                <span className="dot"></span>
+              </div>
+            </div>
+          )}
+
+          {!showAnalyzerDemo && !showScenarioDemo && (isJakeTyping || typingChatId === currentChat.id) && (
             <div className="typing-indicator-wrapper">
-              <img src={isJakeTyping ? "https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true" : currentChat.avatar} alt="Typing" className="avatar message-avatar" style={{ width: '28px', height: '28px' }} />
+              <img
+                src={isJakeTyping ? "https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true" : currentChat.avatar}
+                alt="Typing"
+                className="avatar message-avatar"
+                style={{ width: '28px', height: '28px' }}
+              />
               <div className="typing-indicator">
                 <span className="dot"></span>
                 <span className="dot"></span>
@@ -527,6 +527,11 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
           <div ref={messagesEndRef} />
         </div>
+
+        {/* Conditional rendering of Analysis Cinema overlay */}
+        {showCinema && (
+          <AnalyzerCinema phase={analyzerPhase} />
+        )}
       </div>
 
       {/* Navi Clippy Upset Assistant */}
@@ -635,10 +640,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
   );
 }
 
-function AnalyzerDemo({ phase }) {
-  const showTyping = phase === 'typing';
-  const showMessage = ['message', 'focus', 'tokens', 'stopwords', 'highlight', 'vocabulary-transition', 'vocabulary'].includes(phase);
-  const showCinema = ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary-transition', 'vocabulary', 'sentiment-vocabulary', 'context-window', 'confidence-score', 'confidence-exit'].includes(phase);
+function AnalyzerCinema({ phase }) {
   const showTokens = ['tokens', 'stopwords', 'highlight', 'vocabulary-transition', 'vocabulary'].includes(phase);
   const showStopWords = ['stopwords', 'highlight', 'vocabulary-transition', 'vocabulary'].includes(phase);
   const showHighlight = ['highlight', 'vocabulary'].includes(phase);
@@ -656,146 +658,102 @@ function AnalyzerDemo({ phase }) {
     'context-window': 'Sentiment Classifier',
   }[phase];
 
-  const demoMessages = [...DEMO_CONTEXT_MESSAGES];
-  if (showMessage) {
-    demoMessages.push({
-      id: 'demo-new-msg',
-      senderId: 'c2',
-      text: 'Adya, you suck at science.',
-      timestamp: '4:47 PM'
-    });
-  }
-
   return (
-    <div className="analyzer-demo">
-      {!showMessage && !showTyping && !showCinema && (
-        <DemoContextThread messagesList={demoMessages} />
-      )}
-
-      {showTyping && (
-        <div className="analyzer-message-zone">
-          <DemoContextThread messagesList={demoMessages} />
-          <div className="typing-indicator-wrapper analyzer-typing">
-            <img
-              src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"
-              alt="Jake"
-              className="avatar message-avatar"
-              title="Jake"
-            />
-            <div className="typing-indicator">
-              <span className="dot"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showMessage && (
-        <div className="analyzer-message-zone">
-          <DemoContextThread messagesList={demoMessages} />
-        </div>
-      )}
-
-      {showCinema && (
-        <div className="analysis-cinema">
-          <div className="cinema-card">
-            <div className="cinema-transition-container">
-              {showTokenMessage && (
-                <div className={`cinema-message ${phase === 'vocabulary-transition' ? 'vocabulary-handoff' : ''}`}>
-                  <span className="cinema-sender">Jake</span>
-                  <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
-                    {!showTokens ? (
-                      <span className="raw-focused-message">Adya, you suck at science.</span>
-                    ) : (
-                      ANALYZER_TOKENS.map((token, index) => (
-                        <span
-                          className={`cinema-token ${token.role} ${!token.keep && showStopWords ? 'removed' : ''}`}
-                          style={{ '--token-delay': `${index * 48}ms`, '--compact-index': token.keep ? index : 0 }}
-                          key={`${token.text}-${index}`}
-                        >
-                          {token.text}
-                        </span>
-                      ))
-                    )}
-                  </div>
-                  {phase === 'focus' && (
-                    <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
-                  )}
-                  {phaseLabel && (
-                    <div className="scan-tooltip-tag" key={phaseLabel}>{phaseLabel}</div>
-                  )}
-                </div>
-              )}
-
-              {showVocabulary && (
-                <div className="vocabulary-index-panel">
-                  <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
-                  <div className="vocab-index-header">
-                    <span>Word</span>
-                    <span>ID</span>
-                  </div>
-                  {VOCABULARY_INDEX.map((item, index) => (
-                    <div className="vocab-index-row" style={{ '--vocab-row-delay': `${index * 140}ms` }} key={item.word}>
-                      <span className="vocab-word-cell">
-                        <span className="vocab-word" style={{ '--vocab-word-delay': `${index * 140 + 440}ms` }}>{item.word}</span>
-                        <span className="vocab-arrow" aria-hidden="true"></span>
-                      </span>
-                      <span className="vocab-id">{item.id}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {showContextWindow && (
-              <div className={`sentiment-plot-panel ${showConfidenceScore ? 'plot-exiting' : ''}`}>
-                {phaseLabel && (
-                  <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
-                )}
-                <svg className="context-plot" viewBox="0 0 520 360" role="img" aria-label="Context window sentiment plot">
-                  <defs>
-                    <filter id="contextShadow" x="-20%" y="-20%" width="140%" height="140%">
-                      <feDropShadow dx="0" dy="7" stdDeviation="7" floodColor="#0d47a1" floodOpacity="0.18" />
-                    </filter>
-                  </defs>
-                  <line className="context-axis" x1="70" y1="180" x2="470" y2="180" />
-                  <line className="context-axis" x1="260" y1="46" x2="260" y2="314" />
-                  <text className="context-axis-label y-top" x="260" y="34">Kind</text>
-                  <text className="context-axis-label y-bottom" x="260" y="338">Mean</text>
-                  <text className="context-axis-label x-left" x="70" y="170">Unsafe</text>
-                  <text className="context-axis-label x-right" x="470" y="170">Safe</text>
-                  <path
-                    className="context-blob"
-                    d="M 114 268 C 92 216, 126 144, 212 124 C 314 100, 374 128, 386 188 C 400 260, 310 304, 198 300 C 154 298, 128 286, 114 268 Z"
-                  />
-                  <text className="context-window-label" x="326" y="112">Context Window</text>
-                  {SENTIMENT_POINTS.map((point, index) => (
-                    <g
-                      transform={`translate(${260 + point.x * 170} ${180 - point.y * 116})`}
-                      key={point.word}
+    <div className="analysis-cinema">
+      <div className="cinema-card">
+        <div className="cinema-transition-container">
+          {showTokenMessage && (
+            <div className={`cinema-message ${phase === 'vocabulary-transition' ? 'vocabulary-handoff' : ''}`}>
+              <span className="cinema-sender">Jake</span>
+              <div className={`message-token-surface ${showTokens ? 'tokenized' : ''} ${showStopWords ? 'stopwords-removed' : ''} ${showHighlight ? 'classified' : ''}`}>
+                {!showTokens ? (
+                  <span className="raw-focused-message">Adya, you suck at science.</span>
+                ) : (
+                  ANALYZER_TOKENS.map((token, index) => (
+                    <span
+                      className={`cinema-token ${token.role} ${!token.keep && showStopWords ? 'removed' : ''}`}
+                      style={{ '--token-delay': `${index * 48}ms`, '--compact-index': token.keep ? index : 0 }}
+                      key={`${token.text}-${index}`}
                     >
-                      <g
-                        className={`context-point point-${point.word.toLowerCase()}`}
-                        style={{ '--plot-delay': `${index * 250}ms` }}
-                      >
-                        <circle r="8" />
-                        <text className="context-word" x="0" y="-15">{point.word}</text>
-                        <text className="context-id" x="0" y="27">{point.id}</text>
-                      </g>
-                    </g>
-                  ))}
-                </svg>
+                      {token.text}
+                    </span>
+                  ))
+                )}
               </div>
-            )}
+              {phase === 'focus' && (
+                <img src={magnifyingGlassImg} alt="Navi scanner" className="cinema-magnifier" />
+              )}
+              {phaseLabel && (
+                <div className="scan-tooltip-tag" key={phaseLabel}>{phaseLabel}</div>
+              )}
+            </div>
+          )}
 
-            {showConfidenceScore && (
-              <ConfidenceScoreCard isExiting={phase === 'confidence-exit'} />
-            )}
-
-          </div>
+          {showVocabulary && (
+            <div className="vocabulary-index-panel">
+              <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
+              <div className="vocab-index-header">
+                <span>Word</span>
+                <span>ID</span>
+              </div>
+              {VOCABULARY_INDEX.map((item, index) => (
+                <div className="vocab-index-row" style={{ '--vocab-row-delay': `${index * 140}ms` }} key={item.word}>
+                  <span className="vocab-word-cell">
+                    <span className="vocab-word" style={{ '--vocab-word-delay': `${index * 140 + 440}ms` }}>{item.word}</span>
+                    <span className="vocab-arrow" aria-hidden="true"></span>
+                  </span>
+                  <span className="vocab-id">{item.id}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+
+        {showContextWindow && (
+          <div className={`sentiment-plot-panel ${showConfidenceScore ? 'plot-exiting' : ''}`}>
+            {phaseLabel && (
+              <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
+            )}
+            <svg className="context-plot" viewBox="0 0 520 360" role="img" aria-label="Context window sentiment plot">
+              <defs>
+                <filter id="contextShadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="7" stdDeviation="7" floodColor="#0d47a1" floodOpacity="0.18" />
+                </filter>
+              </defs>
+              <line className="context-axis" x1="70" y1="180" x2="470" y2="180" />
+              <line className="context-axis" x1="260" y1="46" x2="260" y2="314" />
+              <text className="context-axis-label y-top" x="260" y="34">Kind</text>
+              <text className="context-axis-label y-bottom" x="260" y="338">Mean</text>
+              <text className="context-axis-label x-left" x="70" y="170">Unsafe</text>
+              <text className="context-axis-label x-right" x="470" y="170">Safe</text>
+              <path
+                className="context-blob"
+                d="M 114 268 C 92 216, 126 144, 212 124 C 314 100, 374 128, 386 188 C 400 260, 310 304, 198 300 C 154 298, 128 286, 114 268 Z"
+              />
+              <text className="context-window-label" x="326" y="112">Context Window</text>
+              {SENTIMENT_POINTS.map((point, index) => (
+                <g
+                  transform={`translate(${260 + point.x * 170} ${180 - point.y * 116})`}
+                  key={point.word}
+                >
+                  <g
+                    className={`context-point point-${point.word.toLowerCase()}`}
+                    style={{ '--plot-delay': `${index * 250}ms` }}
+                  >
+                    <circle r="8" />
+                    <text className="context-word" x="0" y="-15">{point.word}</text>
+                    <text className="context-id" x="0" y="27">{point.id}</text>
+                  </g>
+                </g>
+              ))}
+            </svg>
+          </div>
+        )}
+
+        {showConfidenceScore && (
+          <ConfidenceScoreCard isExiting={phase === 'confidence-exit'} />
+        )}
+      </div>
     </div>
   );
 }
