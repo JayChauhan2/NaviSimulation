@@ -70,7 +70,7 @@ export const initialMessages = [
   {
     id: 'm1',
     senderId: 'c3', // Mia
-    text: 'i can bring the poster board tomorrow',
+    text: 'i can bring the poster board tomorrow!',
     timestamp: '4:44 PM'
   },
   {
