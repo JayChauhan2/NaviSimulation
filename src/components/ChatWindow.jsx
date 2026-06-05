@@ -422,6 +422,11 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
   return (
     <main className="chat-window">
+      {/* Floating Navi Stage Label Overlay */}
+      {showNaviStageLabel && (
+        <NaviStageLabel activeStage={activeNaviStage} isExiting={isStageLabelExiting} />
+      )}
+
       {/* Chat Header */}
       <header className="chat-header">
         <div className="chat-profile">
@@ -450,9 +455,6 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
       {/* Messages Area */}
       <div className={`messages-area ${showAnalyzerDemo ? 'analyzer-active' : ''}`}>
-        {showNaviStageLabel && (
-          <NaviStageLabel activeStage={activeNaviStage} isExiting={isStageLabelExiting} />
-        )}
         <div className={`messages-container ${extraSpaceClass}`}>
           {messagesToRender.map((msg, index) => {
             const isMine = msg.senderId === currentUser.id;
