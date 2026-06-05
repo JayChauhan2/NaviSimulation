@@ -744,9 +744,9 @@ function AnalyzerCinema({ phase }) {
                     className={`context-point point-${point.word.toLowerCase()}`}
                     style={{ '--plot-delay': `${index * 250}ms` }}
                   >
-                    <circle r="8" />
-                    <text className="context-word" x="0" y="-15">{point.word}</text>
-                    <text className="context-id" x="0" y="27">{point.id}</text>
+                    <circle r="12" />
+                    <text className="context-word" x="0" y="-22">{point.word}</text>
+                    <text className="context-id" x="0" y="36">{point.id}</text>
                   </g>
                 </g>
               ))}

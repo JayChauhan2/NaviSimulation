@@ -562,8 +562,8 @@
 
 .sentiment-plot-panel {
   position: relative;
-  width: min(560px, calc(100vw - 42px));
-  padding: 12px 14px 8px;
+  width: min(780px, calc(100vw - 42px));
+  padding: 18px 24px 12px;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.97);
   border: 1px solid rgba(25, 118, 210, 0.18);
@@ -595,7 +595,7 @@
 
 .context-axis-label {
   fill: rgba(34, 49, 58, 0.52);
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 800;
 }
 
@@ -629,7 +629,7 @@
 
 .context-window-label {
   fill: #0D47A1;
-  font-size: 17px;
+  font-size: 24px;
   font-weight: 900;
   opacity: 0;
   animation: contextLabelIn 0.4s ease forwards;
@@ -656,14 +656,14 @@
 
 .context-word {
   fill: #22313A;
-  font-size: 17px;
+  font-size: 24px;
   font-weight: 900;
   text-anchor: middle;
 }
 
 .context-id {
   fill: #0D47A1;
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 900;
   text-anchor: middle;
 }
