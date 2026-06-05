@@ -654,6 +654,7 @@ function AnalyzerCinema({ phase }) {
     stopwords: 'Stop-Word Removal',
     highlight: 'Sentiment Classifier',
     vocabulary: 'Vocabulary Indexing',
+    'vocabulary-transition': 'Vocabulary Indexing',
     'sentiment-vocabulary': 'Vocabulary Indexing',
     'context-window': 'Sentiment Classifier',
   }[phase];
@@ -691,7 +692,9 @@ function AnalyzerCinema({ phase }) {
 
           {showVocabulary && (
             <div className="vocabulary-index-panel">
-              <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
+              {phaseLabel && (
+                <div className="scan-tooltip-tag vocabulary-tag" key={phaseLabel}>{phaseLabel}</div>
+              )}
               <div className="vocab-index-header">
                 <span>Word</span>
                 <span>ID</span>
