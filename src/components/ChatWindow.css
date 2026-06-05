@@ -159,6 +159,7 @@
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
+  padding-top: 60px;
   transition: padding-bottom 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
