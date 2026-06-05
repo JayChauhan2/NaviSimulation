@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Send, Phone, Video, MoreVertical, Paperclip, Smile, AlertTriangle } from 'lucide-react';
 import { currentUser, getSimulatedTimestamp } from '../data/fakeData';
 import './ChatWindow.css';
@@ -112,7 +113,7 @@ function NaviStageLabel({ activeStage, isExiting = false }) {
 
   if (!currentLabel && !leavingLabel) return null;
 
-  return (
+  return createPortal(
     <div className="navi-stage-label-stack" aria-live="polite">
       {leavingLabel && (
         <div className="navi-stage-label stage-label-leaving" key={`leaving-${leavingLabel}`}>
@@ -124,7 +125,8 @@ function NaviStageLabel({ activeStage, isExiting = false }) {
           {currentLabel}
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
 

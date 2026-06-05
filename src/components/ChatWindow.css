@@ -113,14 +113,13 @@
 .messages-area.analyzer-active {
   overflow: hidden;
 }
-
 .navi-stage-label-stack {
-  position: absolute;
-  top: 6px;
+  position: fixed;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 500;
-  width: min(600px, calc(100% - 36px));
+  z-index: 100000;
+  width: min(600px, calc(100vw - 36px));
   min-height: 64px;
   pointer-events: none;
 }
