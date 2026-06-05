@@ -75,18 +75,19 @@ function getActiveNaviStage({ analyzerPhase, decisionStageComplete, showScenario
     if (analyzerPhase === 'context-window') return 'sentiment';
     if (['confidence-score', 'confidence-exit'].includes(analyzerPhase)) return 'decision';
     if (analyzerPhase === 'sentiment-vocabulary') return 'analyzer';
-  }
-
-  if (!showTeachingAnalyzer) return 'hidden';
-
-  if (['focus', 'tokens', 'stopwords', 'vocabulary-transition', 'vocabulary'].includes(analyzerPhase)) {
     return 'analyzer';
   }
 
-  if (analyzerPhase === 'context-window') return 'sentiment';
-  if (['confidence-score', 'confidence-exit', 'response-scenario'].includes(analyzerPhase)) return 'decision';
+  if (showTeachingAnalyzer) {
+    if (['focus', 'tokens', 'stopwords', 'vocabulary-transition', 'vocabulary'].includes(analyzerPhase)) {
+      return 'analyzer';
+    }
+    if (analyzerPhase === 'context-window') return 'sentiment';
+    if (['confidence-score', 'confidence-exit', 'response-scenario'].includes(analyzerPhase)) return 'decision';
+    return 'analyzer';
+  }
 
-  return 'hidden';
+  return 'analyzer';
 }
 
 function NaviStageLabel({ activeStage, isExiting = false }) {
@@ -162,7 +163,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
     showSentimentAnalyzer,
     showTeachingAnalyzer,
   });
-  const showNaviStageLabel = currentChat.id === 'g1' && activeNaviStage !== 'hidden' && (!decisionStageComplete || isStageLabelExiting);
+  const showNaviStageLabel = currentChat.id === 'g1' && activeNaviStage && activeNaviStage !== 'hidden' && (!decisionStageComplete || isStageLabelExiting);
 
   const showCinema = showAnalyzerDemo && ['focus', 'tokens', 'stopwords', 'highlight', 'vocabulary-transition', 'vocabulary', 'sentiment-vocabulary', 'context-window', 'confidence-score', 'confidence-exit'].includes(analyzerPhase);
 
