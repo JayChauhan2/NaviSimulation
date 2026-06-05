@@ -37,9 +37,7 @@ html {
 }
 
 body {
-  background-image: url('./assets/wood_background.png');
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(180deg, #72b7f4 0%, #b8ecfb 100%);
   color: var(--text-primary);
   display: flex;
   justify-content: center;
