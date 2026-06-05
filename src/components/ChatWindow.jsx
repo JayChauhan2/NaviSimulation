@@ -276,10 +276,10 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
       setTimeout(() => setAnalyzerPhase('stopwords'), 8800),
       setTimeout(() => setAnalyzerPhase('vocabulary-transition'), 10800),
       setTimeout(() => setAnalyzerPhase('vocabulary'), 11600),
-      setTimeout(() => setAnalyzerPhase('context-window'), 13350),
-      setTimeout(() => setAnalyzerPhase('confidence-score'), 20300),
-      setTimeout(() => setAnalyzerPhase('confidence-exit'), 24800),
-      setTimeout(() => setAnalyzerPhase('response-scenario'), 25500),
+      setTimeout(() => setAnalyzerPhase('context-window'), 12850),
+      setTimeout(() => setAnalyzerPhase('confidence-score'), 19800),
+      setTimeout(() => setAnalyzerPhase('confidence-exit'), 24300),
+      setTimeout(() => setAnalyzerPhase('response-scenario'), 25000),
     ];
 
     return () => timers.forEach(clearTimeout);
@@ -701,9 +701,9 @@ function AnalyzerCinema({ phase }) {
                 <span>ID</span>
               </div>
               {VOCABULARY_INDEX.map((item, index) => (
-                <div className="vocab-index-row" style={{ '--vocab-row-delay': `${index * 70}ms` }} key={item.word}>
+                <div className="vocab-index-row" style={{ '--vocab-row-delay': `${index * 50}ms` }} key={item.word}>
                   <span className="vocab-word-cell">
-                    <span className="vocab-word" style={{ '--vocab-word-delay': `${index * 70 + 220}ms` }}>{item.word}</span>
+                    <span className="vocab-word" style={{ '--vocab-word-delay': `${index * 50 + 150}ms` }}>{item.word}</span>
                     <span className="vocab-arrow" aria-hidden="true"></span>
                   </span>
                   <span className="vocab-id">{item.id}</span>
