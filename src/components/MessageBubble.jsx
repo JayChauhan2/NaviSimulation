@@ -2,19 +2,19 @@ import React from 'react';
 import './MessageBubble.css';
 import { chatList } from '../data/fakeData';
 
-export default function MessageBubble({ message, isMine, showSender }) {
+export default function MessageBubble({ message, isMine, showAvatar, showSenderName, className, bubbleClassName }) {
   // Find sender name and avatar for group chat logic
   const sender = isMine ? null : chatList.find((c) => c.id === message.senderId);
 
   return (
-    <div className={`message-row ${isMine ? 'mine' : 'theirs'}`}>
-      {!isMine && showSender && sender && (
+    <div className={`message-row ${isMine ? 'mine' : 'theirs'} ${className || ''}`}>
+      {!isMine && showAvatar && sender && (
         <img src={sender.avatar} alt={sender.name} className="message-avatar" title={sender.name} />
       )}
-      {!isMine && !showSender && <div className="message-avatar-placeholder" />}
+      {!isMine && !showAvatar && <div className="message-avatar-placeholder" />}
       
-      <div className={`message-bubble ${isMine ? 'mine' : 'theirs'} ${showSender ? 'show-tail' : ''}`}>
-        {!isMine && showSender && sender && (
+      <div className={`message-bubble ${isMine ? 'mine' : 'theirs'} ${showSenderName ? 'show-tail' : ''} ${bubbleClassName || ''}`}>
+        {!isMine && showSenderName && sender && (
           <span className="sender-name">{sender.name}</span>
         )}
         <p className="message-text">

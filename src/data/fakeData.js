@@ -8,47 +8,47 @@ export const getSimulatedTimestamp = () => {
   return simulatedNow.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 };
 
-const getAvatar = (name) => `https://ui-avatars.com/api/?name=${name}&background=random&color=fff&rounded=true&bold=true`;
+const getAvatar = (name, color) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${color}&color=fff&rounded=true&bold=true`;
 
 export const currentUser = {
   id: 'me',
   name: 'Adya',
-  avatar: getAvatar('Adya')
+  avatar: getAvatar('Adya', 'FF9500')
 };
 
 export const contacts = [
   {
     id: 'c1',
     name: 'Chloe',
-    avatar: getAvatar('C'),
+    avatar: getAvatar('C', '2F80ED'),
     status: 'doing homework...',
     isGroup: false
   },
   {
     id: 'c2',
     name: 'Jake',
-    avatar: getAvatar('J'),
+    avatar: getAvatar('J', '7B61FF'),
     status: 'gym',
     isGroup: false
   },
   {
     id: 'c3',
     name: 'Mia',
-    avatar: getAvatar('M'),
+    avatar: getAvatar('M', 'E5484D'),
     status: 'Snapchat me',
     isGroup: false
   },
   {
     id: 'c4',
     name: 'Alex',
-    avatar: getAvatar('A'),
+    avatar: getAvatar('A', '65A30D'),
     status: 'sleep',
     isGroup: false
   },
   {
     id: 'c5',
     name: 'Dad ❤️',
-    avatar: 'https://ui-avatars.com/api/?name=D&background=3b5998&color=fff&rounded=true&bold=true',
+    avatar: getAvatar('D', '3b5998'),
     status: 'At work',
     isGroup: false
   }
@@ -59,7 +59,7 @@ export const dadContact = contacts.find(c => c.id === 'c5');
 export const groupChatInfo = {
   id: 'g1',
   name: 'Science Project 🔬',
-  avatar: getAvatar('SP'),
+  avatar: getAvatar('SP', '00a884'),
   status: 'Jake, Mia, Chloe, Alex, Adya',
   isGroup: true
 };
@@ -70,13 +70,13 @@ export const initialMessages = [
   {
     id: 'm1',
     senderId: 'c3', // Mia
-    text: 'I can bring the poster board tomorrow.',
+    text: 'i can bring the poster board tomorrow',
     timestamp: '4:44 PM'
   },
   {
     id: 'm2',
     senderId: 'me', // User
-    text: 'Nice. I can write the volcano explanation part.',
+    text: 'nice, i can write the volcano explanation part!',
     timestamp: '4:45 PM'
   },
   {

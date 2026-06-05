@@ -32,13 +32,13 @@ const DEMO_CONTEXT_MESSAGES = [
   {
     id: 'demo-context-1',
     senderId: 'c3',
-    text: 'I can bring the poster board tomorrow.',
+    text: 'i can bring the poster board tomorrow',
     timestamp: '4:44 PM',
   },
   {
     id: 'demo-context-2',
     senderId: 'me',
-    text: 'Nice. I can write the volcano explanation part.',
+    text: 'nice, i can write the volcano explanation part!',
     timestamp: '4:45 PM',
   },
   {
@@ -127,18 +127,27 @@ function NaviStageLabel({ activeStage, isExiting = false }) {
   );
 }
 
-function DemoContextThread() {
+function DemoContextThread({ messagesList, isScenario }) {
   return (
     <div className="demo-context-thread">
-      {DEMO_CONTEXT_MESSAGES.map((message, index) => {
+      {messagesList.map((message, index) => {
         const isMine = message.senderId === currentUser.id;
-        const previous = DEMO_CONTEXT_MESSAGES[index - 1];
+        const next = messagesList[index + 1];
+        const previous = messagesList[index - 1];
+        const isNewMsg = message.id === 'demo-new-msg';
+        
+        const showAvatar = !isMine && (!next || next.senderId !== message.senderId);
+        const showSenderName = !isMine && (!previous || previous.senderId !== message.senderId);
+
         return (
           <MessageBubble
             key={message.id}
             message={message}
             isMine={isMine}
-            showSender={!isMine && (!previous || previous.senderId !== message.senderId)}
+            showAvatar={showAvatar}
+            showSenderName={showSenderName}
+            className={isNewMsg ? 'analyzer-message-row' : ''}
+            bubbleClassName={isNewMsg ? `analyzer-message ${isScenario ? 'scenario-mean-message' : ''}` : ''}
           />
         );
       })}
@@ -442,36 +451,35 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
             <AnalyzerDemo phase={analyzerPhase} />
           ) : showScenarioDemo ? (
             <div className="scenario-message-stage">
-              <DemoContextThread />
-              <div className="message-row theirs analyzer-message-row">
-                <img
-                  src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"
-                  alt="Jake"
-                  className="message-avatar"
-                  title="Jake"
-                />
-                <div className="message-bubble theirs show-tail analyzer-message scenario-mean-message">
-                  <span className="sender-name">Jake</span>
-                  <p className="message-text">Adya, you suck at science.</p>
-                  <span className="timestamp">4:47 PM</span>
-                </div>
-              </div>
+              <DemoContextThread 
+                messagesList={[
+                  ...DEMO_CONTEXT_MESSAGES, 
+                  { id: 'demo-new-msg', senderId: 'c2', text: 'Adya, you suck at science.', timestamp: '4:47 PM' }
+                ]} 
+                isScenario={true} 
+              />
               {scenarioMessages.map((msg, index) => {
                 const isMine = msg.senderId === currentUser.id;
-                const previous = scenarioMessages[index - 1];
+                const nextMsg = scenarioMessages[index + 1];
+                const prevMsg = scenarioMessages[index - 1];
+                
+                const showAvatar = !isMine && (!nextMsg || nextMsg.senderId !== msg.senderId);
+                const showSenderName = !isMine && (!prevMsg || prevMsg.senderId !== msg.senderId);
+                
                 return (
                   <MessageBubble
                     key={msg.id}
                     message={msg}
                     isMine={isMine}
-                    showSender={!isMine && (!previous || previous.senderId !== msg.senderId)}
+                    showAvatar={showAvatar}
+                    showSenderName={showSenderName}
                   />
                 );
               })}
               {isScenarioTyping && (
                 <div className="typing-indicator-wrapper scenario-typing">
                   <img
-                    src="https://ui-avatars.com/api/?name=C&background=random&color=fff&rounded=true&bold=true"
+                    src="https://ui-avatars.com/api/?name=C&background=2F80ED&color=fff&rounded=true&bold=true"
                     alt="Chloe typing"
                     className="avatar message-avatar"
                     title="Chloe"
@@ -488,12 +496,19 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
           ) : (
             messages.map((msg, index) => {
               const isMine = msg.senderId === currentUser.id;
+              const nextMsg = messages[index + 1];
+              const prevMsg = messages[index - 1];
+              
+              const showAvatar = !isMine && isGroup && (!nextMsg || nextMsg.senderId !== msg.senderId);
+              const showSenderName = !isMine && isGroup && (!prevMsg || prevMsg.senderId !== msg.senderId);
+              
               return (
                 <MessageBubble
                   key={msg.id}
                   message={msg}
                   isMine={isMine}
-                  showSender={!isMine && isGroup && (index === 0 || messages[index - 1].senderId !== msg.senderId)}
+                  showAvatar={showAvatar}
+                  showSenderName={showSenderName}
                 />
               );
             })
@@ -501,7 +516,7 @@ export default function ChatWindow({ messages, onSendMessage, currentChat, demoM
 
           {!showAnalyzerDemo && (isJakeTyping || typingChatId === currentChat.id) && (
             <div className="typing-indicator-wrapper">
-              <img src={isJakeTyping ? "https://ui-avatars.com/api/?name=J&background=random&color=fff&rounded=true&bold=true" : currentChat.avatar} alt="Typing" className="avatar message-avatar" style={{ width: '28px', height: '28px' }} />
+              <img src={isJakeTyping ? "https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true" : currentChat.avatar} alt="Typing" className="avatar message-avatar" style={{ width: '28px', height: '28px' }} />
               <div className="typing-indicator">
                 <span className="dot"></span>
                 <span className="dot"></span>
@@ -641,15 +656,25 @@ function AnalyzerDemo({ phase }) {
     'context-window': 'Sentiment Classifier',
   }[phase];
 
+  const demoMessages = [...DEMO_CONTEXT_MESSAGES];
+  if (showMessage) {
+    demoMessages.push({
+      id: 'demo-new-msg',
+      senderId: 'c2',
+      text: 'Adya, you suck at science.',
+      timestamp: '4:47 PM'
+    });
+  }
+
   return (
     <div className="analyzer-demo">
       {!showMessage && !showTyping && !showCinema && (
-        <DemoContextThread />
+        <DemoContextThread messagesList={demoMessages} />
       )}
 
       {showTyping && (
         <div className="analyzer-message-zone">
-          <DemoContextThread />
+          <DemoContextThread messagesList={demoMessages} />
           <div className="typing-indicator-wrapper analyzer-typing">
             <img
               src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"
@@ -668,20 +693,7 @@ function AnalyzerDemo({ phase }) {
 
       {showMessage && (
         <div className="analyzer-message-zone">
-          <DemoContextThread />
-          <div className="message-row theirs analyzer-message-row">
-            <img
-              src="https://ui-avatars.com/api/?name=J&background=7B61FF&color=fff&rounded=true&bold=true"
-              alt="Jake"
-              className="message-avatar"
-              title="Jake"
-            />
-            <div className="message-bubble theirs show-tail analyzer-message">
-              <span className="sender-name">Jake</span>
-              <p className="message-text">Adya, you suck at science.</p>
-              <span className="timestamp">4:47 PM</span>
-            </div>
-          </div>
+          <DemoContextThread messagesList={demoMessages} />
         </div>
       )}
 
